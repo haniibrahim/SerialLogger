@@ -305,7 +305,7 @@ public class SerialPrinter extends javax.swing.JFrame {
             protected void done() {
                 try {
                     if (get()) {
-                        System.out.println("DEBUG: Method DONE reached");
+                        System.out.println("DEBUG: Method DONE in CLOSE reached");
                         cb_Commport.setEnabled(true);
                         bt_Update.setEnabled(true);
                         cb_Baud.setEnabled(true);
@@ -416,10 +416,12 @@ public class SerialPrinter extends javax.swing.JFrame {
                     System.out.println("Port " + portName + " open");
 
                     Scanner serialScanner = new Scanner(chosenPort.getInputStream());
-                    while (serialScanner.hasNextLine()) {
-                        String line = serialScanner.nextLine();
-                        System.out.println(line); // Debug
-                        publish(line);
+                    while (!isCancelled()) {
+                        while (serialScanner.hasNextLine()) {
+                            String line = serialScanner.nextLine();
+                            System.out.println("DEBUG: Serial-OUT: " + line); // Debug
+                            publish(line);
+                        }
                     }
                 } else {
                     JOptionPane.showMessageDialog(null,
@@ -433,7 +435,7 @@ public class SerialPrinter extends javax.swing.JFrame {
 
             @Override
             protected void process(List<String> chunkLines) {
-                System.out.println("DEBUG: Method PROCESS reached");
+                System.out.println("DEBUG: Method PROCESS in OPEN reached"); // Debug
                 // Disable GUI elements
                 cb_Commport.setEnabled(false);
                 bt_Update.setEnabled(false);
@@ -446,7 +448,7 @@ public class SerialPrinter extends javax.swing.JFrame {
                 bt_ClosePort.setEnabled(true);
                 for (String line : chunkLines) {
                     ta_VirtualPrint.append(line + "\n");
-                    System.out.println("DEBUG: " + line);
+                    System.out.println("DEBUG: Serial-Out2: " + line); // Debug
                 }
             }
 
@@ -556,7 +558,7 @@ public class SerialPrinter extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 new SerialPrinter().setVisible(true);
