@@ -1,7 +1,6 @@
 package de.hani_ibrahim.serialprinter;
 
 import com.fazecast.jSerialComm.*;
-import java.awt.Toolkit;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.CancellationException;
