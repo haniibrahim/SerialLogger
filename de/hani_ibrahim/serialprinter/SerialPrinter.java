@@ -4,9 +4,11 @@ import com.fazecast.jSerialComm.*;
 import java.awt.Toolkit;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -21,9 +23,10 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author Hani Andreas Ibrahim
  * @version 0.5
  */
-public class SerialPrinter extends javax.swing.JFrame {
+public class SerialPrinter extends JFrame {
 
     static SerialPort chosenPort;
+    private SerialRead serialReader;
 
     /**
      * Creates new form SerialPrinter
@@ -58,6 +61,134 @@ public class SerialPrinter extends javax.swing.JFrame {
         updatePortList();
     }
 
+    private class SerialRead extends SwingWorker<Boolean, String> {
+
+        @Override
+        protected Boolean doInBackground() {
+            // Get values from the GUI
+            String portName = cb_Commport.getSelectedItem().toString();
+            int baud = Integer.parseInt(cb_Baud.getSelectedItem().toString());
+            int databits = Integer.parseInt(cb_DataBits.getSelectedItem().toString());
+            String stopbit_s = cb_StopBits.getSelectedItem().toString();
+            String parity_s = cb_Parity.getSelectedItem().toString();
+            String handshake_s = cb_Handshake.getSelectedItem().toString();
+
+//                System.out.print(
+//                        "port name: " + portName + "\n"
+//                        + "baud     : " + baud + "\n"
+//                        + "data bits: " + databits + "\n"
+//                        + "stop bits: " + stopbit_s + "\n"
+//                        + "parity   : " + parity_s + "\n");
+            // Stopbit parser
+            int stopbits;
+            if (stopbit_s.equals("1")) {
+                stopbits = SerialPort.ONE_STOP_BIT;
+            } else if (stopbit_s.equals("1.5")) {
+                stopbits = SerialPort.ONE_POINT_FIVE_STOP_BITS;
+            } else if (stopbit_s.equals("2")) {
+                stopbits = SerialPort.TWO_STOP_BITS;
+            } else {
+                System.err.println("ERROR: No stopbits specified. Set to 1");
+                stopbits = SerialPort.ONE_STOP_BIT;
+            }
+
+            // Parity-Parser
+            int parity;
+            if (parity_s.equals("none")) {
+                parity = SerialPort.NO_PARITY;
+            } else if (parity_s.equals("odd")) {
+                parity = SerialPort.ODD_PARITY;
+            } else if (parity_s.equals("even")) {
+                parity = SerialPort.EVEN_PARITY;
+            } else if (parity_s.equals("mark")) {
+                parity = SerialPort.MARK_PARITY;
+            } else if (parity_s.equals("space")) {
+                parity = SerialPort.SPACE_PARITY;
+            } else {
+                System.err.println("ERROR: Parity not specified, set to NONE");
+                parity = SerialPort.NO_PARITY;
+            }
+
+//                // Handshake-Parser - NOT IMPLEMENTED YET
+//                int handshake;
+//                if (handshake_s.equals("none")) {
+//                    handshake = SerialPort.FLOW_CONTROL_DISABLED;
+//                } else if (handshake_s.equals("RTS/CTS")) {
+//                    handshake = SerialPort.FLOW_CONTROL_RTS_ENABLED;
+//                } else if (handshake_s.equals("XON/XOFF")) {
+//                    handshake = SerialPort.FLOW_CONTROL_XONXOFF_IN_ENABLED;
+//                } else {
+//                    System.err.println("ERROR: Handshake not specified, set to NONE");
+//                    handshake = SerialPort.FLOW_CONTROL_DISABLED;;
+//                }
+            // Do not try to register an "empty" port 
+            if (portName.equals("")) {
+                System.err.println("ERROR: CommPort is empty!");
+                JOptionPane.showMessageDialog(null,
+                        "CommPort is empty",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                return true;
+            }
+
+            chosenPort = SerialPort.getCommPort(portName); // Register chosen port
+            chosenPort.setComPortParameters(baud, databits, stopbits, parity); // Set serial parameters to the chosen port
+            chosenPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
+
+            if (chosenPort.openPort()) {
+                System.out.println("Port " + portName + " open");
+
+                Scanner serialScanner = new Scanner(chosenPort.getInputStream());
+                while (!isCancelled()) {
+                    while (serialScanner.hasNextLine()) {
+                        String line = serialScanner.nextLine();
+                        System.out.println("DEBUG: Serial-OUT: " + line); // Debug
+                        publish(line);
+                    }
+                }
+                return false;
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Could not open serial port\n" + portName + "\n",
+                        "Info", JOptionPane.ERROR_MESSAGE);
+                System.err.println("Could not open port " + portName);
+                return true;
+            }
+        }
+
+        @Override
+        protected void process(List<String> chunkLines) {
+            System.out.println("DEBUG: Method PROCESS in OPEN reached"); // Debug
+            for (String line : chunkLines) {
+                ta_VirtualPrint.append(line + "\n");
+                System.out.println("DEBUG: Serial-Out2: " + line); // Debug
+            }
+        }
+
+        @Override
+        protected void done() {
+            try {
+                if (get() == true) {
+                    // Disable GUI elements
+                    cb_Commport.setEnabled(true);
+                    bt_Update.setEnabled(true);
+                    cb_Baud.setEnabled(true);
+                    cb_DataBits.setEnabled(true);
+                    cb_StopBits.setEnabled(true);
+                    cb_Parity.setEnabled(true);
+                    cb_Handshake.setEnabled(true);
+                    bt_OpenPort.setEnabled(true);
+                    bt_ClosePort.setEnabled(false);
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ExecutionException ex) {
+                Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (CancellationException ex) { // important
+//                Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     private void updatePortList() {
         SwingWorker<SerialPort[], Void> worker = new SwingWorker<SerialPort[], Void>() {
             @Override
@@ -76,10 +207,14 @@ public class SerialPrinter extends javax.swing.JFrame {
                         cb_Commport.addItem(portName.getSystemPortName());
                     }
                     bt_OpenPort.setEnabled(true);
+
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(SerialPrinter.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (ExecutionException ex) {
-                    Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(SerialPrinter.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
 
             }
@@ -287,43 +422,34 @@ public class SerialPrinter extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_UpdateActionPerformed
 
     private void bt_ClosePortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_ClosePortActionPerformed
-        SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
-
-            @Override
-            protected Boolean doInBackground() throws Exception {
-                if (chosenPort.isOpen()) {
-                    chosenPort.closePort();
-                    System.out.println("DEBUG: Port closed");
-                    return true;
-                } else {
-                    System.err.println("ERROR: Port was not opened");
-                    return false;
-                }
-            }
-
-            @Override
-            protected void done() {
-                try {
-                    if (get()) {
-                        System.out.println("DEBUG: Method DONE in CLOSE reached");
+        if (chosenPort.isOpen()) {
+            chosenPort.closePort();
+            cb_Commport.setEnabled(true);
+            bt_Update.setEnabled(true);
+            cb_Baud.setEnabled(true);
+            cb_DataBits.setEnabled(true);
+            cb_StopBits.setEnabled(true);
+            cb_Parity.setEnabled(true);
+            cb_Handshake.setEnabled(true);
+            bt_OpenPort.setEnabled(true);
+            bt_ClosePort.setEnabled(false);
+            System.out.println("DEBUG: Port closed");
+        } else {
+            JOptionPane.showMessageDialog(this, 
+                    "Port was not open",
+                    "Error", JOptionPane.ERROR_MESSAGE);
                         cb_Commport.setEnabled(true);
-                        bt_Update.setEnabled(true);
-                        cb_Baud.setEnabled(true);
-                        cb_DataBits.setEnabled(true);
-                        cb_StopBits.setEnabled(true);
-                        cb_Parity.setEnabled(true);
-                        cb_Handshake.setEnabled(true);
-                        bt_OpenPort.setEnabled(true);
-                        bt_ClosePort.setEnabled(false);
-                    }
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ExecutionException ex) {
-                    Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        };
-        worker.execute();
+            bt_Update.setEnabled(true);
+            cb_Baud.setEnabled(true);
+            cb_DataBits.setEnabled(true);
+            cb_StopBits.setEnabled(true);
+            cb_Parity.setEnabled(true);
+            cb_Handshake.setEnabled(true);
+            bt_OpenPort.setEnabled(true);
+            bt_ClosePort.setEnabled(false);
+            System.err.println("ERROR: Port was not open");
+        }
+        serialReader.cancel(true);
     }//GEN-LAST:event_bt_ClosePortActionPerformed
 
     private void bt_InfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_InfoActionPerformed
@@ -336,145 +462,19 @@ public class SerialPrinter extends javax.swing.JFrame {
 
     private void bt_OpenPortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_OpenPortActionPerformed
 //        System.out.println("OpenPort gedrückt");
-        SwingWorker<Boolean, String> worker = new SwingWorker<Boolean, String>() {
-            @Override
-            protected Boolean doInBackground() throws Exception {
-                // Get values from the GUI
-                String portName = cb_Commport.getSelectedItem().toString();
-                int baud = Integer.parseInt(cb_Baud.getSelectedItem().toString());
-                int databits = Integer.parseInt(cb_DataBits.getSelectedItem().toString());
-                String stopbit_s = cb_StopBits.getSelectedItem().toString();
-                String parity_s = cb_Parity.getSelectedItem().toString();
-                String handshake_s = cb_Handshake.getSelectedItem().toString();
-
-//                System.out.print(
-//                        "port name: " + portName + "\n"
-//                        + "baud     : " + baud + "\n"
-//                        + "data bits: " + databits + "\n"
-//                        + "stop bits: " + stopbit_s + "\n"
-//                        + "parity   : " + parity_s + "\n");
-                // Stopbit parser
-                int stopbits;
-                if (stopbit_s.equals("1")) {
-                    stopbits = SerialPort.ONE_STOP_BIT;
-                } else if (stopbit_s.equals("1.5")) {
-                    stopbits = SerialPort.ONE_POINT_FIVE_STOP_BITS;
-                } else if (stopbit_s.equals("2")) {
-                    stopbits = SerialPort.TWO_STOP_BITS;
-                } else {
-                    System.err.println("ERROR: No stopbits specified. Set to 1");
-                    stopbits = SerialPort.ONE_STOP_BIT;
-                }
-
-                // Parity-Parser
-                int parity;
-                if (parity_s.equals("none")) {
-                    parity = SerialPort.NO_PARITY;
-                } else if (parity_s.equals("odd")) {
-                    parity = SerialPort.ODD_PARITY;
-                } else if (parity_s.equals("even")) {
-                    parity = SerialPort.EVEN_PARITY;
-                } else if (parity_s.equals("mark")) {
-                    parity = SerialPort.MARK_PARITY;
-                } else if (parity_s.equals("space")) {
-                    parity = SerialPort.SPACE_PARITY;
-                } else {
-                    System.err.println("ERROR: Parity not specified, set to NONE");
-                    parity = SerialPort.NO_PARITY;
-                }
-
-//                // Handshake-Parser - NOT IMPLEMENTED YET
-//                int handshake;
-//                if (handshake_s.equals("none")) {
-//                    handshake = SerialPort.FLOW_CONTROL_DISABLED;
-//                } else if (handshake_s.equals("RTS/CTS")) {
-//                    handshake = SerialPort.FLOW_CONTROL_RTS_ENABLED;
-//                } else if (handshake_s.equals("XON/XOFF")) {
-//                    handshake = SerialPort.FLOW_CONTROL_XONXOFF_IN_ENABLED;
-//                } else {
-//                    System.err.println("ERROR: Handshake not specified, set to NONE");
-//                    handshake = SerialPort.FLOW_CONTROL_DISABLED;;
-//                }
-                // Do not try to register an "empty" port 
-                if (portName.equals("")) {
-                    System.err.println("ERROR: CommPort is empty!");
-                    JOptionPane.showMessageDialog(null,
-                            "CommPort is empty",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                    return false;
-                }
-
-                chosenPort = SerialPort.getCommPort(portName);
-
-                chosenPort.setComPortParameters(baud, databits, stopbits, parity);
-//                chosenPort.setComPortParameters(9600, 8, SerialPort.ONE_STOP_BIT, SerialPort.NO_PARITY);
-                chosenPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
-
-                publish(""); // Trigger process method to diable GUI elements even before the first line is transmitted.
-
-                if (chosenPort.openPort()) {
-                    System.out.println("Port " + portName + " open");
-
-                    Scanner serialScanner = new Scanner(chosenPort.getInputStream());
-                    while (!isCancelled()) {
-                        while (serialScanner.hasNextLine()) {
-                            String line = serialScanner.nextLine();
-                            System.out.println("DEBUG: Serial-OUT: " + line); // Debug
-                            publish(line);
-                        }
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null,
-                            "Could not open serial port\n" + portName + "\n",
-                            "Info", JOptionPane.ERROR_MESSAGE);
-                    System.err.println("Could not open port " + portName);
-                    return false;
-                }
-                return true;
-            }
-
-            @Override
-            protected void process(List<String> chunkLines) {
-                System.out.println("DEBUG: Method PROCESS in OPEN reached"); // Debug
-                // Disable GUI elements
-                cb_Commport.setEnabled(false);
-                bt_Update.setEnabled(false);
-                cb_Baud.setEnabled(false);
-                cb_DataBits.setEnabled(false);
-                cb_StopBits.setEnabled(false);
-                cb_Parity.setEnabled(false);
-                cb_Handshake.setEnabled(false);
-                bt_OpenPort.setEnabled(false);
-                bt_ClosePort.setEnabled(true);
-                for (String line : chunkLines) {
-                    ta_VirtualPrint.append(line + "\n");
-                    System.out.println("DEBUG: Serial-Out2: " + line); // Debug
-                }
-            }
-
-            @Override
-            protected void done() {
-                try {
-                    if (get() == true) {
-                        // Disable GUI elements
-                        cb_Commport.setEnabled(false);
-                        bt_Update.setEnabled(false);
-                        cb_Baud.setEnabled(false);
-                        cb_DataBits.setEnabled(false);
-                        cb_StopBits.setEnabled(false);
-                        cb_Parity.setEnabled(false);
-                        cb_Handshake.setEnabled(false);
-                        bt_OpenPort.setEnabled(false);
-                        bt_ClosePort.setEnabled(true);
-                    }
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ExecutionException ex) {
-                    Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        };
-        worker.execute();
+        // Disable GUI elements
+        cb_Commport.setEnabled(false);
+        bt_Update.setEnabled(false);
+        cb_Baud.setEnabled(false);
+        cb_DataBits.setEnabled(false);
+        cb_StopBits.setEnabled(false);
+        cb_Parity.setEnabled(false);
+        cb_Handshake.setEnabled(false);
+        bt_OpenPort.setEnabled(false);
+        bt_ClosePort.setEnabled(true);
+        // Read from the serial interface
+        serialReader = new SerialRead();
+        serialReader.execute();
     }//GEN-LAST:event_bt_OpenPortActionPerformed
 
     /**
@@ -493,12 +493,15 @@ public class SerialPrinter extends javax.swing.JFrame {
             } catch (ClassNotFoundException ex1) {
                 Logger.getLogger(SerialPrinter.class
                         .getName()).log(Level.SEVERE, null, ex1);
+
             } catch (InstantiationException ex1) {
                 Logger.getLogger(SerialPrinter.class
                         .getName()).log(Level.SEVERE, null, ex1);
+
             } catch (IllegalAccessException ex1) {
                 Logger.getLogger(SerialPrinter.class
                         .getName()).log(Level.SEVERE, null, ex1);
+
             } catch (UnsupportedLookAndFeelException ex1) {
                 Logger.getLogger(SerialPrinter.class
                         .getName()).log(Level.SEVERE, null, ex1);
@@ -510,12 +513,15 @@ public class SerialPrinter extends javax.swing.JFrame {
             } catch (ClassNotFoundException ex1) {
                 Logger.getLogger(SerialPrinter.class
                         .getName()).log(Level.SEVERE, null, ex1);
+
             } catch (InstantiationException ex1) {
                 Logger.getLogger(SerialPrinter.class
                         .getName()).log(Level.SEVERE, null, ex1);
+
             } catch (IllegalAccessException ex1) {
                 Logger.getLogger(SerialPrinter.class
                         .getName()).log(Level.SEVERE, null, ex1);
+
             } catch (UnsupportedLookAndFeelException ex1) {
                 Logger.getLogger(SerialPrinter.class
                         .getName()).log(Level.SEVERE, null, ex1);
@@ -527,12 +533,15 @@ public class SerialPrinter extends javax.swing.JFrame {
             } catch (ClassNotFoundException ex1) {
                 Logger.getLogger(SerialPrinter.class
                         .getName()).log(Level.SEVERE, null, ex1);
+
             } catch (InstantiationException ex1) {
                 Logger.getLogger(SerialPrinter.class
                         .getName()).log(Level.SEVERE, null, ex1);
+
             } catch (IllegalAccessException ex1) {
                 Logger.getLogger(SerialPrinter.class
                         .getName()).log(Level.SEVERE, null, ex1);
+
             } catch (UnsupportedLookAndFeelException ex1) {
                 Logger.getLogger(SerialPrinter.class
                         .getName()).log(Level.SEVERE, null, ex1);
@@ -544,12 +553,15 @@ public class SerialPrinter extends javax.swing.JFrame {
             } catch (ClassNotFoundException ex1) {
                 Logger.getLogger(SerialPrinter.class
                         .getName()).log(Level.SEVERE, null, ex1);
+
             } catch (InstantiationException ex1) {
                 Logger.getLogger(SerialPrinter.class
                         .getName()).log(Level.SEVERE, null, ex1);
+
             } catch (IllegalAccessException ex1) {
                 Logger.getLogger(SerialPrinter.class
                         .getName()).log(Level.SEVERE, null, ex1);
+
             } catch (UnsupportedLookAndFeelException ex1) {
                 Logger.getLogger(SerialPrinter.class
                         .getName()).log(Level.SEVERE, null, ex1);
