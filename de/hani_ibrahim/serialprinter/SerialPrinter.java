@@ -26,6 +26,7 @@ public class SerialPrinter extends JFrame {
 
     static SerialPort chosenPort;
     private SerialRead serialReader;
+    String portName;
 
     /**
      * Creates new form SerialPrinter
@@ -65,7 +66,7 @@ public class SerialPrinter extends JFrame {
         @Override
         protected Boolean doInBackground() {
             // Get values from the GUI
-            String portName = cb_Commport.getSelectedItem().toString();
+            portName = cb_Commport.getSelectedItem().toString();
             int baud = Integer.parseInt(cb_Baud.getSelectedItem().toString());
             int databits = Integer.parseInt(cb_DataBits.getSelectedItem().toString());
             String stopbit_s = cb_StopBits.getSelectedItem().toString();
@@ -134,13 +135,13 @@ public class SerialPrinter extends JFrame {
             chosenPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
 
             if (chosenPort.openPort()) {
-                System.out.println("Port " + portName + " open");
+                System.out.println("Port " + portName + " opened");
+                                System.out.println("Serial data: ");
 
                 Scanner serialScanner = new Scanner(chosenPort.getInputStream());
                 while (!isCancelled()) {
                     while (serialScanner.hasNextLine()) {
                         String line = serialScanner.nextLine();
-                        System.out.println("DEBUG: Serial-OUT: " + line); // Debug
                         publish(line);
                     }
                 }
@@ -156,10 +157,9 @@ public class SerialPrinter extends JFrame {
 
         @Override
         protected void process(List<String> chunkLines) {
-            System.out.println("DEBUG: Method PROCESS in OPEN reached"); // Debug
             for (String line : chunkLines) {
                 ta_VirtualPrint.append(line + "\n");
-                System.out.println("DEBUG: Serial-Out2: " + line); // Debug
+                System.out.println(line);
             }
         }
 
@@ -432,7 +432,7 @@ public class SerialPrinter extends JFrame {
             cb_Handshake.setEnabled(true);
             bt_OpenPort.setEnabled(true);
             bt_ClosePort.setEnabled(false);
-            System.out.println("DEBUG: Port closed");
+            System.out.println("Port " + portName + " closed");
         } else {
             JOptionPane.showMessageDialog(this, 
                     "Port was not open",
