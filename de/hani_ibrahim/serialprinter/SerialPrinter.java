@@ -25,7 +25,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class SerialPrinter extends JFrame {
 
     static SerialPort chosenPort;
-    private SerialRead serialReader;
+    private SerialReadTask serialReader;
     String portName;
 
     /**
@@ -38,6 +38,9 @@ public class SerialPrinter extends JFrame {
 
         // Set OK-Button to default
         this.getRootPane().setDefaultButton(bt_OpenPort);
+
+        // Add Contextmenu
+        ta_VirtualPrint.addMouseListener(new ContextMenuMouseListener());
 
         /* Make status messages invisible */
         //lb_Status.setVisible(false); // Temp: Set Status label invisible
@@ -61,7 +64,7 @@ public class SerialPrinter extends JFrame {
         updatePortList();
     }
 
-    private class SerialRead extends SwingWorker<Boolean, String> {
+    private class SerialReadTask extends SwingWorker<Boolean, String> {
 
         @Override
         protected Boolean doInBackground() {
@@ -71,14 +74,8 @@ public class SerialPrinter extends JFrame {
             int databits = Integer.parseInt(cb_DataBits.getSelectedItem().toString());
             String stopbit_s = cb_StopBits.getSelectedItem().toString();
             String parity_s = cb_Parity.getSelectedItem().toString();
-            String handshake_s = cb_Handshake.getSelectedItem().toString();
+//            String handshake_s = cb_Handshake.getSelectedItem().toString();
 
-//                System.out.print(
-//                        "port name: " + portName + "\n"
-//                        + "baud     : " + baud + "\n"
-//                        + "data bits: " + databits + "\n"
-//                        + "stop bits: " + stopbit_s + "\n"
-//                        + "parity   : " + parity_s + "\n");
             // Stopbit parser
             int stopbits;
             if (stopbit_s.equals("1")) {
@@ -136,7 +133,7 @@ public class SerialPrinter extends JFrame {
 
             if (chosenPort.openPort()) {
                 System.out.println("Port " + portName + " opened");
-                                System.out.println("Serial data: ");
+                System.out.println("Serial data: ");
 
                 Scanner serialScanner = new Scanner(chosenPort.getInputStream());
                 while (!isCancelled()) {
@@ -193,7 +190,6 @@ public class SerialPrinter extends JFrame {
             @Override
             protected SerialPort[] doInBackground() throws Exception {
                 SerialPort[] portNames = SerialPort.getCommPorts();
-//                System.out.println("update");
                 return portNames;
             }
 
@@ -202,8 +198,13 @@ public class SerialPrinter extends JFrame {
                 try {
                     SerialPort[] portNames = get();
                     cb_Commport.removeAllItems();
-                    for (SerialPort portName : portNames) {
-                        cb_Commport.addItem(portName.getSystemPortName());
+
+                    if (portNames.length == 0) { // If no serial ports installed
+                        cb_Commport.addItem(""); // To avoid Nullpointer exception
+                    } else {
+                        for (SerialPort portName : portNames) {
+                            cb_Commport.addItem(portName.getSystemPortName());
+                        }
                     }
                     bt_OpenPort.setEnabled(true);
 
@@ -434,10 +435,10 @@ public class SerialPrinter extends JFrame {
             bt_ClosePort.setEnabled(false);
             System.out.println("Port " + portName + " closed");
         } else {
-            JOptionPane.showMessageDialog(this, 
+            JOptionPane.showMessageDialog(this,
                     "Port was not open",
                     "Error", JOptionPane.ERROR_MESSAGE);
-                        cb_Commport.setEnabled(true);
+            cb_Commport.setEnabled(true);
             bt_Update.setEnabled(true);
             cb_Baud.setEnabled(true);
             cb_DataBits.setEnabled(true);
@@ -472,7 +473,7 @@ public class SerialPrinter extends JFrame {
         bt_OpenPort.setEnabled(false);
         bt_ClosePort.setEnabled(true);
         // Read from the serial interface
-        serialReader = new SerialRead();
+        serialReader = new SerialReadTask();
         serialReader.execute();
     }//GEN-LAST:event_bt_OpenPortActionPerformed
 
