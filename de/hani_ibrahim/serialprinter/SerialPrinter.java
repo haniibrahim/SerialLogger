@@ -1,12 +1,15 @@
 package de.hani_ibrahim.serialprinter;
 
 import com.fazecast.jSerialComm.*;
+import java.awt.Toolkit;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -33,14 +36,25 @@ public class SerialPrinter extends JFrame {
      */
     public SerialPrinter() {
         // Set app icon
-        //this.setIconImage(Toolkit.get DefaultToolkit().getImage(getClass().getResource("interface.png")));
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("vsp.png")));
         initComponents();
+
+        // Load prefs at startup and save at shutdown
+        setPrefs();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                storePrefs();
+            }
+        }));
 
         // Set OK-Button to default
         this.getRootPane().setDefaultButton(bt_OpenPort);
 
         // Add Contextmenu
         ta_VirtualPrint.addMouseListener(new ContextMenuMouseListener());
+        tf_Logfile.addMouseListener(new ContextMenuMouseListener());
 
         /* Make status messages invisible */
         //lb_Status.setVisible(false); // Temp: Set Status label invisible
@@ -49,13 +63,12 @@ public class SerialPrinter extends JFrame {
         bt_OpenPort.setEnabled(false);
         bt_ClosePort.setEnabled(false);
 
-        // Initial values for serial parameters
-        cb_Baud.setSelectedItem("9600");
-        cb_DataBits.setSelectedItem("8");
-        cb_StopBits.setSelectedItem("1");
-        cb_Parity.setSelectedItem("none");
-        cb_Handshake.setSelectedItem("none");
-
+//        // Initial values for serial parameters
+//        cb_Baud.setSelectedItem("9600");
+//        cb_DataBits.setSelectedItem("8");
+//        cb_StopBits.setSelectedItem("1");
+//        cb_Parity.setSelectedItem("none");
+//        cb_Handshake.setSelectedItem("none");
         // Handshake deactivated - NOT IMPLEMENTED YET
         lb_Handshake.setVisible(false);
         cb_Handshake.setVisible(false);
@@ -222,6 +235,54 @@ public class SerialPrinter extends JFrame {
         worker.execute();
     }
 
+    private void storePrefs() {
+        // Get node
+        Preferences prefs = Preferences.userNodeForPackage(getClass());
+
+        // Save window position
+        prefs.putInt("xpos", getLocation().x);
+        prefs.putInt("ypos", getLocation().y);
+
+        // Save Window size
+        prefs.putInt("width", getSize().width);
+        prefs.putInt("height", getSize().height);
+
+        // Save serial parameters
+        prefs.put("baud", cb_Baud.getSelectedItem().toString());
+        prefs.put("databits", cb_DataBits.getSelectedItem().toString());
+        prefs.put("stopbits", cb_StopBits.getSelectedItem().toString());
+        prefs.put("parity", cb_Parity.getSelectedItem().toString());
+//        prefs.put("handshake", cb_handshake.getSelectedItem().toString());
+
+    }
+
+    private void setPrefs() {
+        // Get node
+        Preferences prefs = Preferences.userNodeForPackage(getClass());
+
+        // Set window position
+        setLocation(prefs.getInt("xpos", 0),
+                prefs.getInt("ypos", 0));
+
+        // Set window size
+        setSize(prefs.getInt("width", 637),
+                prefs.getInt("height", 380));
+
+        // Set serial parameters
+        String baud      = prefs.get("baud", "9600");
+        String databits  = prefs.get("databits", "8");
+        String stopbits  = prefs.get("stopbits", "1");
+        String parity    = prefs.get("parity", "none");
+        String handshake = prefs.get("handshake", "none");
+
+        // Put default/stored serialparameters in GUI
+        cb_Baud.setSelectedItem(baud);
+        cb_DataBits.setSelectedItem(databits);
+        cb_StopBits.setSelectedItem(stopbits);
+        cb_Parity.setSelectedItem(parity);
+        cb_Handshake.setSelectedItem(handshake);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -248,10 +309,11 @@ public class SerialPrinter extends JFrame {
         bt_Info = new javax.swing.JButton();
         lb_VirtalPrint = new javax.swing.JLabel();
         bt_OpenPort = new javax.swing.JButton();
-        lb_Status = new javax.swing.JLabel();
-        lb_Statusmessage = new javax.swing.JLabel();
         lb_Handshake = new javax.swing.JLabel();
         cb_Handshake = new javax.swing.JComboBox();
+        cb_Log = new javax.swing.JCheckBox();
+        tf_Logfile = new javax.swing.JTextField();
+        bt_Fileselector = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Virtual Serial Printer");
@@ -308,7 +370,7 @@ public class SerialPrinter extends JFrame {
         });
 
         lb_VirtalPrint.setFont(lb_VirtalPrint.getFont());
-        lb_VirtalPrint.setText("Virtual Print:");
+        lb_VirtalPrint.setText("Output:");
 
         bt_OpenPort.setText("Open Port");
         bt_OpenPort.setToolTipText("");
@@ -318,13 +380,13 @@ public class SerialPrinter extends JFrame {
             }
         });
 
-        lb_Status.setText("Status:");
-
-        lb_Statusmessage.setText("***");
-
         lb_Handshake.setText("Handshake:");
 
         cb_Handshake.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "RTS/CTS", "XON/XOFF", "none" }));
+
+        cb_Log.setText("Log to:");
+
+        bt_Fileselector.setText("...");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -334,18 +396,25 @@ public class SerialPrinter extends JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lb_Commport)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cb_Commport, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bt_Update, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lb_VirtalPrint)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lb_Status)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lb_Statusmessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(sp_VirtualPrint, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lb_Commport)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cb_Commport, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bt_Update, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lb_VirtalPrint))
+                        .addGap(0, 107, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cb_Log)
+                                .addGap(12, 12, 12)
+                                .addComponent(tf_Logfile)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(bt_Fileselector, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(sp_VirtualPrint))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(bt_Info, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(bt_OpenPort, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -379,7 +448,6 @@ public class SerialPrinter extends JFrame {
                     .addComponent(bt_Info))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lb_VirtalPrint)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -401,16 +469,18 @@ public class SerialPrinter extends JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cb_Handshake, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lb_Handshake))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 130, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
                         .addComponent(bt_OpenPort)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bt_ClosePort))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(sp_VirtualPrint)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lb_Status)
-                            .addComponent(lb_Statusmessage))))
+                            .addComponent(bt_ClosePort)
+                            .addComponent(tf_Logfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bt_Fileselector)
+                            .addComponent(cb_Log)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(sp_VirtualPrint)
+                        .addGap(32, 32, 32)))
                 .addContainerGap())
         );
 
@@ -580,6 +650,7 @@ public class SerialPrinter extends JFrame {
     //<editor-fold defaultstate="collapsed" desc=" GUI variables declaration ">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bt_ClosePort;
+    private javax.swing.JButton bt_Fileselector;
     private javax.swing.JButton bt_Info;
     private javax.swing.JButton bt_OpenPort;
     private javax.swing.JButton bt_Update;
@@ -587,6 +658,7 @@ public class SerialPrinter extends JFrame {
     private javax.swing.JComboBox cb_Commport;
     private javax.swing.JComboBox cb_DataBits;
     private javax.swing.JComboBox cb_Handshake;
+    private javax.swing.JCheckBox cb_Log;
     private javax.swing.JComboBox cb_Parity;
     private javax.swing.JComboBox cb_StopBits;
     private javax.swing.JLabel lb_Baud;
@@ -594,12 +666,11 @@ public class SerialPrinter extends JFrame {
     private javax.swing.JLabel lb_DataBits;
     private javax.swing.JLabel lb_Handshake;
     private javax.swing.JLabel lb_Parity;
-    private javax.swing.JLabel lb_Status;
-    private javax.swing.JLabel lb_Statusmessage;
     private javax.swing.JLabel lb_StopBits;
     private javax.swing.JLabel lb_VirtalPrint;
     private javax.swing.JScrollPane sp_VirtualPrint;
     private javax.swing.JTextArea ta_VirtualPrint;
+    private javax.swing.JTextField tf_Logfile;
     // End of variables declaration//GEN-END:variables
 //</editor-fold>
 }

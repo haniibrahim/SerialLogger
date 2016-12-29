@@ -32,21 +32,32 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="lb_Commport" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="cb_Commport" min="-2" pref="200" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="bt_Update" min="-2" pref="88" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="lb_Commport" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="cb_Commport" min="-2" pref="200" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="bt_Update" min="-2" pref="88" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="lb_VirtalPrint" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="107" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="lb_VirtalPrint" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="lb_Status" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Component id="lb_Statusmessage" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="cb_Log" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                              <Component id="tf_Logfile" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="bt_Fileselector" min="-2" pref="27" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="sp_VirtualPrint" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="sp_VirtualPrint" pref="439" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="bt_Info" alignment="1" min="-2" max="-2" attributes="0"/>
                   <Component id="bt_OpenPort" alignment="1" max="32767" attributes="0"/>
@@ -87,9 +98,8 @@
                   <Component id="bt_Update" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="bt_Info" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="lb_VirtalPrint" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -116,21 +126,23 @@
                           <Component id="cb_Handshake" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lb_Handshake" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="130" max="32767" attributes="0"/>
+                      <EmptySpace pref="139" max="32767" attributes="0"/>
                       <Component id="bt_OpenPort" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="bt_ClosePort" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="sp_VirtualPrint" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lb_Status" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="lb_Statusmessage" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="bt_ClosePort" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="tf_Logfile" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="bt_Fileselector" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cb_Log" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
+                      <Component id="sp_VirtualPrint" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                  </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -278,7 +290,7 @@
             <Font component="lb_VirtalPrint" property="font" relativeSize="true" size="0"/>
           </FontInfo>
         </Property>
-        <Property name="text" type="java.lang.String" value="Virtual Print:"/>
+        <Property name="text" type="java.lang.String" value="Output:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="bt_OpenPort">
@@ -289,16 +301,6 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_OpenPortActionPerformed"/>
       </Events>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lb_Status">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Status:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lb_Statusmessage">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="***"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lb_Handshake">
       <Properties>
@@ -314,6 +316,18 @@
             <StringItem index="2" value="none"/>
           </StringArray>
         </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="cb_Log">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Log to:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tf_Logfile">
+    </Component>
+    <Component class="javax.swing.JButton" name="bt_Fileselector">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="..."/>
       </Properties>
     </Component>
   </SubComponents>
