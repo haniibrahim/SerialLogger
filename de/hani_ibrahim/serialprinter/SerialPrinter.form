@@ -47,7 +47,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="cb_Log" min="-2" max="-2" attributes="0"/>
+                              <Component id="ck_Log" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                               <Component id="tf_Logfile" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -133,7 +133,7 @@
                           <Component id="bt_ClosePort" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="tf_Logfile" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="bt_Fileselector" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cb_Log" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="ck_Log" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
@@ -318,7 +318,7 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JCheckBox" name="cb_Log">
+    <Component class="javax.swing.JCheckBox" name="ck_Log">
       <Properties>
         <Property name="text" type="java.lang.String" value="Log to:"/>
       </Properties>

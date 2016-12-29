@@ -255,6 +255,9 @@ public class SerialPrinter extends JFrame {
         prefs.put("parity", cb_Parity.getSelectedItem().toString());
 //        prefs.put("handshake", cb_handshake.getSelectedItem().toString());
 
+        // Save Logfile name
+        prefs.put("logfile", tf_Logfile.getText());
+        prefs.putBoolean("logto", ck_Log.isSelected());
     }
 
     private void setPrefs() {
@@ -273,20 +276,29 @@ public class SerialPrinter extends JFrame {
         // Set window size
         setSize(prefs.getInt("width", 637),
                 prefs.getInt("height", 380));
+        
+        // Initial logfilename => ~/vsp.log
+        String logfileName = System.getProperty("user.home") 
+                + System.getProperty("file.separator")
+                + "vsp.log";
 
-        // Set serial parameters
+        // Set serial parameters and logfile name
         String baud      = prefs.get("baud", "9600");
         String databits  = prefs.get("databits", "8");
         String stopbits  = prefs.get("stopbits", "1");
         String parity    = prefs.get("parity", "none");
         String handshake = prefs.get("handshake", "none");
+        String logfile   = prefs.get("logfile", logfileName);
+        boolean logto    = prefs.getBoolean("logto", false);
 
-        // Put default/stored serialparameters in GUI
+        // Put default/stored serialparameters/logfile in GUI
         cb_Baud.setSelectedItem(baud);
         cb_DataBits.setSelectedItem(databits);
         cb_StopBits.setSelectedItem(stopbits);
         cb_Parity.setSelectedItem(parity);
         cb_Handshake.setSelectedItem(handshake);
+        tf_Logfile.setText(logfile);
+        ck_Log.setSelected(logto);
     }
 
     /**
@@ -317,7 +329,7 @@ public class SerialPrinter extends JFrame {
         bt_OpenPort = new javax.swing.JButton();
         lb_Handshake = new javax.swing.JLabel();
         cb_Handshake = new javax.swing.JComboBox();
-        cb_Log = new javax.swing.JCheckBox();
+        ck_Log = new javax.swing.JCheckBox();
         tf_Logfile = new javax.swing.JTextField();
         bt_Fileselector = new javax.swing.JButton();
 
@@ -390,7 +402,7 @@ public class SerialPrinter extends JFrame {
 
         cb_Handshake.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "RTS/CTS", "XON/XOFF", "none" }));
 
-        cb_Log.setText("Log to:");
+        ck_Log.setText("Log to:");
 
         bt_Fileselector.setText("...");
 
@@ -414,7 +426,7 @@ public class SerialPrinter extends JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(cb_Log)
+                                .addComponent(ck_Log)
                                 .addGap(12, 12, 12)
                                 .addComponent(tf_Logfile)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -482,7 +494,7 @@ public class SerialPrinter extends JFrame {
                             .addComponent(bt_ClosePort)
                             .addComponent(tf_Logfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(bt_Fileselector)
-                            .addComponent(cb_Log)))
+                            .addComponent(ck_Log)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addComponent(sp_VirtualPrint)
@@ -664,9 +676,9 @@ public class SerialPrinter extends JFrame {
     private javax.swing.JComboBox cb_Commport;
     private javax.swing.JComboBox cb_DataBits;
     private javax.swing.JComboBox cb_Handshake;
-    private javax.swing.JCheckBox cb_Log;
     private javax.swing.JComboBox cb_Parity;
     private javax.swing.JComboBox cb_StopBits;
+    private javax.swing.JCheckBox ck_Log;
     private javax.swing.JLabel lb_Baud;
     private javax.swing.JLabel lb_Commport;
     private javax.swing.JLabel lb_DataBits;
