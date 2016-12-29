@@ -1,6 +1,7 @@
 package de.hani_ibrahim.serialprinter;
 
 import com.fazecast.jSerialComm.*;
+import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.List;
 import java.util.Scanner;
@@ -259,10 +260,15 @@ public class SerialPrinter extends JFrame {
     private void setPrefs() {
         // Get node
         Preferences prefs = Preferences.userNodeForPackage(getClass());
+        
+        // Calculate screen-centered windows position
+        final Dimension d = this.getToolkit().getScreenSize();
+        int win_x  = (int)((d.getWidth() - this.getWidth()) / 2);
+        int win_y = (int) ((d.getHeight() - this.getHeight()) / 2);
 
         // Set window position
-        setLocation(prefs.getInt("xpos", 0),
-                prefs.getInt("ypos", 0));
+        setLocation(prefs.getInt("xpos", win_x),
+                prefs.getInt("ypos", win_y));
 
         // Set window size
         setSize(prefs.getInt("width", 637),
