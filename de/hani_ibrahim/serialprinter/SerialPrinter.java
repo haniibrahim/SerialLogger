@@ -3,6 +3,9 @@ package de.hani_ibrahim.serialprinter;
 import com.fazecast.jSerialComm.*;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.CancellationException;
@@ -10,7 +13,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -31,6 +33,9 @@ public class SerialPrinter extends JFrame {
     static SerialPort chosenPort;
     private SerialReadTask serialReader;
     String portName;
+
+    Preferences prefs;
+    BufferedWriter bw;
 
     /**
      * Creates new form SerialPrinter
@@ -168,9 +173,26 @@ public class SerialPrinter extends JFrame {
 
         @Override
         protected void process(List<String> chunkLines) {
-            for (String line : chunkLines) {
-                ta_VirtualPrint.append(line + "\n");
-                System.out.println(line);
+            if (ck_Logfile.isSelected()) { // Output on GUI, console AND logfile
+                try {
+                    FileWriter fw = new FileWriter(tf_Logfile.getText());
+                    bw = new BufferedWriter(fw);
+                    for (String line : chunkLines) {
+                        ta_VirtualPrint.append(line + "\n");
+                        System.out.println(line);
+                        bw.write(line);
+                        bw.write(System.getProperty("line.separator"));
+                    }
+                } catch (IOException ex) {
+                    // TO-DO: Catchcode
+                    System.err.println("ERROR: File access error, check permission and filename");
+                    Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else { // Output on GUI and console only
+                for (String line : chunkLines) {
+                    ta_VirtualPrint.append(line + "\n");
+                    System.out.println(line);
+                }
             }
         }
 
@@ -188,13 +210,24 @@ public class SerialPrinter extends JFrame {
                     cb_Handshake.setEnabled(true);
                     bt_OpenPort.setEnabled(true);
                     bt_ClosePort.setEnabled(false);
+                    ck_Logfile.setEnabled(true);
+                    tf_Logfile.setEnabled(true);
+                    bt_Fileselector.setEnabled(true);
                 }
             } catch (InterruptedException ex) {
                 Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ExecutionException ex) {
                 Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
             } catch (CancellationException ex) { // important
-//                Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
+                // do nothing, just catch CancellationException
+            }
+            if (ck_Logfile.isSelected()) {
+                try {
+                    bw.flush();
+                    bw.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
@@ -257,16 +290,16 @@ public class SerialPrinter extends JFrame {
 
         // Save Logfile name
         prefs.put("logfile", tf_Logfile.getText());
-        prefs.putBoolean("logto", ck_Log.isSelected());
+        prefs.putBoolean("logto", ck_Logfile.isSelected());
     }
 
     private void setPrefs() {
         // Get node
         Preferences prefs = Preferences.userNodeForPackage(getClass());
-        
+
         // Calculate screen-centered windows position
         final Dimension d = this.getToolkit().getScreenSize();
-        int win_x  = (int)((d.getWidth() - this.getWidth()) / 2);
+        int win_x = (int) ((d.getWidth() - this.getWidth()) / 2);
         int win_y = (int) ((d.getHeight() - this.getHeight()) / 2);
 
         // Set window position
@@ -276,20 +309,20 @@ public class SerialPrinter extends JFrame {
         // Set window size
         setSize(prefs.getInt("width", 637),
                 prefs.getInt("height", 380));
-        
+
         // Initial logfilename => ~/vsp.log
-        String logfileName = System.getProperty("user.home") 
+        String logfileName = System.getProperty("user.home")
                 + System.getProperty("file.separator")
                 + "vsp.log";
 
         // Set serial parameters and logfile name
-        String baud      = prefs.get("baud", "9600");
-        String databits  = prefs.get("databits", "8");
-        String stopbits  = prefs.get("stopbits", "1");
-        String parity    = prefs.get("parity", "none");
+        String baud = prefs.get("baud", "9600");
+        String databits = prefs.get("databits", "8");
+        String stopbits = prefs.get("stopbits", "1");
+        String parity = prefs.get("parity", "none");
         String handshake = prefs.get("handshake", "none");
-        String logfile   = prefs.get("logfile", logfileName);
-        boolean logto    = prefs.getBoolean("logto", false);
+        String logfile = prefs.get("logfile", logfileName);
+        boolean logto = prefs.getBoolean("logto", false);
 
         // Put default/stored serialparameters/logfile in GUI
         cb_Baud.setSelectedItem(baud);
@@ -298,7 +331,7 @@ public class SerialPrinter extends JFrame {
         cb_Parity.setSelectedItem(parity);
         cb_Handshake.setSelectedItem(handshake);
         tf_Logfile.setText(logfile);
-        ck_Log.setSelected(logto);
+        ck_Logfile.setSelected(logto);
     }
 
     /**
@@ -329,7 +362,7 @@ public class SerialPrinter extends JFrame {
         bt_OpenPort = new javax.swing.JButton();
         lb_Handshake = new javax.swing.JLabel();
         cb_Handshake = new javax.swing.JComboBox();
-        ck_Log = new javax.swing.JCheckBox();
+        ck_Logfile = new javax.swing.JCheckBox();
         tf_Logfile = new javax.swing.JTextField();
         bt_Fileselector = new javax.swing.JButton();
 
@@ -402,7 +435,7 @@ public class SerialPrinter extends JFrame {
 
         cb_Handshake.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "RTS/CTS", "XON/XOFF", "none" }));
 
-        ck_Log.setText("Log to:");
+        ck_Logfile.setText("Log to:");
 
         bt_Fileselector.setText("...");
 
@@ -426,7 +459,7 @@ public class SerialPrinter extends JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(ck_Log)
+                                .addComponent(ck_Logfile)
                                 .addGap(12, 12, 12)
                                 .addComponent(tf_Logfile)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -494,7 +527,7 @@ public class SerialPrinter extends JFrame {
                             .addComponent(bt_ClosePort)
                             .addComponent(tf_Logfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(bt_Fileselector)
-                            .addComponent(ck_Log)))
+                            .addComponent(ck_Logfile)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addComponent(sp_VirtualPrint)
@@ -521,6 +554,9 @@ public class SerialPrinter extends JFrame {
             cb_Handshake.setEnabled(true);
             bt_OpenPort.setEnabled(true);
             bt_ClosePort.setEnabled(false);
+            ck_Logfile.setEnabled(true);
+            tf_Logfile.setEnabled(true);
+            bt_Fileselector.setEnabled(true);
             System.out.println("Port " + portName + " closed");
         } else {
             JOptionPane.showMessageDialog(this,
@@ -535,6 +571,9 @@ public class SerialPrinter extends JFrame {
             cb_Handshake.setEnabled(true);
             bt_OpenPort.setEnabled(true);
             bt_ClosePort.setEnabled(false);
+            ck_Logfile.setEnabled(true);
+            tf_Logfile.setEnabled(true);
+            bt_Fileselector.setEnabled(true);
             System.err.println("ERROR: Port was not open");
         }
         serialReader.cancel(true);
@@ -560,6 +599,9 @@ public class SerialPrinter extends JFrame {
         cb_Handshake.setEnabled(false);
         bt_OpenPort.setEnabled(false);
         bt_ClosePort.setEnabled(true);
+        ck_Logfile.setEnabled(false);
+        tf_Logfile.setEnabled(false);
+        bt_Fileselector.setEnabled(false);
         // Read from the serial interface
         serialReader = new SerialReadTask();
         serialReader.execute();
@@ -678,7 +720,7 @@ public class SerialPrinter extends JFrame {
     private javax.swing.JComboBox cb_Handshake;
     private javax.swing.JComboBox cb_Parity;
     private javax.swing.JComboBox cb_StopBits;
-    private javax.swing.JCheckBox ck_Log;
+    private javax.swing.JCheckBox ck_Logfile;
     private javax.swing.JLabel lb_Baud;
     private javax.swing.JLabel lb_Commport;
     private javax.swing.JLabel lb_DataBits;
