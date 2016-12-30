@@ -2,10 +2,14 @@ package de.hani_ibrahim.serialprinter;
 
 import com.fazecast.jSerialComm.*;
 import java.awt.Dimension;
+import java.awt.FileDialog;
 import java.awt.Toolkit;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.CancellationException;
@@ -35,7 +39,8 @@ public class SerialPrinter extends JFrame {
     String portName;
 
     Preferences prefs;
-    BufferedWriter bw;
+//    BufferedWriter bw;
+    PrintWriter pw;
 
     /**
      * Creates new form SerialPrinter
@@ -62,9 +67,6 @@ public class SerialPrinter extends JFrame {
         ta_VirtualPrint.addMouseListener(new ContextMenuMouseListener());
         tf_Logfile.addMouseListener(new ContextMenuMouseListener());
 
-        /* Make status messages invisible */
-        //lb_Status.setVisible(false); // Temp: Set Status label invisible
-        //lb_Statusmessage.setVisible(false); // Temp: Set status message invisable
         // Open and close button diabled till updatePortList finished
         bt_OpenPort.setEnabled(false);
         bt_ClosePort.setEnabled(false);
@@ -151,8 +153,8 @@ public class SerialPrinter extends JFrame {
             chosenPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
 
             if (chosenPort.openPort()) {
-                System.out.println("Port " + portName + " opened");
-                System.out.println("Serial data: ");
+//                System.out.println("Port " + portName + " opened");
+//                System.out.println("Serial data: ");
 
                 Scanner serialScanner = new Scanner(chosenPort.getInputStream());
                 while (!isCancelled()) {
@@ -176,12 +178,12 @@ public class SerialPrinter extends JFrame {
             if (ck_Logfile.isSelected()) { // Output on GUI, console AND logfile
                 try {
                     FileWriter fw = new FileWriter(tf_Logfile.getText());
-                    bw = new BufferedWriter(fw);
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    pw = new PrintWriter(bw);
                     for (String line : chunkLines) {
+                        pw.println(line);
                         ta_VirtualPrint.append(line + "\n");
                         System.out.println(line);
-                        bw.write(line);
-                        bw.write(System.getProperty("line.separator"));
                     }
                 } catch (IOException ex) {
                     // TO-DO: Catchcode
@@ -222,11 +224,10 @@ public class SerialPrinter extends JFrame {
                 // do nothing, just catch CancellationException
             }
             if (ck_Logfile.isSelected()) {
-                try {
-                    bw.flush();
-                    bw.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
+                if (pw != null) { // if BufferedWriter bw exists
+                    pw.flush();
+                    pw.close();
+
                 }
             }
         }
@@ -438,6 +439,11 @@ public class SerialPrinter extends JFrame {
         ck_Logfile.setText("Log to:");
 
         bt_Fileselector.setText("...");
+        bt_Fileselector.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_FileselectorActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -557,7 +563,7 @@ public class SerialPrinter extends JFrame {
             ck_Logfile.setEnabled(true);
             tf_Logfile.setEnabled(true);
             bt_Fileselector.setEnabled(true);
-            System.out.println("Port " + portName + " closed");
+//            System.out.println("Port " + portName + " closed");
         } else {
             JOptionPane.showMessageDialog(this,
                     "Port was not open",
@@ -589,23 +595,47 @@ public class SerialPrinter extends JFrame {
 
     private void bt_OpenPortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_OpenPortActionPerformed
 //        System.out.println("OpenPort gedrückt");
-        // Disable GUI elements
-        cb_Commport.setEnabled(false);
-        bt_Update.setEnabled(false);
-        cb_Baud.setEnabled(false);
-        cb_DataBits.setEnabled(false);
-        cb_StopBits.setEnabled(false);
-        cb_Parity.setEnabled(false);
-        cb_Handshake.setEnabled(false);
-        bt_OpenPort.setEnabled(false);
-        bt_ClosePort.setEnabled(true);
-        ck_Logfile.setEnabled(false);
-        tf_Logfile.setEnabled(false);
-        bt_Fileselector.setEnabled(false);
-        // Read from the serial interface
-        serialReader = new SerialReadTask();
-        serialReader.execute();
+        // Check for consistent logging settings
+        if ((ck_Logfile.isSelected() && tf_Logfile.getText().equals(""))) {
+            JOptionPane.showMessageDialog(null,
+                    "Filename is empty",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            System.err.println("Filename is empty");
+        } else {
+            // Disable GUI elements
+            cb_Commport.setEnabled(false);
+            bt_Update.setEnabled(false);
+            cb_Baud.setEnabled(false);
+            cb_DataBits.setEnabled(false);
+            cb_StopBits.setEnabled(false);
+            cb_Parity.setEnabled(false);
+            cb_Handshake.setEnabled(false);
+            bt_OpenPort.setEnabled(false);
+            bt_ClosePort.setEnabled(true);
+            ck_Logfile.setEnabled(false);
+            tf_Logfile.setEnabled(false);
+            bt_Fileselector.setEnabled(false);
+            // Read from the serial interface
+            serialReader = new SerialReadTask();
+            serialReader.execute();
+        }
     }//GEN-LAST:event_bt_OpenPortActionPerformed
+
+    private void bt_FileselectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_FileselectorActionPerformed
+        FileDialog openfd = new FileDialog(this, "Specify log file ...", FileDialog.LOAD);
+        FilenameFilter filter = new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return (name.endsWith(".txt") || name.endsWith(".log"));
+            }
+        };
+        openfd.setFilenameFilter(filter);
+        openfd.setVisible(true);
+        String path = openfd.getDirectory() + openfd.getFile();
+        if (openfd.getFile() != null) {
+            tf_Logfile.setText(path);
+        }
+    }//GEN-LAST:event_bt_FileselectorActionPerformed
 
     /**
      * @param args the command line arguments
@@ -698,6 +728,9 @@ public class SerialPrinter extends JFrame {
             }
         }
         //</editor-fold>
+
+        // Mac menubar
+        System.getProperties().put("apple.laf.useScreenMenuBar", "true");
 
         /* Create and display the form */
         SwingUtilities.invokeLater(new Runnable() {
