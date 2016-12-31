@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="title" type="java.lang.String" value="Virtual Serial Printer"/>
+    <Property name="locationByPlatform" type="boolean" value="true"/>
+    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+      <Connection component="Form" name="preferredSize" type="property"/>
+    </Property>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="lb_Commport" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="cb_Commport" min="-2" pref="200" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="bt_Update" min="-2" pref="88" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="lb_VirtalPrint" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="107" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="ck_Logfile" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                              <Component id="tf_Logfile" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="bt_Fileselector" min="-2" pref="27" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="sp_VirtualPrint" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="bt_Info" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="bt_OpenPort" alignment="1" max="32767" attributes="0"/>
+                  <Component id="bt_ClosePort" alignment="1" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                              <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                                  <Component id="lb_Baud" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lb_DataBits" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="lb_StopBits" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="lb_Handshake" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lb_Parity" alignment="1" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="cb_Handshake" pref="0" max="32767" attributes="0"/>
+                          <Component id="cb_Parity" pref="0" max="32767" attributes="0"/>
+                          <Component id="cb_StopBits" max="32767" attributes="0"/>
+                          <Component id="cb_DataBits" max="32767" attributes="0"/>
+                          <Component id="cb_Baud" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lb_Commport" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cb_Commport" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="bt_Update" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="bt_Info" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="lb_VirtalPrint" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="cb_Baud" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lb_Baud" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="cb_DataBits" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lb_DataBits" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="cb_StopBits" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lb_StopBits" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="cb_Parity" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lb_Parity" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="cb_Handshake" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lb_Handshake" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="139" max="32767" attributes="0"/>
+                      <Component id="bt_OpenPort" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="bt_ClosePort" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="tf_Logfile" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="bt_Fileselector" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="ck_Logfile" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
+                      <Component id="sp_VirtualPrint" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="lb_Commport">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+          <FontInfo relative="true">
+            <Font component="lb_Commport" property="font" relativeSize="true" size="0"/>
+          </FontInfo>
+        </Property>
+        <Property name="text" type="java.lang.String" value="CommPort:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="cb_Commport">
+      <Properties>
+        <Property name="editable" type="boolean" value="true"/>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="1">
+            <StringItem index="0" value="Update Ports ..."/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="SerialPrinter_cb_Commport"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lb_Baud">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Baud:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="cb_Baud">
+      <Properties>
+        <Property name="editable" type="boolean" value="true"/>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="7">
+            <StringItem index="0" value="2400"/>
+            <StringItem index="1" value="4800"/>
+            <StringItem index="2" value="9600"/>
+            <StringItem index="3" value="19200"/>
+            <StringItem index="4" value="38400"/>
+            <StringItem index="5" value="57600"/>
+            <StringItem index="6" value="115200"/>
+          </StringArray>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lb_DataBits">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Data Bits:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="cb_DataBits">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="5"/>
+            <StringItem index="1" value="6"/>
+            <StringItem index="2" value="7"/>
+            <StringItem index="3" value="8"/>
+          </StringArray>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lb_StopBits">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Stop Bits:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="cb_StopBits">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="3">
+            <StringItem index="0" value="1"/>
+            <StringItem index="1" value="1.5"/>
+            <StringItem index="2" value="2"/>
+          </StringArray>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lb_Parity">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Parity:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="cb_Parity">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="5">
+            <StringItem index="0" value="none"/>
+            <StringItem index="1" value="even"/>
+            <StringItem index="2" value="odd"/>
+            <StringItem index="3" value="mark"/>
+            <StringItem index="4" value="space"/>
+          </StringArray>
+        </Property>
+      </Properties>
+    </Component>
+    <Container class="javax.swing.JScrollPane" name="sp_VirtualPrint">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JTextArea" name="ta_VirtualPrint">
+          <Properties>
+            <Property name="editable" type="boolean" value="false"/>
+            <Property name="columns" type="int" value="20"/>
+            <Property name="rows" type="int" value="5"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.JButton" name="bt_Update">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Update"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_UpdateActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="bt_ClosePort">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Close Port"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_ClosePortActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="bt_Info">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Info"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_InfoActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lb_VirtalPrint">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
+          <FontInfo relative="true">
+            <Font component="lb_VirtalPrint" property="font" relativeSize="true" size="0"/>
+          </FontInfo>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Output:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="bt_OpenPort">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Open Port"/>
+        <Property name="toolTipText" type="java.lang.String" value=""/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_OpenPortActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lb_Handshake">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Handshake:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="cb_Handshake">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="3">
+            <StringItem index="0" value="RTS/CTS"/>
+            <StringItem index="1" value="XON/XOFF"/>
+            <StringItem index="2" value="none"/>
+          </StringArray>
+        </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="ck_Logfile">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Log to:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tf_Logfile">
+    </Component>
+    <Component class="javax.swing.JButton" name="bt_Fileselector">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="..."/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_FileselectorActionPerformed"/>
+      </Events>
+    </Component>
+  </SubComponents>
+</Form>
