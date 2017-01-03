@@ -6,6 +6,7 @@ import java.awt.FileDialog;
 import java.awt.Toolkit;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -57,7 +59,11 @@ public class SerialPrinter extends JFrame {
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {
+                try{
                 storePrefs();
+                } catch (BackingStoreException ex){
+                    
+                }
             }
         }));
 
@@ -175,15 +181,13 @@ public class SerialPrinter extends JFrame {
         }
 
         @Override
-        protected void process(List<String> chunkLines) {
-            String[] stringLines;
+        protected void process(List<String> chunk) {
             if (ck_Logfile.isSelected()) { // Output on GUI, console AND logfile
                 try {
-                    FileWriter fw = new FileWriter(tf_Logfile.getText(), false); // false - Do not append on an existing file
-                    BufferedWriter bw = new BufferedWriter(fw);
-                    pw = new PrintWriter(bw);
+                    FileOutputStream fw = new FileOutputStream(tf_Logfile.getText());
+                    pw = new PrintWriter(fw);
 
-                    for (String line : chunkLines) {
+                    for (String line : chunk) {
                         pw.println(line); // save to file
                         ta_VirtualPrint.append(line + "\n"); // display in GUI
                         System.out.println(line); // print on console
@@ -194,7 +198,7 @@ public class SerialPrinter extends JFrame {
                     Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else { // Output on GUI and console only
-                for (String line : chunkLines) {
+                for (String line : chunk) {
                     ta_VirtualPrint.append(line + "\n");
                     System.out.println(line);
                 }
@@ -273,7 +277,7 @@ public class SerialPrinter extends JFrame {
         worker.execute();
     }
 
-    private void storePrefs() {
+    private void storePrefs() throws BackingStoreException {
         // Get node
         prefs = Preferences.userNodeForPackage(getClass());
 
@@ -299,6 +303,8 @@ public class SerialPrinter extends JFrame {
             prefs.put("logfile", tf_Logfile.getText());
         }
         prefs.putBoolean("logto", ck_Logfile.isSelected());
+        
+        prefs.flush();
     }
 
     private void setPrefs() {
