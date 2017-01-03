@@ -42,7 +42,6 @@ public class SerialPrinter extends JFrame {
 
     Preferences prefs;
     String stdLogfileName;
-//    BufferedWriter bw;
     PrintWriter pw;
 
     /**
@@ -184,9 +183,7 @@ public class SerialPrinter extends JFrame {
         protected void process(List<String> chunk) {
             if (ck_Logfile.isSelected()) { // Output on GUI, console AND logfile
                 try {
-                    FileOutputStream fw = new FileOutputStream(tf_Logfile.getText());
-                    pw = new PrintWriter(fw);
-
+                    pw = new PrintWriter(new FileWriter(tf_Logfile.getText()));
                     for (String line : chunk) {
                         pw.println(line); // save to file
                         ta_VirtualPrint.append(line + "\n"); // display in GUI
@@ -231,10 +228,8 @@ public class SerialPrinter extends JFrame {
                 // do nothing, just catch CancellationException
             }
             if (ck_Logfile.isSelected()) {
-                if (pw != null) { // if BufferedWriter bw exists
-                    pw.flush();
+                if (pw != null) { // if PrintWriter bw exists
                     pw.close();
-
                 }
             }
         }
