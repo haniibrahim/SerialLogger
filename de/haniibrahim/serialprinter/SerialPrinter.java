@@ -58,10 +58,10 @@ public class SerialPrinter extends JFrame {
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {
-                try{
-                storePrefs();
-                } catch (BackingStoreException ex){
-                    
+                try {
+                    storePrefs();
+                } catch (BackingStoreException ex) {
+
                 }
             }
         }));
@@ -94,7 +94,7 @@ public class SerialPrinter extends JFrame {
     private class SerialReadTask extends SwingWorker<Boolean, String> {
 
         @Override
-        protected Boolean doInBackground() {
+        protected Boolean doInBackground() throws IOException {
             // Get values from the GUI
             portName = cb_Commport.getSelectedItem().toString();
             int baud = Integer.parseInt(cb_Baud.getSelectedItem().toString());
@@ -159,16 +159,23 @@ public class SerialPrinter extends JFrame {
             chosenPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
 
             if (chosenPort.openPort()) {
-//                System.out.println("Port " + portName + " opened");
-//                System.out.println("Serial data: ");
-
+                boolean logFlag;
+                if (ck_Logfile.isSelected()) {
+                    pw = new PrintWriter(new FileWriter(tf_Logfile.getText()));
+                    logFlag = true;
+                } else {
+                    logFlag = false;
+                }
                 Scanner serialScanner = new Scanner(chosenPort.getInputStream());
-                while (!isCancelled()) {
-                    while (serialScanner.hasNextLine()) {
-                        String line = serialScanner.nextLine();
-                        publish(line);
+//                while (!isCancelled()) {
+                while (serialScanner.hasNextLine() || !isCancelled()) {
+                    String line = serialScanner.nextLine();
+                    publish(line);
+                    if (logFlag) {
+                        pw.println(line); // save to file
                     }
                 }
+//                }
                 return false;
             } else {
                 JOptionPane.showMessageDialog(null,
@@ -182,18 +189,18 @@ public class SerialPrinter extends JFrame {
         @Override
         protected void process(List<String> chunk) {
             if (ck_Logfile.isSelected()) { // Output on GUI, console AND logfile
-                try {
-                    pw = new PrintWriter(new FileWriter(tf_Logfile.getText()));
-                    for (String line : chunk) {
-                        pw.println(line); // save to file
-                        ta_VirtualPrint.append(line + "\n"); // display in GUI
-                        System.out.println(line); // print on console
-                    }
-                } catch (IOException ex) {
-                    // TO-DO: Catchcode
-                    System.err.println("ERROR: File access error, check permission and filename");
-                    Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
+//                try {
+//                    pw = new PrintWriter(new FileWriter(tf_Logfile.getText()));
+                for (String line : chunk) {
+//                        pw.println(line); // save to file
+                    ta_VirtualPrint.append(line + "\n"); // display in GUI
+                    System.out.println(line); // print on console
                 }
+//                } catch (IOException ex) {
+//                    // TO-DO: Catchcode
+//                    System.err.println("ERROR: File access error, check permission and filename");
+//                    Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
+//                }
             } else { // Output on GUI and console only
                 for (String line : chunk) {
                     ta_VirtualPrint.append(line + "\n");
@@ -298,7 +305,7 @@ public class SerialPrinter extends JFrame {
             prefs.put("logfile", tf_Logfile.getText());
         }
         prefs.putBoolean("logto", ck_Logfile.isSelected());
-        
+
         prefs.flush();
     }
 
