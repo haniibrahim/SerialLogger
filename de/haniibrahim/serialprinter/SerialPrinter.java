@@ -4,9 +4,7 @@ import com.fazecast.jSerialComm.*;
 import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Toolkit;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -29,7 +27,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 /**
  * *
  * "Virtual Serial Printer" simply logs the data stream received from a serial
- * interface
+ * interface to a GUI interface, the console and optionally to a file
  *
  * @author Hani Andreas Ibrahim
  * @version 0.5
@@ -77,12 +75,6 @@ public class SerialPrinter extends JFrame {
         bt_OpenPort.setEnabled(false);
         bt_ClosePort.setEnabled(false);
 
-//        // Initial values for serial parameters
-//        cb_Baud.setSelectedItem("9600");
-//        cb_DataBits.setSelectedItem("8");
-//        cb_StopBits.setSelectedItem("1");
-//        cb_Parity.setSelectedItem("none");
-//        cb_Handshake.setSelectedItem("none");
         // Handshake deactivated - NOT IMPLEMENTED YET
         lb_Handshake.setVisible(false);
         cb_Handshake.setVisible(false);
@@ -189,18 +181,10 @@ public class SerialPrinter extends JFrame {
         @Override
         protected void process(List<String> chunk) {
             if (ck_Logfile.isSelected()) { // Output on GUI, console AND logfile
-//                try {
-//                    pw = new PrintWriter(new FileWriter(tf_Logfile.getText()));
                 for (String line : chunk) {
-//                        pw.println(line); // save to file
                     ta_VirtualPrint.append(line + "\n"); // display in GUI
                     System.out.println(line); // print on console
                 }
-//                } catch (IOException ex) {
-//                    // TO-DO: Catchcode
-//                    System.err.println("ERROR: File access error, check permission and filename");
-//                    Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
-//                }
             } else { // Output on GUI and console only
                 for (String line : chunk) {
                     ta_VirtualPrint.append(line + "\n");
@@ -273,7 +257,6 @@ public class SerialPrinter extends JFrame {
                     Logger.getLogger(SerialPrinter.class
                             .getName()).log(Level.SEVERE, null, ex);
                 }
-
             }
         };
         worker.execute();
@@ -416,6 +399,7 @@ public class SerialPrinter extends JFrame {
         sp_VirtualPrint.setViewportView(ta_VirtualPrint);
 
         bt_Update.setText("Update");
+        bt_Update.setToolTipText("Update CommPort list");
         bt_Update.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_UpdateActionPerformed(evt);
@@ -452,8 +436,10 @@ public class SerialPrinter extends JFrame {
         cb_Handshake.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "RTS/CTS", "XON/XOFF", "none" }));
 
         ck_Logfile.setText("Log to:");
+        ck_Logfile.setToolTipText("Enable/Disable logging");
 
         bt_Fileselector.setText("...");
+        bt_Fileselector.setToolTipText("Choose log file");
         bt_Fileselector.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_FileselectorActionPerformed(evt);

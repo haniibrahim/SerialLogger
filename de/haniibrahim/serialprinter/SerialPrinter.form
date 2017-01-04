@@ -262,6 +262,7 @@
     <Component class="javax.swing.JButton" name="bt_Update">
       <Properties>
         <Property name="text" type="java.lang.String" value="Update"/>
+        <Property name="toolTipText" type="java.lang.String" value="Update CommPort list"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_UpdateActionPerformed"/>
@@ -321,6 +322,7 @@
     <Component class="javax.swing.JCheckBox" name="ck_Logfile">
       <Properties>
         <Property name="text" type="java.lang.String" value="Log to:"/>
+        <Property name="toolTipText" type="java.lang.String" value="Enable/Disable logging"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tf_Logfile">
@@ -328,6 +330,7 @@
     <Component class="javax.swing.JButton" name="bt_Fileselector">
       <Properties>
         <Property name="text" type="java.lang.String" value="..."/>
+        <Property name="toolTipText" type="java.lang.String" value="Choose log file"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_FileselectorActionPerformed"/>
