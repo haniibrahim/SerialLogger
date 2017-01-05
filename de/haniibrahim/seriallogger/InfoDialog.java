@@ -1,4 +1,4 @@
-package de.haniibrahim.serialprinter;
+package de.haniibrahim.seriallogger;
 
 /*
  * To change this template, choose Tools | Templates

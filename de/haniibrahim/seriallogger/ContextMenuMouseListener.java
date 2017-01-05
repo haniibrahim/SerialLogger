@@ -1,4 +1,4 @@
-package de.haniibrahim.serialprinter;
+package de.haniibrahim.seriallogger;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;

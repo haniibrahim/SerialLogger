@@ -1,4 +1,4 @@
-package de.haniibrahim.serialprinter;
+package de.haniibrahim.seriallogger;
 
 import com.fazecast.jSerialComm.*;
 import java.awt.Dimension;
@@ -32,7 +32,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author Hani Andreas Ibrahim
  * @version 0.5
  */
-public class SerialPrinter extends JFrame {
+public class SerialLogger extends JFrame {
 
     static SerialPort chosenPort;
     private SerialReadTask serialReader;
@@ -45,7 +45,7 @@ public class SerialPrinter extends JFrame {
     /**
      * Creates new form SerialPrinter
      */
-    public SerialPrinter() {
+    public SerialLogger() {
         // Set app icon
         this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("vsp.png")));
         initComponents();
@@ -212,9 +212,9 @@ public class SerialPrinter extends JFrame {
                     bt_Fileselector.setEnabled(true);
                 }
             } catch (InterruptedException ex) {
-                Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ExecutionException ex) {
-                Logger.getLogger(SerialPrinter.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
             } catch (CancellationException ex) { // important
                 // do nothing, just catch CancellationException
             }
@@ -250,11 +250,11 @@ public class SerialPrinter extends JFrame {
                     bt_OpenPort.setEnabled(true);
 
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(SerialPrinter.class
+                    Logger.getLogger(SerialLogger.class
                             .getName()).log(Level.SEVERE, null, ex);
 
                 } catch (ExecutionException ex) {
-                    Logger.getLogger(SerialPrinter.class
+                    Logger.getLogger(SerialLogger.class
                             .getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -665,19 +665,19 @@ public class SerialPrinter extends JFrame {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
             } catch (ClassNotFoundException ex1) {
-                Logger.getLogger(SerialPrinter.class
+                Logger.getLogger(SerialLogger.class
                         .getName()).log(Level.SEVERE, null, ex1);
 
             } catch (InstantiationException ex1) {
-                Logger.getLogger(SerialPrinter.class
+                Logger.getLogger(SerialLogger.class
                         .getName()).log(Level.SEVERE, null, ex1);
 
             } catch (IllegalAccessException ex1) {
-                Logger.getLogger(SerialPrinter.class
+                Logger.getLogger(SerialLogger.class
                         .getName()).log(Level.SEVERE, null, ex1);
 
             } catch (UnsupportedLookAndFeelException ex1) {
-                Logger.getLogger(SerialPrinter.class
+                Logger.getLogger(SerialLogger.class
                         .getName()).log(Level.SEVERE, null, ex1);
             }
         } catch (InstantiationException ex) {
@@ -685,19 +685,19 @@ public class SerialPrinter extends JFrame {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
             } catch (ClassNotFoundException ex1) {
-                Logger.getLogger(SerialPrinter.class
+                Logger.getLogger(SerialLogger.class
                         .getName()).log(Level.SEVERE, null, ex1);
 
             } catch (InstantiationException ex1) {
-                Logger.getLogger(SerialPrinter.class
+                Logger.getLogger(SerialLogger.class
                         .getName()).log(Level.SEVERE, null, ex1);
 
             } catch (IllegalAccessException ex1) {
-                Logger.getLogger(SerialPrinter.class
+                Logger.getLogger(SerialLogger.class
                         .getName()).log(Level.SEVERE, null, ex1);
 
             } catch (UnsupportedLookAndFeelException ex1) {
-                Logger.getLogger(SerialPrinter.class
+                Logger.getLogger(SerialLogger.class
                         .getName()).log(Level.SEVERE, null, ex1);
             }
         } catch (IllegalAccessException ex) {
@@ -705,19 +705,19 @@ public class SerialPrinter extends JFrame {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
             } catch (ClassNotFoundException ex1) {
-                Logger.getLogger(SerialPrinter.class
+                Logger.getLogger(SerialLogger.class
                         .getName()).log(Level.SEVERE, null, ex1);
 
             } catch (InstantiationException ex1) {
-                Logger.getLogger(SerialPrinter.class
+                Logger.getLogger(SerialLogger.class
                         .getName()).log(Level.SEVERE, null, ex1);
 
             } catch (IllegalAccessException ex1) {
-                Logger.getLogger(SerialPrinter.class
+                Logger.getLogger(SerialLogger.class
                         .getName()).log(Level.SEVERE, null, ex1);
 
             } catch (UnsupportedLookAndFeelException ex1) {
-                Logger.getLogger(SerialPrinter.class
+                Logger.getLogger(SerialLogger.class
                         .getName()).log(Level.SEVERE, null, ex1);
             }
         } catch (UnsupportedLookAndFeelException ex) {
@@ -725,29 +725,30 @@ public class SerialPrinter extends JFrame {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
             } catch (ClassNotFoundException ex1) {
-                Logger.getLogger(SerialPrinter.class
+                Logger.getLogger(SerialLogger.class
                         .getName()).log(Level.SEVERE, null, ex1);
 
             } catch (InstantiationException ex1) {
-                Logger.getLogger(SerialPrinter.class
+                Logger.getLogger(SerialLogger.class
                         .getName()).log(Level.SEVERE, null, ex1);
 
             } catch (IllegalAccessException ex1) {
-                Logger.getLogger(SerialPrinter.class
+                Logger.getLogger(SerialLogger.class
                         .getName()).log(Level.SEVERE, null, ex1);
 
             } catch (UnsupportedLookAndFeelException ex1) {
-                Logger.getLogger(SerialPrinter.class
+                Logger.getLogger(SerialLogger.class
                         .getName()).log(Level.SEVERE, null, ex1);
             }
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new SerialPrinter().setVisible(true);
+                new SerialLogger().setVisible(true);
             }
         });
     }
