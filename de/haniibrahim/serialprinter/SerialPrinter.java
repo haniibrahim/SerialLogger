@@ -595,9 +595,14 @@ public class SerialPrinter extends JFrame {
         // Check for consistent logging settings
         if ((ck_Logfile.isSelected() && tf_Logfile.getText().equals(""))) {
             JOptionPane.showMessageDialog(null,
-                    "Filename is empty",
+                    "Logfile name is empty",
                     "Error", JOptionPane.ERROR_MESSAGE);
-            System.err.println("Filename is empty");
+            System.err.println("Logfile name is empty");
+        } else if (ck_Logfile.isSelected() && (new File(tf_Logfile.getText())).exists()) {
+            JOptionPane.showMessageDialog(null,
+                    "Logfile aready exists",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            System.err.println("ERROR: Logfile already exists");
         } else {
             // Disable GUI elements
             cb_Commport.setEnabled(false);
