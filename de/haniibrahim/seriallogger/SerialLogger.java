@@ -68,7 +68,7 @@ public class SerialLogger extends JFrame {
         this.getRootPane().setDefaultButton(bt_OpenPort);
 
         // Add Contextmenu
-        ta_VirtualPrint.addMouseListener(new ContextMenuMouseListener());
+        ta_LogPanel.addMouseListener(new ContextMenuMouseListener());
         tf_Logfile.addMouseListener(new ContextMenuMouseListener());
 
         // Open and close button diabled till updatePortList finished
@@ -182,12 +182,12 @@ public class SerialLogger extends JFrame {
         protected void process(List<String> chunk) {
             if (ck_Logfile.isSelected()) { // Output on GUI, console AND logfile
                 for (String line : chunk) {
-                    ta_VirtualPrint.append(line + "\n"); // display in GUI
+                    ta_LogPanel.append(line + "\n"); // display in GUI
                     System.out.println(line); // print on console
                 }
             } else { // Output on GUI and console only
                 for (String line : chunk) {
-                    ta_VirtualPrint.append(line + "\n");
+                    ta_LogPanel.append(line + "\n");
                     System.out.println(line);
                 }
             }
@@ -353,7 +353,7 @@ public class SerialLogger extends JFrame {
         lb_Parity = new javax.swing.JLabel();
         cb_Parity = new javax.swing.JComboBox();
         sp_VirtualPrint = new javax.swing.JScrollPane();
-        ta_VirtualPrint = new javax.swing.JTextArea();
+        ta_LogPanel = new javax.swing.JTextArea();
         bt_Update = new javax.swing.JButton();
         bt_ClosePort = new javax.swing.JButton();
         bt_Info = new javax.swing.JButton();
@@ -366,7 +366,7 @@ public class SerialLogger extends JFrame {
         bt_Fileselector = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Virtual Serial Printer");
+        setTitle("SerialLogger");
         setLocationByPlatform(true);
         setMinimumSize(getPreferredSize());
 
@@ -393,10 +393,10 @@ public class SerialLogger extends JFrame {
 
         cb_Parity.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "none", "even", "odd", "mark", "space" }));
 
-        ta_VirtualPrint.setEditable(false);
-        ta_VirtualPrint.setColumns(20);
-        ta_VirtualPrint.setRows(5);
-        sp_VirtualPrint.setViewportView(ta_VirtualPrint);
+        ta_LogPanel.setEditable(false);
+        ta_LogPanel.setColumns(20);
+        ta_LogPanel.setRows(5);
+        sp_VirtualPrint.setViewportView(ta_LogPanel);
 
         bt_Update.setText("Update");
         bt_Update.setToolTipText("Update CommPort list");
@@ -580,8 +580,9 @@ public class SerialLogger extends JFrame {
 
     private void bt_InfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_InfoActionPerformed
         JOptionPane.showMessageDialog(this,
-                "<html><span style=\"font-size:large;\"><b>Virtual Serial Printer</b></span></html>\n"
-                + "Lists data received from a serial interface\n\n"
+                "<html><span style=\"font-size:large;\"><b>SerialLogger</b></span></html>\n"
+                + "Logs data received from a serial interface\n"
+                + "to GUI, console or file.\n\n"
                 + "(c) 2013 Hani Ibrahim <hani.ibrahim@gmx.de>\n\n",
                 "Info", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_bt_InfoActionPerformed
@@ -590,7 +591,7 @@ public class SerialLogger extends JFrame {
 //        System.out.println("OpenPort gedrückt");
 
         // Clear textarea
-        ta_VirtualPrint.setText("");
+        ta_LogPanel.setText("");
 
         // Check for consistent logging settings
         if ((ck_Logfile.isSelected() && tf_Logfile.getText().equals(""))) {
@@ -774,7 +775,7 @@ public class SerialLogger extends JFrame {
     private javax.swing.JLabel lb_StopBits;
     private javax.swing.JLabel lb_VirtalPrint;
     private javax.swing.JScrollPane sp_VirtualPrint;
-    private javax.swing.JTextArea ta_VirtualPrint;
+    private javax.swing.JTextArea ta_LogPanel;
     private javax.swing.JTextField tf_Logfile;
     // End of variables declaration//GEN-END:variables
 //</editor-fold>
