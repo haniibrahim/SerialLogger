@@ -31,29 +31,44 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="bt_Ok" min="-2" pref="67" max="-2" attributes="0"/>
+                  </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="lb_Image" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="lb_Text3" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="lb_Version" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
                           </Group>
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="lb_text" min="-2" max="-2" attributes="0"/>
+                              <Component id="lb_copyright" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lb_title" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lb_copy" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lb_Text2" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lb_Text1" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lb_title" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="lb_Email" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lb_License" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="bt_ok" min="-2" pref="67" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -62,17 +77,29 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
+              <Component id="lb_Image" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="lb_title" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="lb_text" min="-2" max="-2" attributes="0"/>
+              <Component id="lb_Text1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="lb_Text2" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="lb_copy" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="bt_ok" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lb_Text3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lb_Version" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="58" max="32767" attributes="0"/>
+              <Component id="lb_copyright" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="lb_License" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="lb_Email" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="bt_Ok" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -83,32 +110,58 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Lucida Grande" size="18" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="VirtualSerialPrinter"/>
+        <Property name="text" type="java.lang.String" value="SerialLogger"/>
+        <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="lb_text">
+    <Component class="javax.swing.JLabel" name="lb_Text1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Simple serial terminal app"/>
+        <Property name="text" type="java.lang.String" value="Logs data received from a serial interface"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="lb_copy">
+    <Component class="javax.swing.JLabel" name="lb_copyright">
       <Properties>
-        <Property name="text" type="java.lang.String" value="(c) Hani Andreas Ibrahim"/>
+        <Property name="text" type="java.lang.String" value="(c) Hani Andreas Ibrahim - GPL 3.0"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="bt_ok">
+    <Component class="javax.swing.JButton" name="bt_Ok">
       <Properties>
         <Property name="text" type="java.lang.String" value="OK"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_okActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_OkActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel2">
+    <Component class="javax.swing.JLabel" name="lb_Text2">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="to GUI, console or file."/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lb_Image">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/de/hani_ibrahim/showallports/interface.png"/>
+          <Image iconType="3" name="/de/haniibrahim/seriallogger/serial_th.png"/>
         </Property>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lb_Text3">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Version: "/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lb_Version">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="NO VERSION"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lb_Email">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="hani.ibrahim@gmx.de"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lb_License">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="GNU Public License 3.0"/>
       </Properties>
     </Component>
   </SubComponents>

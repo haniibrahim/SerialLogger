@@ -19,7 +19,7 @@
     <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
-    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="2"/>
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
@@ -180,14 +180,17 @@
       <Properties>
         <Property name="editable" type="boolean" value="true"/>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="7">
-            <StringItem index="0" value="2400"/>
-            <StringItem index="1" value="4800"/>
-            <StringItem index="2" value="9600"/>
-            <StringItem index="3" value="19200"/>
-            <StringItem index="4" value="38400"/>
-            <StringItem index="5" value="57600"/>
-            <StringItem index="6" value="115200"/>
+          <StringArray count="10">
+            <StringItem index="0" value="300"/>
+            <StringItem index="1" value="600"/>
+            <StringItem index="2" value="1200"/>
+            <StringItem index="3" value="2400"/>
+            <StringItem index="4" value="4800"/>
+            <StringItem index="5" value="9600"/>
+            <StringItem index="6" value="19200"/>
+            <StringItem index="7" value="38400"/>
+            <StringItem index="8" value="57600"/>
+            <StringItem index="9" value="115200"/>
           </StringArray>
         </Property>
       </Properties>

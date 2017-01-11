@@ -17,6 +17,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -42,12 +44,15 @@ public class SerialLogger extends JFrame {
     String stdLogfileName;
     PrintWriter pw;
 
+    Icon icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("serial_th.png")));
+
     /**
      * Creates new form SerialPrinter
      */
     public SerialLogger() {
+
         // Set app icon
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("vsp.png")));
+        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("serial.png")));
         initComponents();
 
         // Load prefs at startup and save at shutdown
@@ -78,6 +83,11 @@ public class SerialLogger extends JFrame {
         // Handshake deactivated - NOT IMPLEMENTED YET
         lb_Handshake.setVisible(false);
         cb_Handshake.setVisible(false);
+
+        // Hide Info Button for Mac
+        if (getOS().equals("mac")) {
+            bt_Info.setVisible(false);
+        }
 
         // Initial values for CommPorts in combobox
         updatePortList();
@@ -149,8 +159,8 @@ public class SerialLogger extends JFrame {
             chosenPort = SerialPort.getCommPort(portName); // Register chosen port
             chosenPort.setComPortParameters(baud, databits, stopbits, parity); // Set serial parameters to the chosen port
             chosenPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
-
-            if (chosenPort.openPort()) {
+            chosenPort.openPort();
+            if (chosenPort.isOpen()) {
                 boolean logFlag;
                 if (ck_Logfile.isSelected()) {
                     pw = new PrintWriter(new FileWriter(tf_Logfile.getText()));
@@ -159,7 +169,6 @@ public class SerialLogger extends JFrame {
                     logFlag = false;
                 }
                 Scanner serialScanner = new Scanner(chosenPort.getInputStream());
-//                while (!isCancelled()) {
                 while (serialScanner.hasNextLine() || !isCancelled()) {
                     String line = serialScanner.nextLine();
                     publish(line);
@@ -167,7 +176,6 @@ public class SerialLogger extends JFrame {
                         pw.println(line); // save to file
                     }
                 }
-//                }
                 return false;
             } else {
                 JOptionPane.showMessageDialog(null,
@@ -217,6 +225,15 @@ public class SerialLogger extends JFrame {
                 Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
             } catch (CancellationException ex) { // important
                 // do nothing, just catch CancellationException
+            }
+            if (chosenPort.isOpen()) {
+                // Close serial port
+                chosenPort.closePort();
+            } else {
+                JOptionPane.showMessageDialog(SerialLogger.getFrames()[0],
+                        "Port was not open",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                System.err.println("ERROR: Port was not open");
             }
             if (ck_Logfile.isSelected()) {
                 if (pw != null) { // if PrintWriter bw exists
@@ -309,10 +326,10 @@ public class SerialLogger extends JFrame {
         setSize(prefs.getInt("width", 637),
                 prefs.getInt("height", 380));
 
-        // Initial logfilename => ~/vsp.log
+        // Initial logfilename => ~/serial.log
         stdLogfileName = System.getProperty("user.home")
                 + System.getProperty("file.separator")
-                + "vsp.log";
+                + "serial.log";
 
         // Set serial parameters and logfile name
         String baud = prefs.get("baud", "9600");
@@ -379,7 +396,7 @@ public class SerialLogger extends JFrame {
         lb_Baud.setText("Baud:");
 
         cb_Baud.setEditable(true);
-        cb_Baud.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2400", "4800", "9600", "19200", "38400", "57600", "115200" }));
+        cb_Baud.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "300", "600", "1200", "2400", "4800", "9600", "19200", "38400", "57600", "115200" }));
 
         lb_DataBits.setText("Data Bits:");
 
@@ -446,99 +463,99 @@ public class SerialLogger extends JFrame {
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lb_Commport)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cb_Commport, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bt_Update, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(lb_VirtalPrint))
-                        .addGap(0, 107, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(ck_Logfile)
-                                .addGap(12, 12, 12)
-                                .addComponent(tf_Logfile)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bt_Fileselector, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(sp_VirtualPrint))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(bt_Info, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(bt_OpenPort, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(bt_ClosePort, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lb_Baud, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lb_DataBits))
-                                .addComponent(lb_StopBits))
-                            .addComponent(lb_Handshake)
-                            .addComponent(lb_Parity, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cb_Handshake, 0, 1, Short.MAX_VALUE)
-                            .addComponent(cb_Parity, 0, 1, Short.MAX_VALUE)
-                            .addComponent(cb_StopBits, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cb_DataBits, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cb_Baud, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(layout.createSequentialGroup()
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(layout.createSequentialGroup()
+                                .add(lb_Commport)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(cb_Commport, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 200, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(bt_Update, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 88, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(lb_VirtalPrint))
+                        .add(0, 107, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(layout.createSequentialGroup()
+                                .add(ck_Logfile)
+                                .add(12, 12, 12)
+                                .add(tf_Logfile)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(bt_Fileselector, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 27, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(sp_VirtualPrint))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, bt_Info)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, bt_OpenPort, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, bt_ClosePort, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(org.jdesktop.layout.GroupLayout.TRAILING, lb_Baud)
+                                    .add(lb_DataBits))
+                                .add(lb_StopBits))
+                            .add(lb_Handshake)
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, lb_Parity))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                            .add(cb_Handshake, 0, 1, Short.MAX_VALUE)
+                            .add(cb_Parity, 0, 1, Short.MAX_VALUE)
+                            .add(cb_StopBits, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .add(cb_DataBits, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .add(cb_Baud, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lb_Commport)
-                    .addComponent(cb_Commport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bt_Update)
-                    .addComponent(bt_Info))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lb_VirtalPrint)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cb_Baud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lb_Baud))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cb_DataBits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lb_DataBits))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cb_StopBits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lb_StopBits))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cb_Parity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lb_Parity))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cb_Handshake, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lb_Handshake))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
-                        .addComponent(bt_OpenPort)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(bt_ClosePort)
-                            .addComponent(tf_Logfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(bt_Fileselector)
-                            .addComponent(ck_Logfile)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(sp_VirtualPrint)
-                        .addGap(32, 32, 32)))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(lb_Commport)
+                    .add(cb_Commport, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(bt_Update)
+                    .add(bt_Info))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(lb_VirtalPrint)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(layout.createSequentialGroup()
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(cb_Baud, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(lb_Baud))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(cb_DataBits, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(lb_DataBits))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(cb_StopBits, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(lb_StopBits))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(cb_Parity, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(lb_Parity))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(cb_Handshake, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(lb_Handshake))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 139, Short.MAX_VALUE)
+                        .add(bt_OpenPort)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(bt_ClosePort)
+                            .add(tf_Logfile, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(bt_Fileselector)
+                            .add(ck_Logfile)))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .add(3, 3, 3)
+                        .add(sp_VirtualPrint)
+                        .add(32, 32, 32)))
                 .addContainerGap())
         );
 
@@ -550,16 +567,6 @@ public class SerialLogger extends JFrame {
     }//GEN-LAST:event_bt_UpdateActionPerformed
 
     private void bt_ClosePortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_ClosePortActionPerformed
-        if (chosenPort.isOpen()) {
-            // Close serial port
-            chosenPort.closePort();
-//            System.out.println("Port " + portName + " closed");
-        } else {
-            JOptionPane.showMessageDialog(this,
-                    "Port was not open",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            System.err.println("ERROR: Port was not open");
-        }
         // Enable GUI elements
         cb_Commport.setEnabled(true);
         bt_Update.setEnabled(true);
@@ -583,8 +590,12 @@ public class SerialLogger extends JFrame {
                 "<html><span style=\"font-size:large;\"><b>SerialLogger</b></span></html>\n"
                 + "Logs data received from a serial interface\n"
                 + "to GUI, console or file.\n\n"
-                + "(c) 2013 Hani Ibrahim <hani.ibrahim@gmx.de>\n\n",
-                "Info", JOptionPane.INFORMATION_MESSAGE);
+                + "(c) 2013 Hani Ibrahim <hani.ibrahim@gmx.de>\n"
+                + "GNU Public License 3.0\n\n",
+                "Info", JOptionPane.INFORMATION_MESSAGE, icon);
+//        InfoDialog infoDialog = new InfoDialog(this, true);
+//        infoDialog.setLocationRelativeTo(this);
+//        infoDialog.setVisible(true);
     }//GEN-LAST:event_bt_InfoActionPerformed
 
     private void bt_OpenPortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_OpenPortActionPerformed
@@ -639,7 +650,7 @@ public class SerialLogger extends JFrame {
         if (oldLogfilePath.isEmpty()) { // if tf_Logfile is empty set standard logfile path
             oldLogfilePath = System.getProperty("user.home")
                     + System.getProperty("file.separator")
-                    + "vsp.log";
+                    + "serial.log";
         }
         String pathName = oldLogfilePath.substring(0, // Extract path w/o filename
                 oldLogfilePath.lastIndexOf(System.getProperty("file.separator")) + 1);
@@ -651,6 +662,17 @@ public class SerialLogger extends JFrame {
             tf_Logfile.setText(newLogfilePath);
         }
     }//GEN-LAST:event_bt_FileselectorActionPerformed
+
+    public static String getOS() {
+        String osname = System.getProperty("os.name");
+        if (osname != null && osname.toLowerCase().indexOf("mac") != -1) {
+            return "mac";
+        }
+        if (osname != null && osname.toLowerCase().indexOf("windows") != -1) {
+            return "win";
+        }
+        return "noarch";
+    }
 
     /**
      * @param args the command line arguments
@@ -750,6 +772,9 @@ public class SerialLogger extends JFrame {
             @Override
             public void run() {
                 new SerialLogger().setVisible(true);
+                if (getOS().equals("mac")) {
+                    MacImpl macImpl = new MacImpl();
+                }
             }
         });
     }
