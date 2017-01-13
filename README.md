@@ -13,6 +13,7 @@
 
 ## Screenshot
 ![SerialLogger Screenshot (Windows)](http://blog.hani-ibrahim.de/wp-content/uploads/seriallogger.png "")
+
 SerialLogger on Windows 10
 
 ## Requirements
@@ -25,7 +26,8 @@ SerialLogger on Windows 10
 ## Dependencies
 
 * [JSerialComm library](http://fazecast.github.io/jSerialComm/ "")
-* [SwingLayoutExtensions library](http://www.java2s.com/Code/JarDownload/swing/swing-layout.jar.zip "") for platforms other than Mac
+* [SwingLayoutExtensions library](http://www.java2s.com/Code/JarDownload/swing/swing-layout.jar.zip "")
+* [AppleJavaExtensions library](http://www.java2s.com/Code/Jar/a/applejavaextensions.htm "") for platforms other than Mac OS X
 
 Build in Netbeans. 
 
