@@ -169,7 +169,7 @@ public class SerialLogger extends JFrame {
                     logFlag = false;
                 }
                 Scanner serialScanner = new Scanner(chosenPort.getInputStream());
-                while (serialScanner.hasNextLine() || !isCancelled()) {
+                while (serialScanner.hasNextLine() && !isCancelled()) {
                     String line = serialScanner.nextLine();
                     publish(line);
                     if (logFlag) {
@@ -424,6 +424,7 @@ public class SerialLogger extends JFrame {
         });
 
         bt_ClosePort.setText("Close Port");
+        bt_ClosePort.setToolTipText("");
         bt_ClosePort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_ClosePortActionPerformed(evt);
