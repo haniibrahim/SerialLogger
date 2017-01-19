@@ -173,7 +173,8 @@ public class SerialLogger extends JFrame {
                     String line = serialScanner.nextLine();
                     publish(line);
                     if (logFlag) {
-                        pw.println(line); // save to file
+                        pw.println(line); // save to buffer (file)
+                        pw.flush(); // flush buffer and tries to save every line to the file immediately
                     }
                 }
                 return false;

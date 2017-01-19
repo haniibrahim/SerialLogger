@@ -8,7 +8,8 @@
 * Graphical User Interface (GUI)
 * Get serial port names from the OS
 * Logs serial data to screen (GUI), console and optionally in a file
-* Serial port name is editable in the GUI (for virtual ports as `/dev/pts/[x]`)
+* Save every collected line of data immediately to the file avoiding data loss
+* Serial port name is editable in the GUI (for pseudo ports as `/dev/pts/[x]`)
 * Arbitrary baud rate 
 
 ## Screenshot
@@ -38,6 +39,7 @@ Build in Netbeans.
 
 ## To-Do
 
+* Get rid of the Mac OS X bug
 * Configurable flow control parameters (CTS, RTS/CTS, DSR, DTR/DSR, XOn/XOff)
 * Command-line interface
 
