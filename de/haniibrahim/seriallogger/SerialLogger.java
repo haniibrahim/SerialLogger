@@ -230,11 +230,11 @@ public class SerialLogger extends JFrame {
             } catch (CancellationException ex) { // important
                 // do nothing, just catch CancellationException
             }
-            try {
-                serialBufferedReader.close();
-            } catch (IOException ex) {
-                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, "BufferedReader.close() failed", ex);
-            }
+//            try {
+//                serialBufferedReader.close();
+//            } catch (IOException ex) {
+//                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, "BufferedReader.close() failed", ex);
+//            }
             if (chosenPort.isOpen()) {
                 // Close serial port
                 chosenPort.closePort();
