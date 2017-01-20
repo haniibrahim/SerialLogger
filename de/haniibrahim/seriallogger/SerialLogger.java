@@ -4,10 +4,12 @@ import com.fazecast.jSerialComm.*;
 import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Toolkit;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Scanner;
@@ -42,7 +44,6 @@ public class SerialLogger extends JFrame {
 
     Preferences prefs;
     String stdLogfileName;
-    PrintWriter pw;
 
     Icon icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("serial_th.png")));
 
@@ -94,6 +95,8 @@ public class SerialLogger extends JFrame {
     }
 
     private class SerialReadTask extends SwingWorker<Boolean, String> {
+        BufferedReader serialBufferedReader;
+        PrintWriter pw;
 
         @Override
         protected Boolean doInBackground() throws IOException {
@@ -168,9 +171,9 @@ public class SerialLogger extends JFrame {
                 } else {
                     logFlag = false;
                 }
-                Scanner serialScanner = new Scanner(chosenPort.getInputStream());
-                while (serialScanner.hasNextLine() && !isCancelled()) {
-                    String line = serialScanner.nextLine();
+                String line = null;
+                serialBufferedReader = new BufferedReader(new InputStreamReader(chosenPort.getInputStream()));
+                while (((line = serialBufferedReader.readLine()) != null) && !isCancelled()) {
                     publish(line);
                     if (logFlag) {
                         pw.println(line); // save to buffer (file)
@@ -226,6 +229,11 @@ public class SerialLogger extends JFrame {
                 Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
             } catch (CancellationException ex) { // important
                 // do nothing, just catch CancellationException
+            }
+            try {
+                serialBufferedReader.close();
+            } catch (IOException ex) {
+                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, "BufferedReader.close() failed", ex);
             }
             if (chosenPort.isOpen()) {
                 // Close serial port
