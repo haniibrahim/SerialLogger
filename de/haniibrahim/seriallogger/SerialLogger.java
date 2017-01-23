@@ -67,6 +67,9 @@ public class SerialLogger extends JFrame {
                 } catch (BackingStoreException ex) {
 
                 }
+                if (chosenPort != null && chosenPort.isOpen()) {
+                    chosenPort.closePort();
+                }
             }
         }));
 
