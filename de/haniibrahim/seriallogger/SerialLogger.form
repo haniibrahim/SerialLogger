@@ -274,7 +274,7 @@
     <Component class="javax.swing.JButton" name="bt_ClosePort">
       <Properties>
         <Property name="text" type="java.lang.String" value="Close Port"/>
-        <Property name="toolTipText" type="java.lang.String" value=""/>
+        <Property name="toolTipText" type="java.lang.String" value="Close serial port"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_ClosePortActionPerformed"/>
@@ -301,7 +301,7 @@
     <Component class="javax.swing.JButton" name="bt_OpenPort">
       <Properties>
         <Property name="text" type="java.lang.String" value="Open Port"/>
-        <Property name="toolTipText" type="java.lang.String" value=""/>
+        <Property name="toolTipText" type="java.lang.String" value="Open serial port"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_OpenPortActionPerformed"/>

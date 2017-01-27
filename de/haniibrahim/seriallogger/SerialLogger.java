@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -38,14 +37,14 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class SerialLogger extends JFrame {
 
-    static SerialPort chosenPort;
+    private static SerialPort chosenPort;
+    private static String stdLogfileName;
+    private static String portName;
     private SerialReadTask serialReader;
-    String portName;
-
-    Preferences prefs;
-    String stdLogfileName;
-
-    Icon icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("serial_th.png")));
+    private Preferences prefs;
+    
+    // Set program icon
+    private final Icon icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("serial_th.png")));
 
     /**
      * Creates new form SerialPrinter
@@ -67,6 +66,7 @@ public class SerialLogger extends JFrame {
                 } catch (BackingStoreException ex) {
 
                 }
+                // Close port at shutdown if button "Close Port" was not pressed before
                 if (chosenPort != null && chosenPort.isOpen()) {
                     chosenPort.closePort();
                 }
@@ -88,7 +88,7 @@ public class SerialLogger extends JFrame {
         lb_Handshake.setVisible(false);
         cb_Handshake.setVisible(false);
 
-        // Hide Info Button for Mac
+        // Hide Info Button for macOS
         if (getOS().equals("mac")) {
             bt_Info.setVisible(false);
         }
@@ -242,10 +242,10 @@ public class SerialLogger extends JFrame {
                 // Close serial port
                 chosenPort.closePort();
             } else {
-                JOptionPane.showMessageDialog(SerialLogger.getFrames()[0],
-                        "Port was not open",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                System.err.println("ERROR: Port was not open");
+//                JOptionPane.showMessageDialog(SerialLogger.getFrames()[0],
+//                        "Port was not open",
+//                        "Error", JOptionPane.ERROR_MESSAGE);
+                System.err.println("Final close port fails, port was not open");
             }
             if (ck_Logfile.isSelected()) {
                 if (pw != null) { // if PrintWriter bw exists
@@ -436,7 +436,7 @@ public class SerialLogger extends JFrame {
         });
 
         bt_ClosePort.setText("Close Port");
-        bt_ClosePort.setToolTipText("");
+        bt_ClosePort.setToolTipText("Close serial port");
         bt_ClosePort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_ClosePortActionPerformed(evt);
@@ -454,7 +454,7 @@ public class SerialLogger extends JFrame {
         lb_VirtalPrint.setText("Output:");
 
         bt_OpenPort.setText("Open Port");
-        bt_OpenPort.setToolTipText("");
+        bt_OpenPort.setToolTipText("Open serial port");
         bt_OpenPort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_OpenPortActionPerformed(evt);
