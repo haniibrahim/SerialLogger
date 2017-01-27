@@ -10,7 +10,7 @@
 * Logs serial data to screen (GUI), console and optionally in a file
 * Save every collected line of data immediately to the file avoiding data loss
 * Serial port name is editable in the GUI (for pseudo ports as `/dev/pts/[x]`)
-* Arbitrary baud rate 
+* Arbitrary baud rate (if hardware supports it)
 
 ## Screenshot
 ![SerialLogger Screenshot (Windows)](http://blog.hani-ibrahim.de/wp-content/uploads/seriallogger.png "")
@@ -26,9 +26,9 @@ SerialLogger on Windows 10
 
 ## Dependencies
 
-* [JSerialComm library](http://fazecast.github.io/jSerialComm/ "")
-* [SwingLayoutExtensions library](http://www.java2s.com/Code/JarDownload/swing/swing-layout.jar.zip "")
-* [AppleJavaExtensions library](http://www.java2s.com/Code/Jar/a/applejavaextensions.htm "") for platforms other than Mac OS X
+* [JSerialComm](http://fazecast.github.io/jSerialComm/ "") library
+* [SwingLayoutExtensions](http://www.java2s.com/Code/JarDownload/swing/swing-layout.jar.zip "") library
+* [AppleJavaExtensions](http://www.java2s.com/Code/Jar/a/applejavaextensions.htm "") library for platforms other than Mac OS X
 
 Build in Netbeans. 
 
@@ -36,12 +36,15 @@ Build in Netbeans.
 
 * ***IMPORTANT: Still not released!*** No binary provided yet
 * Branch master is always compile- and runnable
+* Works without any problems on Windows currently
+* GNU/Linux has a small problem, macOS a bigger one, see [Issues](https://github.com/haniibrahim/SerialLogger/issues "")
 
 ## To-Do
 
-* Get rid of the Mac OS X bug
+* Get rid of the Mac OS X and GNU/Linux bug
 * Configurable flow control parameters (CTS, RTS/CTS, DSR, DTR/DSR, XOn/XOff)
 * Command-line interface
+* Time-stamp feature
 
 ## Known bugs
 
