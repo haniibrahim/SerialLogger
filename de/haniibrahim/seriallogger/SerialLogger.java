@@ -42,7 +42,7 @@ public class SerialLogger extends JFrame {
     private static String portName;
     private SerialReadTask serialReader;
     private Preferences prefs;
-    
+
     // Set program icon
     private final Icon icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("serial_th.png")));
 
@@ -95,9 +95,13 @@ public class SerialLogger extends JFrame {
 
         // Initial values for CommPorts in combobox
         updatePortList();
+        
+        // Warning if platform other than Windows is used
+        unixWarning();
     }
 
     private class SerialReadTask extends SwingWorker<Boolean, String> {
+
         BufferedReader serialBufferedReader;
         PrintWriter pw;
 
@@ -156,7 +160,7 @@ public class SerialLogger extends JFrame {
             // Do not try to register an "empty" port 
             if (portName.equals("")) {
                 System.err.println("ERROR: CommPort is empty!");
-                JOptionPane.showMessageDialog(null,
+                JOptionPane.showMessageDialog(SerialLogger.getFrames()[0],
                         "CommPort is empty",
                         "Error", JOptionPane.ERROR_MESSAGE);
                 return true;
@@ -185,7 +189,7 @@ public class SerialLogger extends JFrame {
                 }
                 return false;
             } else {
-                JOptionPane.showMessageDialog(null,
+                JOptionPane.showMessageDialog(SerialLogger.getFrames()[0],
                         "Could not open serial port\n" + portName + "\n",
                         "Info", JOptionPane.ERROR_MESSAGE);
                 System.err.println("Could not open port " + portName);
@@ -227,29 +231,28 @@ public class SerialLogger extends JFrame {
                     bt_Fileselector.setEnabled(true);
                 }
             } catch (InterruptedException ex) {
-                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, "DONE: Interrupted", ex);
             } catch (ExecutionException ex) {
-                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, "DONE: Cancelled", ex);
             } catch (CancellationException ex) { // important
-                // do nothing, just catch CancellationException
-            }
-//            try {
-//                serialBufferedReader.close();
-//            } catch (IOException ex) {
-//                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, "BufferedReader.close() failed", ex);
-//            }
-            if (chosenPort.isOpen()) {
-                // Close serial port
-                chosenPort.closePort();
-            } else {
+//                try {
+//                    serialBufferedReader.close();
+//                } catch (IOException ex) {
+//                    Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, "BufferedReader.close() failed", ex);
+//                }
+                if (chosenPort.isOpen()) {
+                    // Close serial port
+                    chosenPort.closePort();
+                } else {
 //                JOptionPane.showMessageDialog(SerialLogger.getFrames()[0],
 //                        "Port was not open",
 //                        "Error", JOptionPane.ERROR_MESSAGE);
-                System.err.println("Final close port fails, port was not open");
-            }
-            if (ck_Logfile.isSelected()) {
-                if (pw != null) { // if PrintWriter bw exists
-                    pw.close();
+                    System.err.println("Final close port fails, port was not open");
+                }
+                if (ck_Logfile.isSelected()) {
+                    if (pw != null) { // if PrintWriter bw exists
+                        pw.close();
+                    }
                 }
             }
         }
@@ -360,6 +363,21 @@ public class SerialLogger extends JFrame {
         cb_Handshake.setSelectedItem(handshake);
         tf_Logfile.setText(logfile);
         ck_Logfile.setSelected(logto);
+    }
+
+    /**
+     * Warning if not Windows is used because of macOS and GNU/Linux bug
+     */
+    private void unixWarning() {
+        if (!getOS().equals("win")) {
+            JOptionPane.showMessageDialog(null,
+                    "<html><span style=\"font-weight:bold; color: red;\">DO NOT USE SerialLogger</span></html>\n" +
+                    "on platforms other than Windows®\n" +
+                    "at the moment.\n\n" +
+                    "Unexpected behavior may occur.\n" + " ",
+                    "Severe Warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+        }
     }
 
     /**
@@ -619,12 +637,12 @@ public class SerialLogger extends JFrame {
 
         // Check for consistent logging settings
         if ((ck_Logfile.isSelected() && tf_Logfile.getText().equals(""))) {
-            JOptionPane.showMessageDialog(null,
+            JOptionPane.showMessageDialog(this,
                     "Logfile name is empty",
                     "Error", JOptionPane.ERROR_MESSAGE);
             System.err.println("Logfile name is empty");
         } else if (ck_Logfile.isSelected() && (new File(tf_Logfile.getText())).exists()) {
-            JOptionPane.showMessageDialog(null,
+            JOptionPane.showMessageDialog(this,
                     "Logfile aready exists",
                     "Error", JOptionPane.ERROR_MESSAGE);
             System.err.println("ERROR: Logfile already exists");
@@ -678,11 +696,14 @@ public class SerialLogger extends JFrame {
 
     public static String getOS() {
         String osname = System.getProperty("os.name");
-        if (osname != null && osname.toLowerCase().indexOf("mac") != -1) {
+        if (osname != null && osname.toLowerCase().contains("mac")) {
             return "mac";
         }
-        if (osname != null && osname.toLowerCase().indexOf("windows") != -1) {
+        if (osname != null && osname.toLowerCase().contains("windows")) {
             return "win";
+        }
+        if (osname != null && osname.toLowerCase().contains("linux")) {
+            return "linux";
         }
         return "noarch";
     }
@@ -779,12 +800,12 @@ public class SerialLogger extends JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-
+        
         /* Create and display the form */
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new SerialLogger().setVisible(true);
+                new SerialLogger().setVisible(true);               
                 if (getOS().equals("mac")) {
                     MacImpl macImpl = new MacImpl();
                 }
