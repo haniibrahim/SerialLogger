@@ -20,12 +20,14 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * *
@@ -95,7 +97,7 @@ public class SerialLogger extends JFrame {
 
         // Initial values for CommPorts in combobox
         updatePortList();
-        
+
         // Warning if platform other than Windows is used
         unixWarning();
     }
@@ -371,10 +373,10 @@ public class SerialLogger extends JFrame {
     private void unixWarning() {
         if (!getOS().equals("win")) {
             JOptionPane.showMessageDialog(null,
-                    "<html><span style=\"font-weight:bold; color: red;\">DO NOT USE SerialLogger</span></html>\n" +
-                    "on platforms other than Windows®\n" +
-                    "at the moment.\n\n" +
-                    "Unexpected behavior may occur.\n" + " ",
+                    "<html><span style=\"font-weight:bold; color: red;\">DO NOT USE SerialLogger</span></html>\n"
+                    + "on platforms other than Windows®\n"
+                    + "at the moment.\n\n"
+                    + "Unexpected behavior may occur.\n" + " ",
                     "Severe Warning", JOptionPane.WARNING_MESSAGE);
         } else {
         }
@@ -575,18 +577,17 @@ public class SerialLogger extends JFrame {
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(cb_Handshake, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(lb_Handshake))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 139, Short.MAX_VALUE)
-                        .add(bt_OpenPort)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(bt_ClosePort)
-                            .add(tf_Logfile, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(bt_Fileselector)
-                            .add(ck_Logfile)))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 176, Short.MAX_VALUE)
+                        .add(bt_OpenPort))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                        .add(3, 3, 3)
-                        .add(sp_VirtualPrint)
-                        .add(32, 32, 32)))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(sp_VirtualPrint)))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(bt_ClosePort)
+                    .add(tf_Logfile, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(bt_Fileselector)
+                    .add(ck_Logfile))
                 .addContainerGap())
         );
 
@@ -667,14 +668,9 @@ public class SerialLogger extends JFrame {
     }//GEN-LAST:event_bt_OpenPortActionPerformed
 
     private void bt_FileselectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_FileselectorActionPerformed
-        FileDialog fd = new FileDialog(this, "Specify log file ...", FileDialog.SAVE);
-        FilenameFilter filter = new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return (name.endsWith(".txt") || name.endsWith(".log"));
-            }
-        };
-        fd.setFilenameFilter(filter);
+
+        String dialogTitle = "Specify log file ..";
+        String newLogfilePath = "";
 
         // Logfilename: Extract pathname (w/o filename) from tf_Logfile
         String oldLogfilePath = tf_Logfile.getText();
@@ -686,12 +682,42 @@ public class SerialLogger extends JFrame {
         String pathName = oldLogfilePath.substring(0, // Extract path w/o filename
                 oldLogfilePath.lastIndexOf(System.getProperty("file.separator")) + 1);
 
-        fd.setDirectory(pathName);  // Set default path to last selected path
-        fd.setVisible(true);
-        String newLogfilePath = fd.getDirectory() + fd.getFile();
-        if (fd.getFile() != null) {
-            tf_Logfile.setText(newLogfilePath);
+        // If Linux AND JRE 6 than use JFilechooser() otherwise the native FileDialog()
+        // the native filechooser is ugly on Linux with Jave 6
+        if (System.getProperty("os.name").toLowerCase().contains("linux")
+                && System.getProperty("java.version").startsWith("1.6")) {
+            JFileChooser fd = new JFileChooser(pathName);
+            fd.setDialogTitle(dialogTitle);
+            fd.setDialogType(JFileChooser.SAVE_DIALOG);
+            FileNameExtensionFilter logFilter = new FileNameExtensionFilter(
+                    "Logfile (*.log, *.txt)", "log", "txt");
+            fd.setFileFilter(logFilter);
+            fd.setVisible(true);
+            int retVal = fd.showSaveDialog(this);
+            if (retVal == JFileChooser.APPROVE_OPTION) {
+                newLogfilePath = fd.getSelectedFile().toString();
+            } else {
+                newLogfilePath = oldLogfilePath;
+            }
+        } else {
+            FileDialog fd = new FileDialog(this, dialogTitle, FileDialog.SAVE);
+            FilenameFilter filter = new FilenameFilter() {
+                @Override
+                public boolean accept(File dir, String name) {
+                    return (name.endsWith(".txt") || name.endsWith(".log"));
+                }
+            };
+            fd.setFilenameFilter(filter);
+
+            fd.setDirectory(pathName);  // Set default path to last selected path
+            fd.setVisible(true);
+            if (fd.getFile() != null) {
+                newLogfilePath = fd.getDirectory() + fd.getFile();
+            } else {
+                newLogfilePath = oldLogfilePath;
+            }
         }
+        tf_Logfile.setText(newLogfilePath);
     }//GEN-LAST:event_bt_FileselectorActionPerformed
 
     public static String getOS() {
@@ -713,99 +739,32 @@ public class SerialLogger extends JFrame {
      */
     public static void main(String args[]) {
 
-        // Try GTK+ Look and Feel first. If fails use System LaF
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-        } catch (ClassNotFoundException ex) {
+        //<editor-fold defaultstate="collapsed" desc="Look and Feel">
+        // Try GTK-LaF on GNU/Linux first, then System-LaF. System-LaF on all other platforms
+        if (System.getProperty("os.name").toLowerCase().contains("linux")) {
             try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-
-            } catch (ClassNotFoundException ex1) {
-                Logger.getLogger(SerialLogger.class
-                        .getName()).log(Level.SEVERE, null, ex1);
-
-            } catch (InstantiationException ex1) {
-                Logger.getLogger(SerialLogger.class
-                        .getName()).log(Level.SEVERE, null, ex1);
-
-            } catch (IllegalAccessException ex1) {
-                Logger.getLogger(SerialLogger.class
-                        .getName()).log(Level.SEVERE, null, ex1);
-
-            } catch (UnsupportedLookAndFeelException ex1) {
-                Logger.getLogger(SerialLogger.class
-                        .getName()).log(Level.SEVERE, null, ex1);
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+            } catch (Exception e1) {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                } catch (Exception e2) {
+                    System.err.println("Look & Feel Error\n" + e2.getMessage());
+                }
             }
-        } catch (InstantiationException ex) {
+        } else {
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-
-            } catch (ClassNotFoundException ex1) {
-                Logger.getLogger(SerialLogger.class
-                        .getName()).log(Level.SEVERE, null, ex1);
-
-            } catch (InstantiationException ex1) {
-                Logger.getLogger(SerialLogger.class
-                        .getName()).log(Level.SEVERE, null, ex1);
-
-            } catch (IllegalAccessException ex1) {
-                Logger.getLogger(SerialLogger.class
-                        .getName()).log(Level.SEVERE, null, ex1);
-
-            } catch (UnsupportedLookAndFeelException ex1) {
-                Logger.getLogger(SerialLogger.class
-                        .getName()).log(Level.SEVERE, null, ex1);
-            }
-        } catch (IllegalAccessException ex) {
-            try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-
-            } catch (ClassNotFoundException ex1) {
-                Logger.getLogger(SerialLogger.class
-                        .getName()).log(Level.SEVERE, null, ex1);
-
-            } catch (InstantiationException ex1) {
-                Logger.getLogger(SerialLogger.class
-                        .getName()).log(Level.SEVERE, null, ex1);
-
-            } catch (IllegalAccessException ex1) {
-                Logger.getLogger(SerialLogger.class
-                        .getName()).log(Level.SEVERE, null, ex1);
-
-            } catch (UnsupportedLookAndFeelException ex1) {
-                Logger.getLogger(SerialLogger.class
-                        .getName()).log(Level.SEVERE, null, ex1);
-            }
-        } catch (UnsupportedLookAndFeelException ex) {
-            try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-
-            } catch (ClassNotFoundException ex1) {
-                Logger.getLogger(SerialLogger.class
-                        .getName()).log(Level.SEVERE, null, ex1);
-
-            } catch (InstantiationException ex1) {
-                Logger.getLogger(SerialLogger.class
-                        .getName()).log(Level.SEVERE, null, ex1);
-
-            } catch (IllegalAccessException ex1) {
-                Logger.getLogger(SerialLogger.class
-                        .getName()).log(Level.SEVERE, null, ex1);
-
-            } catch (UnsupportedLookAndFeelException ex1) {
-                Logger.getLogger(SerialLogger.class
-                        .getName()).log(Level.SEVERE, null, ex1);
+            } catch (Exception e2) {
+                System.err.println("Look & Feel Error\n" + e2.getMessage());
             }
         }
         //</editor-fold>
-        //</editor-fold>
-        
+
         /* Create and display the form */
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new SerialLogger().setVisible(true);               
+                new SerialLogger().setVisible(true);
                 if (getOS().equals("mac")) {
                     MacImpl macImpl = new MacImpl();
                 }

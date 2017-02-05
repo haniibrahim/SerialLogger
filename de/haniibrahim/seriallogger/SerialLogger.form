@@ -126,21 +126,20 @@
                           <Component id="cb_Handshake" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lb_Handshake" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="139" max="32767" attributes="0"/>
+                      <EmptySpace pref="176" max="32767" attributes="0"/>
                       <Component id="bt_OpenPort" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="bt_ClosePort" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="tf_Logfile" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="bt_Fileselector" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="ck_Logfile" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="3" pref="3" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="sp_VirtualPrint" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                   </Group>
+              </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="bt_ClosePort" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="tf_Logfile" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="bt_Fileselector" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ck_Logfile" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
