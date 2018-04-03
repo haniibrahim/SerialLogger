@@ -34,7 +34,7 @@ Build in Netbeans.
 
 ## Status
 
-* ***IMPORTANT: Still not finally released!*** Only preview JAR released yet
+* ***IMPORTANT: Still not finally released!*** Only [preview JAR](https://github.com/haniibrahim/SerialLogger/releases) released yet
 * Branch master is always compile- and runnable
 * Works without any problems on Windows currently
 * GNU/Linux has a small problem, macOS a bigger one, see [Issues](https://github.com/haniibrahim/SerialLogger/issues "")
