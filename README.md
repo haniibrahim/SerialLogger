@@ -26,7 +26,7 @@ SerialLogger on Windows 10
 
 ## Dependencies
 
-* [JSerialComm](http://fazecast.github.io/jSerialComm/ "") library
+* [JSerialComm](http://fazecast.github.io/jSerialComm/ "") library, version 2.1.0 or higher is mandatory for macOS & GNU/Linux
 * [SwingLayoutExtensions](http://www.java2s.com/Code/JarDownload/swing/swing-layout.jar.zip "") library
 * [AppleJavaExtensions](http://www.java2s.com/Code/Jar/a/applejavaextensions.htm "") library for platforms other than Mac OS X
 
@@ -34,21 +34,21 @@ Build in Netbeans.
 
 ## Status
 
-* ***IMPORTANT: Still not finally released!*** Only [preview JAR](https://github.com/haniibrahim/SerialLogger/releases) released yet
+* [FatJar](https://github.com/haniibrahim/SerialLogger/releases) released. Installer comming soon
 * Branch master is always compile- and runnable
-* Works without any problems on Windows currently
-* GNU/Linux has a small problem, macOS a bigger one, see [Issues](https://github.com/haniibrahim/SerialLogger/issues "")
+* Works without any problems on Windows
+* Works **now** on GNU/Linux and macOS, too
 
 ## To-Do
 
-* Get rid of the Mac OS X and GNU/Linux bug
+* ~~Get rid of the Mac OS X and GNU/Linux bug~~ => Fixed
 * Configurable flow control parameters (CTS, RTS/CTS, DSR, DTR/DSR, XOn/XOff)
 * Command-line interface
 * Time-stamp feature
 
 ## Known bugs
 
-See [Issues](https://github.com/haniibrahim/SerialLogger/issues "").
+Report bugs on [Issues](https://github.com/haniibrahim/SerialLogger/issues "")
 
 ## License
 

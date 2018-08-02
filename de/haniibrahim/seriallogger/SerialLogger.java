@@ -99,7 +99,7 @@ public class SerialLogger extends JFrame {
         updatePortList();
 
         // Warning if platform other than Windows is used
-        unixWarning();
+        //unixWarning(); // problem on macOS and Linux solved w/ JSerialComm 2.1.0
     }
 
     private class SerialReadTask extends SwingWorker<Boolean, String> {
