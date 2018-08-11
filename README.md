@@ -15,13 +15,13 @@
 ## Screenshot
 ![SerialLogger Screenshot (Windows)](http://blog.hani-ibrahim.de/wp-content/uploads/seriallogger.png "")
 
-SerialLogger on Windows 10
+SerialLogger v0.9.0 on Windows 10
 
 ## Requirements
 
 * PC with MS-Windows XP or higher
-* PC with GNU/Linux on x86/x86_64 or ARM (32/64-bit))
-* Macintosh with Mac OS X 10.5 or higher
+* PC with GNU/Linux on x86/x86_64 or ARM (32/64-bit)
+* Macintosh with macOS 10.5 or higher
 * Java 6 JRE on platforms mentioned above (Oracle Java or OpenJDK)
 
 ## Dependencies
@@ -41,8 +41,8 @@ Build in Netbeans.
 
 ## To-Do
 
-* ~~Get rid of the Mac OS X and GNU/Linux bug~~ => Fixed
-* Configurable flow control parameters (CTS, RTS/CTS, DSR, DTR/DSR, XOn/XOff)
+* ~~Get rid of the Mac OS X and GNU/Linux bug~~ => Fixed in v0.9.0
+* ~~Configurable flow control parameters (CTS, RTS/CTS, DSR, DTR/DSR, XOn/XOff)~~ => Implemented in master
 * Command-line interface
 * Time-stamp feature
 

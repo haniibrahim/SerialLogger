@@ -42,20 +42,20 @@
                           </Group>
                           <Component id="lb_VirtalPrint" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="107" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="181" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="ck_Logfile" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
                               <Component id="tf_Logfile" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="bt_Fileselector" min="-2" pref="27" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                              <Component id="bt_Fileselector" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="sp_VirtualPrint" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -84,7 +84,7 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -138,10 +138,10 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="bt_ClosePort" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="tf_Logfile" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="bt_Fileselector" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="ck_Logfile" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="bt_Fileselector" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

@@ -87,8 +87,8 @@ public class SerialLogger extends JFrame {
         bt_ClosePort.setEnabled(false);
 
         // Handshake deactivated - NOT IMPLEMENTED YET
-        lb_Handshake.setVisible(false);
-        cb_Handshake.setVisible(false);
+        lb_Handshake.setVisible(true);
+        cb_Handshake.setVisible(true);
 
         // Hide Info Button for macOS
         if (getOS().equals("mac")) {
@@ -115,7 +115,7 @@ public class SerialLogger extends JFrame {
             int databits = Integer.parseInt(cb_DataBits.getSelectedItem().toString());
             String stopbit_s = cb_StopBits.getSelectedItem().toString();
             String parity_s = cb_Parity.getSelectedItem().toString();
-//            String handshake_s = cb_Handshake.getSelectedItem().toString();
+            String handshake_s = cb_Handshake.getSelectedItem().toString();
 
             // Stopbit parser
             int stopbits;
@@ -147,18 +147,18 @@ public class SerialLogger extends JFrame {
                 parity = SerialPort.NO_PARITY;
             }
 
-//                // Handshake-Parser - NOT IMPLEMENTED YET
-//                int handshake;
-//                if (handshake_s.equals("none")) {
-//                    handshake = SerialPort.FLOW_CONTROL_DISABLED;
-//                } else if (handshake_s.equals("RTS/CTS")) {
-//                    handshake = SerialPort.FLOW_CONTROL_RTS_ENABLED;
-//                } else if (handshake_s.equals("XON/XOFF")) {
-//                    handshake = SerialPort.FLOW_CONTROL_XONXOFF_IN_ENABLED;
-//                } else {
-//                    System.err.println("ERROR: Handshake not specified, set to NONE");
-//                    handshake = SerialPort.FLOW_CONTROL_DISABLED;;
-//                }
+                // Handshake-Parser - NOT IMPLEMENTED YET
+                int handshake;
+                if (handshake_s.equals("none")) {
+                    handshake = SerialPort.FLOW_CONTROL_DISABLED;
+                } else if (handshake_s.equals("RTS/CTS")) {
+                    handshake = SerialPort.FLOW_CONTROL_RTS_ENABLED;
+                } else if (handshake_s.equals("XON/XOFF")) {
+                    handshake = SerialPort.FLOW_CONTROL_XONXOFF_IN_ENABLED;
+                } else {
+                    System.err.println("ERROR: Handshake not specified, set to NONE");
+                    handshake = SerialPort.FLOW_CONTROL_DISABLED;
+                }
             // Do not try to register an "empty" port 
             if (portName.equals("")) {
                 System.err.println("ERROR: CommPort is empty!");
@@ -313,7 +313,7 @@ public class SerialLogger extends JFrame {
         prefs.put("databits", cb_DataBits.getSelectedItem().toString());
         prefs.put("stopbits", cb_StopBits.getSelectedItem().toString());
         prefs.put("parity", cb_Parity.getSelectedItem().toString());
-//        prefs.put("handshake", cb_handshake.getSelectedItem().toString());
+        prefs.put("handshake", cb_Handshake.getSelectedItem().toString());
 
         // Save Logfile name
         if (tf_Logfile.getText().isEmpty()) {
@@ -369,6 +369,7 @@ public class SerialLogger extends JFrame {
 
     /**
      * Warning if not Windows is used because of macOS and GNU/Linux bug
+     * => Bug solved w/ JSerialComm 2.1.0
      */
     private void unixWarning() {
         if (!getOS().equals("win")) {
@@ -512,15 +513,15 @@ public class SerialLogger extends JFrame {
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(bt_Update, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 88, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                             .add(lb_VirtalPrint))
-                        .add(0, 107, Short.MAX_VALUE))
+                        .add(0, 181, Short.MAX_VALUE))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                             .add(layout.createSequentialGroup()
                                 .add(ck_Logfile)
-                                .add(12, 12, 12)
-                                .add(tf_Logfile)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(bt_Fileselector, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 27, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                .add(tf_Logfile)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(bt_Fileselector))
                             .add(sp_VirtualPrint))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)))
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
@@ -586,8 +587,8 @@ public class SerialLogger extends JFrame {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(bt_ClosePort)
                     .add(tf_Logfile, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(bt_Fileselector)
-                    .add(ck_Logfile))
+                    .add(ck_Logfile)
+                    .add(bt_Fileselector, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
