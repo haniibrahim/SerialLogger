@@ -31,11 +31,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * *
- * "Virtual Serial Printer" simply logs the data stream received from a serial
+ * "SerialLogger" simply logs the data stream received from a serial
  * interface to a GUI interface, the console and optionally to a file
  *
  * @author Hani Andreas Ibrahim
- * @version 0.5
+ * @version 1.0.0
  */
 public class SerialLogger extends JFrame {
 
@@ -101,7 +101,14 @@ public class SerialLogger extends JFrame {
         // Warning if platform other than Windows is used
         //unixWarning(); // problem on macOS and Linux solved w/ JSerialComm 2.1.0
     }
-
+    
+    /**
+     * Inner SwingWorker class: Reading serial data
+     *  - Read serial data
+     *  - Write it to the GUI
+     *  - Write it to the console
+     *  - Write it to file, if desired by user
+     */
     private class SerialReadTask extends SwingWorker<Boolean, String> {
 
         BufferedReader serialBufferedReader;
@@ -147,18 +154,18 @@ public class SerialLogger extends JFrame {
                 parity = SerialPort.NO_PARITY;
             }
 
-                // Handshake-Parser - NOT IMPLEMENTED YET
-                int handshake;
-                if (handshake_s.equals("none")) {
-                    handshake = SerialPort.FLOW_CONTROL_DISABLED;
-                } else if (handshake_s.equals("RTS/CTS")) {
-                    handshake = SerialPort.FLOW_CONTROL_RTS_ENABLED;
-                } else if (handshake_s.equals("XON/XOFF")) {
-                    handshake = SerialPort.FLOW_CONTROL_XONXOFF_IN_ENABLED;
-                } else {
-                    System.err.println("ERROR: Handshake not specified, set to NONE");
-                    handshake = SerialPort.FLOW_CONTROL_DISABLED;
-                }
+            // Handshake-Parser
+            int handshake;
+            if (handshake_s.equals("none")) {
+                handshake = SerialPort.FLOW_CONTROL_DISABLED;
+            } else if (handshake_s.equals("RTS/CTS")) {
+                handshake = SerialPort.FLOW_CONTROL_RTS_ENABLED + SerialPort.FLOW_CONTROL_CTS_ENABLED;
+            } else if (handshake_s.equals("XON/XOFF")) {
+                handshake = SerialPort.FLOW_CONTROL_XONXOFF_IN_ENABLED;
+            } else {
+                System.err.println("ERROR: Handshake not specified, set to NONE");
+                handshake = SerialPort.FLOW_CONTROL_DISABLED;
+            }
             // Do not try to register an "empty" port 
             if (portName.equals("")) {
                 System.err.println("ERROR: CommPort is empty!");
@@ -259,7 +266,11 @@ public class SerialLogger extends JFrame {
             }
         }
     }
-
+    
+    /**
+     * SwingWorker Thread: Read list of commports and show it in the combobox 
+     * of the GUI
+     */
     private void updatePortList() {
         SwingWorker<SerialPort[], Void> worker = new SwingWorker<SerialPort[], Void>() {
             @Override
@@ -295,7 +306,15 @@ public class SerialLogger extends JFrame {
         };
         worker.execute();
     }
-
+    
+    /**
+     * Store settings in preferences
+     *  - Window position and size
+     *  - Serial settings
+     *  - Log file name and path
+     * 
+     * @throws BackingStoreException 
+     */
     private void storePrefs() throws BackingStoreException {
         // Get node
         prefs = Preferences.userNodeForPackage(getClass());
@@ -325,7 +344,13 @@ public class SerialLogger extends JFrame {
 
         prefs.flush();
     }
-
+    
+    /**
+     * Set settings from stored preferences
+     *  - Window position and size
+     *  - Serial settings
+     *  - Log file name and path
+     */
     private void setPrefs() {
         // Get node
         prefs = Preferences.userNodeForPackage(getClass());
@@ -368,8 +393,10 @@ public class SerialLogger extends JFrame {
     }
 
     /**
-     * Warning if not Windows is used because of macOS and GNU/Linux bug
-     * => Bug solved w/ JSerialComm 2.1.0
+     * DEPRECATED
+     * Warning if not Windows is used because of macOS and GNU/Linux bug => Bug
+     * solved w/ JSerialComm 2.1.0
+     * @deprecated 
      */
     private void unixWarning() {
         if (!getOS().equals("win")) {
@@ -379,7 +406,6 @@ public class SerialLogger extends JFrame {
                     + "at the moment.\n\n"
                     + "Unexpected behavior may occur.\n" + " ",
                     "Severe Warning", JOptionPane.WARNING_MESSAGE);
-        } else {
         }
     }
 
@@ -485,6 +511,7 @@ public class SerialLogger extends JFrame {
         lb_Handshake.setText("Handshake:");
 
         cb_Handshake.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "RTS/CTS", "XON/XOFF", "none" }));
+        cb_Handshake.setToolTipText("Flow Control");
 
         ck_Logfile.setText("Log to:");
         ck_Logfile.setToolTipText("Enable/Disable logging");
@@ -594,11 +621,18 @@ public class SerialLogger extends JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    /**
+     * Update Button event
+     * @param evt 
+     */
     private void bt_UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_UpdateActionPerformed
         updatePortList();
     }//GEN-LAST:event_bt_UpdateActionPerformed
-
+    
+    /**
+     * Close port button event
+     * @param evt 
+     */
     private void bt_ClosePortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_ClosePortActionPerformed
         // Enable GUI elements
         cb_Commport.setEnabled(true);
@@ -617,20 +651,28 @@ public class SerialLogger extends JFrame {
         // flag main swingworker class as cancel
         serialReader.cancel(true);
     }//GEN-LAST:event_bt_ClosePortActionPerformed
-
+    
+    /**
+     * Info button event
+     * @param evt 
+     */
     private void bt_InfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_InfoActionPerformed
-        JOptionPane.showMessageDialog(this,
-                "<html><span style=\"font-size:large;\"><b>SerialLogger</b></span></html>\n"
-                + "Logs data received from a serial interface\n"
-                + "to GUI, console or file.\n\n"
-                + "(c) 2013 Hani Ibrahim <hani.ibrahim@gmx.de>\n"
-                + "GNU Public License 3.0\n\n",
-                "Info", JOptionPane.INFORMATION_MESSAGE, icon);
-//        InfoDialog infoDialog = new InfoDialog(this, true);
-//        infoDialog.setLocationRelativeTo(this);
-//        infoDialog.setVisible(true);
+//        JOptionPane.showMessageDialog(this,
+//                "<html><span style=\"font-size:large;\"><b>SerialLogger</b></span></html>\n"
+//                + "Logs data received from a serial interface\n"
+//                + "to GUI, console or file.\n\n"
+//                + "(c) 2013 Hani Ibrahim <hani.ibrahim@gmx.de>\n"
+//                + "GNU Public License 3.0\n\n",
+//                "Info", JOptionPane.INFORMATION_MESSAGE, icon);
+        InfoDialog infoDialog = new InfoDialog(this, true);
+        infoDialog.setLocationRelativeTo(this);
+        infoDialog.setVisible(true);
     }//GEN-LAST:event_bt_InfoActionPerformed
-
+    
+    /**
+     * Open port button event
+     * @param evt 
+     */
     private void bt_OpenPortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_OpenPortActionPerformed
 //        System.out.println("OpenPort gedrückt");
 
@@ -667,7 +709,11 @@ public class SerialLogger extends JFrame {
             serialReader.execute();
         }
     }//GEN-LAST:event_bt_OpenPortActionPerformed
-
+    
+    /**
+     * Logfile's fileselector button event
+     * @param evt 
+     */
     private void bt_FileselectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_FileselectorActionPerformed
 
         String dialogTitle = "Specify log file ..";
@@ -720,7 +766,11 @@ public class SerialLogger extends JFrame {
         }
         tf_Logfile.setText(newLogfilePath);
     }//GEN-LAST:event_bt_FileselectorActionPerformed
-
+    
+    /**
+     * Detect platform (Windows, macOS, ...)
+     * @return platform name as short string: win, mac, linux, noarch. If platform cannot detected "noarch" is returned
+     */
     public static String getOS() {
         String osname = System.getProperty("os.name");
         if (osname != null && osname.toLowerCase().contains("mac")) {

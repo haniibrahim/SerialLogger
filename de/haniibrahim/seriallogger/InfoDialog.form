@@ -7,7 +7,6 @@
     <Property name="alwaysOnTop" type="boolean" value="true"/>
     <Property name="modal" type="boolean" value="true"/>
     <Property name="name" type="java.lang.String" value="dlg_Info" noResource="true"/>
-    <Property name="undecorated" type="boolean" value="true"/>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
@@ -30,48 +29,29 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      <Component id="bt_Ok" min="-2" pref="67" max="-2" attributes="0"/>
+                  <Component id="lb_Image" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="lb_Label_version" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="lb_Version" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lb_Image" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="lb_Text3" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="lb_Version" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="lb_copyright" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lb_Text2" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lb_Text1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lb_title" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lb_Email" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lb_License" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
+                  <Component id="lb_copyright" min="-2" max="-2" attributes="0"/>
+                  <Component id="lb_Text2" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lb_Text1" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lb_title" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="lb_copyright1" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" alignment="0" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace min="-2" pref="132" max="-2" attributes="0"/>
+                          <Component id="bt_Ok" min="-2" pref="67" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Component id="lb_Email" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lb_License" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -88,18 +68,20 @@
               <Component id="lb_Text2" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lb_Text3" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lb_Label_version" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="lb_Version" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="58" max="32767" attributes="0"/>
+              <EmptySpace pref="20" max="32767" attributes="0"/>
               <Component id="lb_copyright" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+              <Component id="lb_copyright1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="lb_License" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="lb_Email" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="bt_Ok" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -121,7 +103,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lb_copyright">
       <Properties>
-        <Property name="text" type="java.lang.String" value="(c) Hani Andreas Ibrahim - GPL 3.0"/>
+        <Property name="text" type="java.lang.String" value="COPYRIGHT"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="bt_Ok">
@@ -144,7 +126,7 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="lb_Text3">
+    <Component class="javax.swing.JLabel" name="lb_Label_version">
       <Properties>
         <Property name="text" type="java.lang.String" value="Version: "/>
       </Properties>
@@ -162,6 +144,11 @@
     <Component class="javax.swing.JLabel" name="lb_License">
       <Properties>
         <Property name="text" type="java.lang.String" value="GNU Public License 3.0"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lb_copyright1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Hani A. Ibrahim"/>
       </Properties>
     </Component>
   </SubComponents>

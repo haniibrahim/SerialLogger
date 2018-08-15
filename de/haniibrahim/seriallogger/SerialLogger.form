@@ -320,6 +320,7 @@
             <StringItem index="2" value="none"/>
           </StringArray>
         </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Flow Control"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JCheckBox" name="ck_Logfile">

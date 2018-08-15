@@ -1,17 +1,16 @@
 package de.haniibrahim.seriallogger;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
+import java.util.Calendar;
+import java.util.Date;
 
 /**
- *
+ * Info Dialogbox
  * @author hi
  */
 public class InfoDialog extends javax.swing.JDialog {
-
+    
+    private String version = "1.0.0"; // CHANGE VERSION NUMBER AS NECESSARY - Shown in Infodialog()
+    
     /**
      * Creates new form InfoDialog
      * @param parent
@@ -20,7 +19,20 @@ public class InfoDialog extends javax.swing.JDialog {
     public InfoDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        lb_Version.setText(version); // Set version no.
+        lb_copyright.setText("© 2013 - " + getCurrentYear());
         this.getRootPane().setDefaultButton(bt_Ok); // Set OK-Button to default    
+    }
+    
+    /**
+     * Get current year as integer
+     * @return int current year (YYYY)
+     */
+    private static int getCurrentYear(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        int jahr = cal.get(Calendar.YEAR);
+        return jahr;
     }
 
     /**
@@ -38,17 +50,17 @@ public class InfoDialog extends javax.swing.JDialog {
         bt_Ok = new javax.swing.JButton();
         lb_Text2 = new javax.swing.JLabel();
         lb_Image = new javax.swing.JLabel();
-        lb_Text3 = new javax.swing.JLabel();
+        lb_Label_version = new javax.swing.JLabel();
         lb_Version = new javax.swing.JLabel();
         lb_Email = new javax.swing.JLabel();
         lb_License = new javax.swing.JLabel();
+        lb_copyright1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Info");
         setAlwaysOnTop(true);
         setModal(true);
         setName("dlg_Info"); // NOI18N
-        setUndecorated(true);
         setResizable(false);
 
         lb_title.setFont(new java.awt.Font("Lucida Grande", 1, 18)); // NOI18N
@@ -57,7 +69,7 @@ public class InfoDialog extends javax.swing.JDialog {
 
         lb_Text1.setText("Logs data received from a serial interface");
 
-        lb_copyright.setText("(c) Hani Andreas Ibrahim - GPL 3.0");
+        lb_copyright.setText("COPYRIGHT");
 
         bt_Ok.setText("OK");
         bt_Ok.addActionListener(new java.awt.event.ActionListener() {
@@ -70,7 +82,7 @@ public class InfoDialog extends javax.swing.JDialog {
 
         lb_Image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/haniibrahim/seriallogger/serial_th.png"))); // NOI18N
 
-        lb_Text3.setText("Version: ");
+        lb_Label_version.setText("Version: ");
 
         lb_Version.setText("NO VERSION");
 
@@ -78,41 +90,32 @@ public class InfoDialog extends javax.swing.JDialog {
 
         lb_License.setText("GNU Public License 3.0");
 
+        lb_copyright1.setText("Hani A. Ibrahim");
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
+                .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                        .add(0, 0, Short.MAX_VALUE)
-                        .add(bt_Ok, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 67, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(lb_Image)
                     .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(lb_Image)
-                                    .add(layout.createSequentialGroup()
-                                        .add(lb_Text3)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(lb_Version))))
-                            .add(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .add(lb_copyright))
-                            .add(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(lb_Text2)
-                                    .add(lb_Text1)
-                                    .add(lb_title)))
-                            .add(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(lb_Email)
-                                    .add(lb_License))))
-                        .add(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .add(lb_Label_version)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(lb_Version))
+                    .add(lb_copyright)
+                    .add(lb_Text2)
+                    .add(lb_Text1)
+                    .add(lb_title)
+                    .add(lb_copyright1)
+                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                            .add(132, 132, 132)
+                            .add(bt_Ok, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 67, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(lb_Email)
+                        .add(lb_License)))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -127,22 +130,28 @@ public class InfoDialog extends javax.swing.JDialog {
                 .add(lb_Text2)
                 .add(18, 18, 18)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(lb_Text3)
+                    .add(lb_Label_version)
                     .add(lb_Version))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 58, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 20, Short.MAX_VALUE)
                 .add(lb_copyright)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(1, 1, 1)
+                .add(lb_copyright1)
+                .add(18, 18, 18)
                 .add(lb_License)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(lb_Email)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(bt_Ok)
-                .add(6, 6, 6))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * OK button event
+     * @param evt 
+     */
     private void bt_OkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_OkActionPerformed
         this.dispose();
     }//GEN-LAST:event_bt_OkActionPerformed
@@ -152,12 +161,13 @@ public class InfoDialog extends javax.swing.JDialog {
     private javax.swing.JButton bt_Ok;
     private javax.swing.JLabel lb_Email;
     private javax.swing.JLabel lb_Image;
+    private javax.swing.JLabel lb_Label_version;
     private javax.swing.JLabel lb_License;
     private javax.swing.JLabel lb_Text1;
     private javax.swing.JLabel lb_Text2;
-    private javax.swing.JLabel lb_Text3;
     private javax.swing.JLabel lb_Version;
     private javax.swing.JLabel lb_copyright;
+    private javax.swing.JLabel lb_copyright1;
     private javax.swing.JLabel lb_title;
     // End of variables declaration//GEN-END:variables
 }
