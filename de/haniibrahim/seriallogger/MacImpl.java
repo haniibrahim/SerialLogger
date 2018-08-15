@@ -50,17 +50,19 @@ class MacImpl implements ClassSelector, AboutHandler, PreferencesHandler, QuitHa
     // Info Dialog
     @Override
     public void handleAbout(AboutEvent arg0) {
-//        Icon icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("serial_th.png")));
-//        JOptionPane.showMessageDialog(null,
-//                "<html><span style=\"font-size:large;\"><b>SerialLogger</b></span></html>\n"
-//                + "Logs data received from a serial interface\n"
-//                + "to GUI, console or file.\n\n"
-//                + "(c) 2013 Hani Ibrahim <hani.ibrahim@gmx.de>\n"
-//                + "GNU Public License 3.0\n\n",
-//                "Info", JOptionPane.INFORMATION_MESSAGE, icon);
-        InfoDialog infoDialog = new InfoDialog(SerialLogger.getFrames()[0], true);
-        infoDialog.setLocationRelativeTo(null);
-        infoDialog.setVisible(true);
+        Icon icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("serial_th.png")));
+        JOptionPane.showMessageDialog(null,
+                "<html><span style=\"font-size:large;\"><b>SerialLogger</b></span></html>\n"
+                + "Logs data received from a serial interface\n"
+                + "to GUI, console or file.\n\n"
+                + "Version: " + SerialLogger.version + "\n\n"
+                + "(c) 2013-" + Helper.getCurrentYear() + " Hani Ibrahim\n"
+                + "<html><a href=\"mailto:hani.ibrahim@gmx.de>\">hani.ibrahim@gmx.de</a>\n\n"
+                + "GNU Public License 3.0\n\n",
+                "Info", JOptionPane.INFORMATION_MESSAGE, icon);
+//        InfoDialog infoDialog = new InfoDialog(SerialLogger.getFrames()[0], true);
+//        infoDialog.setLocationRelativeTo(null);
+//        infoDialog.setVisible(true);
         // System.out.println("handleAbout()"); 
     }
 

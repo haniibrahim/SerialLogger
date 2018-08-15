@@ -1,5 +1,6 @@
 package de.haniibrahim.seriallogger;
 
+//<editor-fold defaultstate="collapsed" desc="import statements">
 import com.fazecast.jSerialComm.*;
 import java.awt.Dimension;
 import java.awt.FileDialog;
@@ -26,8 +27,8 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileNameExtensionFilter;
+//</editor-fold>
 
 /**
  * *
@@ -38,6 +39,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @version 1.0.0
  */
 public class SerialLogger extends JFrame {
+    
+    static String version = "1.0.0"; // CHANGE VERSION NUMBER AS NECESSARY - Shown in info dialog
 
     private static SerialPort chosenPort;
     private static String stdLogfileName;
@@ -53,9 +56,11 @@ public class SerialLogger extends JFrame {
      */
     public SerialLogger() {
 
-        // Set app icon
-        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("serial.png")));
         initComponents();
+        
+        // Set app icon in JFrame properties
+//        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("serial.png"))); // parent class has to be final to avoid side effects
+//        this.setIconImage(new ImageIcon(getClass().getResource("serial.png")).getImage()); // <= JFRame properties Design mode
 
         // Load prefs at startup and save at shutdown
         setPrefs();
@@ -91,7 +96,7 @@ public class SerialLogger extends JFrame {
         cb_Handshake.setVisible(true);
 
         // Hide Info Button for macOS
-        if (getOS().equals("mac")) {
+        if (Helper.getOS().equals("mac")) {
             bt_Info.setVisible(false);
         }
 
@@ -399,7 +404,7 @@ public class SerialLogger extends JFrame {
      * @deprecated 
      */
     private void unixWarning() {
-        if (!getOS().equals("win")) {
+        if (!Helper.getOS().equals("win")) {
             JOptionPane.showMessageDialog(null,
                     "<html><span style=\"font-weight:bold; color: red;\">DO NOT USE SerialLogger</span></html>\n"
                     + "on platforms other than Windows®\n"
@@ -443,6 +448,7 @@ public class SerialLogger extends JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SerialLogger");
+        setIconImage(new ImageIcon(getClass().getResource("serial.png")).getImage());
         setLocationByPlatform(true);
         setMinimumSize(getPreferredSize());
 
@@ -657,16 +663,18 @@ public class SerialLogger extends JFrame {
      * @param evt 
      */
     private void bt_InfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_InfoActionPerformed
-//        JOptionPane.showMessageDialog(this,
-//                "<html><span style=\"font-size:large;\"><b>SerialLogger</b></span></html>\n"
-//                + "Logs data received from a serial interface\n"
-//                + "to GUI, console or file.\n\n"
-//                + "(c) 2013 Hani Ibrahim <hani.ibrahim@gmx.de>\n"
-//                + "GNU Public License 3.0\n\n",
-//                "Info", JOptionPane.INFORMATION_MESSAGE, icon);
-        InfoDialog infoDialog = new InfoDialog(this, true);
-        infoDialog.setLocationRelativeTo(this);
-        infoDialog.setVisible(true);
+        JOptionPane.showMessageDialog(this,
+                "<html><span style=\"font-size:large;\"><b>SerialLogger</b></span></html>\n"
+                + "Logs data received from a serial interface\n"
+                + "to GUI, console or file.\n\n"
+                + "Version: " + version + "\n\n"
+                + "(c) 2013-" + Helper.getCurrentYear() + " Hani Ibrahim\n"
+                + "<html><a href=\"mailto:hani.ibrahim@gmx.de>\">hani.ibrahim@gmx.de</a>\n\n"
+                + "GNU Public License 3.0\n\n",
+                "Info", JOptionPane.INFORMATION_MESSAGE, icon);
+//        InfoDialog infoDialog = new InfoDialog(this, true);
+//        infoDialog.setLocationRelativeTo(this);
+//        infoDialog.setVisible(true);
     }//GEN-LAST:event_bt_InfoActionPerformed
     
     /**
@@ -768,28 +776,10 @@ public class SerialLogger extends JFrame {
     }//GEN-LAST:event_bt_FileselectorActionPerformed
     
     /**
-     * Detect platform (Windows, macOS, ...)
-     * @return platform name as short string: win, mac, linux, noarch. If platform cannot detected "noarch" is returned
-     */
-    public static String getOS() {
-        String osname = System.getProperty("os.name");
-        if (osname != null && osname.toLowerCase().contains("mac")) {
-            return "mac";
-        }
-        if (osname != null && osname.toLowerCase().contains("windows")) {
-            return "win";
-        }
-        if (osname != null && osname.toLowerCase().contains("linux")) {
-            return "linux";
-        }
-        return "noarch";
-    }
-
-    /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-
+        
         //<editor-fold defaultstate="collapsed" desc="Look and Feel">
         // Try GTK-LaF on GNU/Linux first, then System-LaF. System-LaF on all other platforms
         if (System.getProperty("os.name").toLowerCase().contains("linux")) {
@@ -816,7 +806,7 @@ public class SerialLogger extends JFrame {
             @Override
             public void run() {
                 new SerialLogger().setVisible(true);
-                if (getOS().equals("mac")) {
+                if (Helper.getOS().equals("mac")) {
                     MacImpl macImpl = new MacImpl();
                 }
             }
