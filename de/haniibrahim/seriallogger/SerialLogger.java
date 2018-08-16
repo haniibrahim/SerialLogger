@@ -192,7 +192,7 @@ public class SerialLogger extends JFrame {
                 } else {
                     logFlag = false;
                 }
-                String line = null;
+                String line;
                 serialBufferedReader = new BufferedReader(new InputStreamReader(chosenPort.getInputStream()));
                 while (((line = serialBufferedReader.readLine()) != null) && !isCancelled()) {
                     publish(line);
@@ -725,7 +725,7 @@ public class SerialLogger extends JFrame {
     private void bt_FileselectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_FileselectorActionPerformed
 
         String dialogTitle = "Specify log file ..";
-        String newLogfilePath = "";
+        String newLogfilePath;
 
         // Logfilename: Extract pathname (w/o filename) from tf_Logfile
         String oldLogfilePath = tf_Logfile.getText();
