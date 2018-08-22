@@ -27,7 +27,7 @@ SerialLogger v0.9.0 on Windows 10
 ## Dependencies
 
 * [JSerialComm](http://fazecast.github.io/jSerialComm/ "") library, version 2.1.0 or higher is mandatory for macOS & GNU/Linux
-* ~~[SwingLayoutExtensions](http://www.java2s.com/Code/JarDownload/swing/swing-layout.jar.zip "") library~~ => not neccessary anymore, Java 6 internal GroupLayout used
+* ~~[SwingLayoutExtensions](http://www.java2s.com/Code/JarDownload/swing/swing-layout.jar.zip "") library~~ => not necessary anymore, Java 6 internal GroupLayout used
 * [AppleJavaExtensions](http://www.java2s.com/Code/Jar/a/applejavaextensions.htm "") library for platforms other than Mac OS X
 
 Build in Netbeans. 

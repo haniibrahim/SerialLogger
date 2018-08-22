@@ -1,8 +1,5 @@
 package de.haniibrahim.seriallogger;
 
-import java.util.Calendar;
-import java.util.Date;
-
 /**
  * Info Dialogbox
  * @author hi
