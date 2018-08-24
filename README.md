@@ -1,16 +1,18 @@
 # SerialLogger
 
- Logs data from RS-232 interface to a GUI, console and optionally to a file
+ Fail-proof and easy to use cross-platform serial datalogger. 
+ Logs data from RS-232 interface to a GUI, console and optionally to a file.
  
 ## Features
 
-* Cross-platform: Windows (Intel), Mac (Intel), GNU/Linux (Intel/ARM), 32- and 64-bit architectures
+* Cross-platform: Windows (Intel), macOS (Intel), GNU/Linux (Intel/ARM), 32- and 64-bit architectures
+* Fail-proof data collection. Save every collected line of data immediately to the optional log file avoiding data loss even at power breakdowns
 * Graphical User Interface (GUI)
 * Get serial port names from the OS
 * Logs serial data to screen (GUI), console and optionally in a file
-* Save every collected line of data immediately to the file avoiding data loss
 * Serial port name is editable in the GUI (for pseudo ports as `/dev/pts/[x]`)
 * Arbitrary baud rate (if hardware supports it)
+* Hardware (CTS/RTS) and Software (Xon/Xoff) handshake available
 
 ## Screenshot
 ![SerialLogger Screenshot (Windows)](http://blog.hani-ibrahim.de/wp-content/uploads/seriallogger.png "")
@@ -21,30 +23,31 @@ SerialLogger v0.9.0 on Windows 10
 
 * PC with MS-Windows XP or higher
 * PC with GNU/Linux on x86/x86_64 or ARM (32/64-bit)
-* Macintosh with macOS 10.5 or higher
+* Macintosh with macOS 10.5 (Tiger) or higher
 * Java 6 JRE on platforms mentioned above (Oracle Java or OpenJDK)
 
 ## Dependencies
 
-* [JSerialComm](http://fazecast.github.io/jSerialComm/ "") library, version 2.1.0 or higher is mandatory for macOS & GNU/Linux
-* ~~[SwingLayoutExtensions](http://www.java2s.com/Code/JarDownload/swing/swing-layout.jar.zip "") library~~ => not necessary anymore, Java 6 internal GroupLayout used
-* [AppleJavaExtensions](http://www.java2s.com/Code/Jar/a/applejavaextensions.htm "") library for platforms other than Mac OS X
+* [jSerialComm](http://fazecast.github.io/jSerialComm/ "") library, version 2.1.0 or higher
+* [AppleJavaExtensions](http://www.java2s.com/Code/Jar/a/applejavaextensions.htm "") library for platforms other than macOS
 
 Build in Netbeans. 
 
-## Status
+## Binary
 
-* [FatJar](https://github.com/haniibrahim/SerialLogger/releases) released. Installer comming soon
-* Branch master is always compile- and runnable
-* Works without any problems on Windows
-* Works **now** on GNU/Linux and macOS, too
+For JARs and installers go to the [RELEASE section](https://github.com/haniibrahim/SerialLogger/releases).
 
-## To-Do
+## Changelog
 
-* ~~Get rid of the Mac OS X and GNU/Linux bug~~ => Fixed in v0.9.0
-* ~~Configurable flow control parameters (CTS, RTS/CTS, DSR, DTR/DSR, XOn/XOff)~~ => Implemented in master
-* Command-line interface
-* Time-stamp feature
+| Version | Notes |
+|-------|--------|
+| 0.9.0 | Basic logging functions and serial settings, fail-proof log file feature, full cross-platform functionality|
+| 1.0.0 | Hardware (CTS/RTS) and Software (Xon/Xoff) handshake option, append data to exixting file feature |
+
+## Roadmap
+
+* Time-stamp feature (v1.1.0)
+* Command line features (v2.0.0)
 
 ## Known bugs
 

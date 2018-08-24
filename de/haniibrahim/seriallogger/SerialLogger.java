@@ -32,21 +32,23 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * *
- * "SerialLogger" simply logs the data stream received from a serial
- * interface to a GUI interface, the console and optionally to a file
+ * "SerialLogger" simply logs the data stream received from a serial interface
+ * to a GUI interface, the console and optionally to a file
  *
  * @author Hani Andreas Ibrahim
  * @version 1.0.0
  */
 public class SerialLogger extends JFrame {
-    
-    static String version = "1.0.0"; // CHANGE VERSION NUMBER AS NECESSARY - Shown in info dialog
+
+    static String version = "1.0.0-beta"; // CHANGE VERSION NUMBER AS NECESSARY - Shown in info dialog
 
     private static SerialPort chosenPort;
     private static String stdLogfileName;
     private static String portName;
     private SerialReadTask serialReader;
     private Preferences prefs;
+
+    private boolean appendFlag = false;
 
     // Set program icon
     private final Icon icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("serial_th.png")));
@@ -57,11 +59,10 @@ public class SerialLogger extends JFrame {
     public SerialLogger() {
 
         initComponents();
-        
+
         // Set app icon in JFrame properties
 //        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("serial.png"))); // parent class has to be final to avoid side effects
 //        this.setIconImage(new ImageIcon(getClass().getResource("serial.png")).getImage()); // <= JFRame properties Design mode
-
         // Load prefs at startup and save at shutdown
         setPrefs();
 
@@ -106,13 +107,13 @@ public class SerialLogger extends JFrame {
         // Warning if platform other than Windows is used
         //unixWarning(); // problem on macOS and Linux solved w/ JSerialComm 2.1.0
     }
-    
+
     /**
-     * Inner SwingWorker class: Reading serial data
-     *  - Read serial data
-     *  - Write it to the GUI
-     *  - Write it to the console
-     *  - Write it to file, if desired by user
+     * Inner SwingWorker class: Reading serial data 
+     * <li>Read serial data
+     * <li>Write it to the GUI
+     * <li>Write it to the console 
+     * <li>Write it to file, if desired by user
      */
     private class SerialReadTask extends SwingWorker<Boolean, String> {
 
@@ -187,7 +188,11 @@ public class SerialLogger extends JFrame {
             if (chosenPort.isOpen()) {
                 boolean logFlag;
                 if (ck_Logfile.isSelected()) {
-                    pw = new PrintWriter(new FileWriter(tf_Logfile.getText()));
+                    if (appendFlag) {
+                        pw = new PrintWriter(new FileWriter(tf_Logfile.getText(), true)); // append data to existing file
+                    } else {
+                        pw = new PrintWriter(new FileWriter(tf_Logfile.getText())); // write data to a empty file
+                    }
                     logFlag = true;
                 } else {
                     logFlag = false;
@@ -271,10 +276,10 @@ public class SerialLogger extends JFrame {
             }
         }
     }
-    
+
     /**
-     * SwingWorker Thread: Read list of commports and show it in the combobox 
-     * of the GUI
+     * SwingWorker Thread: Read list of commports and show it in the combobox of
+     * the GUI
      */
     private void updatePortList() {
         SwingWorker<SerialPort[], Void> worker = new SwingWorker<SerialPort[], Void>() {
@@ -311,14 +316,12 @@ public class SerialLogger extends JFrame {
         };
         worker.execute();
     }
-    
+
     /**
-     * Store settings in preferences
-     *  - Window position and size
-     *  - Serial settings
-     *  - Log file name and path
-     * 
-     * @throws BackingStoreException 
+     * Store settings in preferences - Window position and size - Serial
+     * settings - Log file name and path
+     *
+     * @throws BackingStoreException
      */
     private void storePrefs() throws BackingStoreException {
         // Get node
@@ -349,12 +352,12 @@ public class SerialLogger extends JFrame {
 
         prefs.flush();
     }
-    
+
     /**
-     * Set settings from stored preferences
-     *  - Window position and size
-     *  - Serial settings
-     *  - Log file name and path
+     * Set settings from stored preferences 
+     * <li>Window position and size
+     * <li>Serial settings 
+     * <li>Log file name and path
      */
     private void setPrefs() {
         // Get node
@@ -398,10 +401,36 @@ public class SerialLogger extends JFrame {
     }
 
     /**
-     * DEPRECATED
-     * Warning if not Windows is used because of macOS and GNU/Linux bug => Bug
-     * solved w/ JSerialComm 2.1.0
-     * @deprecated 
+     * Enables or disables GUI elements
+     *
+     * @param toggle Enables or disables GUI elements (T/F)
+     */
+    private void toggleGuiElements(boolean toggle) {
+        // Exception for ClosePort button
+        if (toggle == true) {
+            bt_ClosePort.setEnabled(false);
+        } else if (toggle == false) {
+            bt_ClosePort.setEnabled(true);
+        }
+        // other elements
+        cb_Commport.setEnabled(toggle);
+        bt_Update.setEnabled(toggle);
+        cb_Baud.setEnabled(toggle);
+        cb_DataBits.setEnabled(toggle);
+        cb_StopBits.setEnabled(toggle);
+        cb_Parity.setEnabled(toggle);
+        cb_Handshake.setEnabled(toggle);
+        bt_OpenPort.setEnabled(toggle);
+        ck_Logfile.setEnabled(toggle);
+        tf_Logfile.setEnabled(toggle);
+        bt_Fileselector.setEnabled(toggle);
+    }
+
+    /**
+     * DEPRECATED Warning if not Windows is used because of macOS and GNU/Linux
+     * bug => Bug solved w/ JSerialComm 2.1.0
+     *
+     * @deprecated
      */
     private void unixWarning() {
         if (!Helper.getOS().equals("win")) {
@@ -629,38 +658,42 @@ public class SerialLogger extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
     /**
      * Update Button event
-     * @param evt 
+     *
+     * @param evt
      */
     private void bt_UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_UpdateActionPerformed
         updatePortList();
     }//GEN-LAST:event_bt_UpdateActionPerformed
-    
+
     /**
      * Close port button event
-     * @param evt 
+     *
+     * @param evt
      */
     private void bt_ClosePortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_ClosePortActionPerformed
         // Enable GUI elements
-        cb_Commport.setEnabled(true);
-        bt_Update.setEnabled(true);
-        cb_Baud.setEnabled(true);
-        cb_DataBits.setEnabled(true);
-        cb_StopBits.setEnabled(true);
-        cb_Parity.setEnabled(true);
-        cb_Handshake.setEnabled(true);
-        bt_OpenPort.setEnabled(true);
-        bt_ClosePort.setEnabled(false);
-        ck_Logfile.setEnabled(true);
-        tf_Logfile.setEnabled(true);
-        bt_Fileselector.setEnabled(true);
+        toggleGuiElements(true);
+//        cb_Commport.setEnabled(true);
+//        bt_Update.setEnabled(true);
+//        cb_Baud.setEnabled(true);
+//        cb_DataBits.setEnabled(true);
+//        cb_StopBits.setEnabled(true);
+//        cb_Parity.setEnabled(true);
+//        cb_Handshake.setEnabled(true);
+//        bt_OpenPort.setEnabled(true);
+//        bt_ClosePort.setEnabled(false);
+//        ck_Logfile.setEnabled(true);
+//        tf_Logfile.setEnabled(true);
+//        bt_Fileselector.setEnabled(true);
 
         // flag main swingworker class as cancel
         serialReader.cancel(true);
     }//GEN-LAST:event_bt_ClosePortActionPerformed
-    
+
     /**
      * Info button event
-     * @param evt 
+     *
+     * @param evt
      */
     private void bt_InfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_InfoActionPerformed
         JOptionPane.showMessageDialog(this,
@@ -676,10 +709,11 @@ public class SerialLogger extends JFrame {
 //        infoDialog.setLocationRelativeTo(this);
 //        infoDialog.setVisible(true);
     }//GEN-LAST:event_bt_InfoActionPerformed
-    
+
     /**
      * Open port button event
-     * @param evt 
+     *
+     * @param evt
      */
     private void bt_OpenPortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_OpenPortActionPerformed
 //        System.out.println("OpenPort gedrückt");
@@ -694,33 +728,51 @@ public class SerialLogger extends JFrame {
                     "Error", JOptionPane.ERROR_MESSAGE);
             System.err.println("Logfile name is empty");
         } else if (ck_Logfile.isSelected() && (new File(tf_Logfile.getText())).exists()) {
-            JOptionPane.showMessageDialog(this,
-                    "Logfile aready exists",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            System.err.println("ERROR: Logfile already exists");
-        } else {
+            // Log file exists, append or cancel?
+            Object[] options = {
+                "Append",
+                "Cancel"
+            };
+            int ans = JOptionPane.showOptionDialog(this,
+                    "Logfile already exists\n"
+                    + "Do you want to append data to this file\n",
+                    "Append or Cancel?",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null, options, options[1]);
+            if (ans == 0) { // append data to file
+                appendFlag = true;
+                toggleGuiElements(false);
+                serialReader = new SerialReadTask();
+                serialReader.execute();
+            } else { // cancel
+                appendFlag = false;
+            }
+        } else { // no problems
             // Disable GUI elements
-            cb_Commport.setEnabled(false);
-            bt_Update.setEnabled(false);
-            cb_Baud.setEnabled(false);
-            cb_DataBits.setEnabled(false);
-            cb_StopBits.setEnabled(false);
-            cb_Parity.setEnabled(false);
-            cb_Handshake.setEnabled(false);
-            bt_OpenPort.setEnabled(false);
-            bt_ClosePort.setEnabled(true);
-            ck_Logfile.setEnabled(false);
-            tf_Logfile.setEnabled(false);
-            bt_Fileselector.setEnabled(false);
+            toggleGuiElements(false);
+//            cb_Commport.setEnabled(false);
+//            bt_Update.setEnabled(false);
+//            cb_Baud.setEnabled(false);
+//            cb_DataBits.setEnabled(false);
+//            cb_StopBits.setEnabled(false);
+//            cb_Parity.setEnabled(false);
+//            cb_Handshake.setEnabled(false);
+//            bt_OpenPort.setEnabled(false);
+//            bt_ClosePort.setEnabled(true);
+//            ck_Logfile.setEnabled(false);
+//            tf_Logfile.setEnabled(false);
+//            bt_Fileselector.setEnabled(false);
             // Read from the serial interface
             serialReader = new SerialReadTask();
             serialReader.execute();
         }
     }//GEN-LAST:event_bt_OpenPortActionPerformed
-    
+
     /**
      * Logfile's fileselector button event
-     * @param evt 
+     *
+     * @param evt
      */
     private void bt_FileselectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_FileselectorActionPerformed
 
@@ -774,12 +826,12 @@ public class SerialLogger extends JFrame {
         }
         tf_Logfile.setText(newLogfilePath);
     }//GEN-LAST:event_bt_FileselectorActionPerformed
-    
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
+
         //<editor-fold defaultstate="collapsed" desc="Look and Feel">
         // Try GTK-LaF on GNU/Linux first, then System-LaF. System-LaF on all other platforms
         if (System.getProperty("os.name").toLowerCase().contains("linux")) {
