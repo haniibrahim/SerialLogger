@@ -48,7 +48,8 @@ public class SerialLogger extends JFrame {
     private SerialReadTask serialReader;
     private Preferences prefs;
 
-    private boolean appendFlag = false;
+    private boolean appendFlag = false; // If append data to existing file was chosen
+    private boolean printLogFlag;       // If data was saved or not
 
     // Set program icon
     private final Icon icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(getClass().getResource("serial_th.png")));
@@ -63,6 +64,7 @@ public class SerialLogger extends JFrame {
         // Set app icon in JFrame properties
 //        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("serial.png"))); // parent class has to be final to avoid side effects
 //        this.setIconImage(new ImageIcon(getClass().getResource("serial.png")).getImage()); // <= JFRame properties Design mode
+
         // Load prefs at startup and save at shutdown
         setPrefs();
 
@@ -195,8 +197,10 @@ public class SerialLogger extends JFrame {
                             pw = new PrintWriter(new FileWriter(tf_Logfile.getText(), false)); // write data to a empty file
                         }
                         logFlag = true;
+                        printLogFlag = true;
                     } else {
                         logFlag = false;
+                        printLogFlag = false;
                     }
                     String line;
                     serialBufferedReader = new BufferedReader(new InputStreamReader(chosenPort.getInputStream()));
@@ -209,20 +213,21 @@ public class SerialLogger extends JFrame {
                     }
                     return false;
                 } catch (IOException ex) {
-                    //Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
+//                    Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
                     System.err.println(ex.getMessage());
                     Helper.showLogIOException(ex.getMessage());
                     // Clean up
                     toggleGuiElements(true);
                     chosenPort.closePort();
-                    return true;
+                    return false;
                 }
             } else {
                 JOptionPane.showMessageDialog(SerialLogger.getFrames()[0],
                         "Could not open serial port\n" + portName + "\n",
                         "Info", JOptionPane.ERROR_MESSAGE);
                 System.err.println("Could not open port " + portName);
-                return true;
+                toggleGuiElements(true);
+                return false;
             }
         }
 
@@ -246,18 +251,19 @@ public class SerialLogger extends JFrame {
             try {
                 if (get() == true) {
                     // Disable GUI elements
-                    cb_Commport.setEnabled(true);
-                    bt_Update.setEnabled(true);
-                    cb_Baud.setEnabled(true);
-                    cb_DataBits.setEnabled(true);
-                    cb_StopBits.setEnabled(true);
-                    cb_Parity.setEnabled(true);
-                    cb_Handshake.setEnabled(true);
-                    bt_OpenPort.setEnabled(true);
-                    bt_ClosePort.setEnabled(false);
-                    ck_Logfile.setEnabled(true);
-                    tf_Logfile.setEnabled(true);
-                    bt_Fileselector.setEnabled(true);
+                    toggleGuiElements(false);
+//                    cb_Commport.setEnabled(true);
+//                    bt_Update.setEnabled(true);
+//                    cb_Baud.setEnabled(true);
+//                    cb_DataBits.setEnabled(true);
+//                    cb_StopBits.setEnabled(true);
+//                    cb_Parity.setEnabled(true);
+//                    cb_Handshake.setEnabled(true);
+//                    bt_OpenPort.setEnabled(true);
+//                    bt_ClosePort.setEnabled(false);
+//                    ck_Logfile.setEnabled(true);
+//                    tf_Logfile.setEnabled(true);
+//                    bt_Fileselector.setEnabled(true);
                 }
             } catch (InterruptedException ex) {
                 Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, "DONE: Interrupted", ex);
@@ -727,21 +733,21 @@ public class SerialLogger extends JFrame {
      */
     private void bt_OpenPortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_OpenPortActionPerformed
         // Clear textarea if desired
-//        if (!ta_LogPanel.getText().isEmpty()) { // Buffer not empty
-//            Object[] options = {"Delete Buffer", "Cancel"};
-//            int ans = JOptionPane.showOptionDialog(this,
-//                    "Buffer is not empty and not saved\n"
-//                    + "Delete buffer and continue?",
-//                    "Buffer not empty",
-//                    JOptionPane.YES_NO_OPTION,
-//                    JOptionPane.WARNING_MESSAGE,
-//                    null, options, options[1]);
-//            if (ans == 0) {                
-//                ta_LogPanel.setText("");
-//            } else {
-//                return;
-//            }
-//        }
+        if (!ta_LogPanel.getText().isEmpty() && printLogFlag == false) { // Buffer not empty
+            Object[] options = {"Delete Buffer", "Cancel"};
+            int ans = JOptionPane.showOptionDialog(this,
+                    "Buffer is not empty and not saved\n"
+                    + "Delete buffer and continue?",
+                    "Buffer not empty",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE,
+                    null, options, options[1]);
+            if (ans == 0) {                
+                ta_LogPanel.setText("");
+            } else {
+                return;
+            }
+        }
         ta_LogPanel.setText("");
 
         // Check for consistent logging settings

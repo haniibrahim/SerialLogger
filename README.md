@@ -15,7 +15,7 @@
 * Hardware (CTS/RTS) and Software (Xon/Xoff) handshake available
 
 ## Screenshot
-![SerialLogger Screenshot (Windows)](http://blog.hani-ibrahim.de/wp-content/uploads/seriallogger.png "")
+![SerialLogger Screenshot (Windows)](http://blog.hani-ibrahim.de/wp-content/uploads/seriallogger.png "Screenshot")
 
 SerialLogger v0.9.0 on Windows 10
 
@@ -35,14 +35,14 @@ Build in Netbeans.
 
 ## Binary
 
-For JARs and installers go to the [RELEASE section](https://github.com/haniibrahim/SerialLogger/releases).
+For JARs and installers go to the [RELEASE](https://github.com/haniibrahim/SerialLogger/releases) section.
 
 ## Changelog
 
 | Version | Notes |
 |-------|--------|
-| 0.9.0 | Basic logging functions and serial settings, fail-proof log file feature, full cross-platform functionality|
-| 1.0.0 | Hardware (CTS/RTS) and Software (Xon/Xoff) handshake option, append data to exixting file feature |
+| 0.9.0      | Basic logging functions and serial settings, fail-proof log file feature, full cross-platform functionality|
+| 1.0.0-beta | Hardware (CTS/RTS) and Software (Xon/Xoff) handshake option, append data to existing file feature, invalid path bug fixed, warning of overwriting the unsaved buffer |
 
 ## Roadmap
 
