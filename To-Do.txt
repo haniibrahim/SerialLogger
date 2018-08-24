@@ -1,0 +1,5 @@
+[x] testing append-logging
+[x] invalid log file path handling
+[ ] Warning if open new port and buffer has data and no file-logging was specified - not easy to implement
+[x] get rid of the overwriting warning when choose an existing filename w/ FileDialog()
+

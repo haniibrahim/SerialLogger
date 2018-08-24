@@ -36,7 +36,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * to a GUI interface, the console and optionally to a file
  *
  * @author Hani Andreas Ibrahim
- * @version 1.0.0
+ * @version 1.0.0-beta
  */
 public class SerialLogger extends JFrame {
 
@@ -109,10 +109,10 @@ public class SerialLogger extends JFrame {
     }
 
     /**
-     * Inner SwingWorker class: Reading serial data 
+     * Inner SwingWorker class: Reading serial data
      * <li>Read serial data
      * <li>Write it to the GUI
-     * <li>Write it to the console 
+     * <li>Write it to the console
      * <li>Write it to file, if desired by user
      */
     private class SerialReadTask extends SwingWorker<Boolean, String> {
@@ -121,7 +121,7 @@ public class SerialLogger extends JFrame {
         PrintWriter pw;
 
         @Override
-        protected Boolean doInBackground() throws IOException {
+        protected Boolean doInBackground() {
             // Get values from the GUI
             portName = cb_Commport.getSelectedItem().toString();
             int baud = Integer.parseInt(cb_Baud.getSelectedItem().toString());
@@ -186,27 +186,37 @@ public class SerialLogger extends JFrame {
             chosenPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
             chosenPort.openPort();
             if (chosenPort.isOpen()) {
-                boolean logFlag;
-                if (ck_Logfile.isSelected()) {
-                    if (appendFlag) {
-                        pw = new PrintWriter(new FileWriter(tf_Logfile.getText(), true)); // append data to existing file
+                try { // Problems with log file - IOException
+                    boolean logFlag;
+                    if (ck_Logfile.isSelected()) {
+                        if (appendFlag) {
+                            pw = new PrintWriter(new FileWriter(tf_Logfile.getText(), true)); // append data to existing file
+                        } else {
+                            pw = new PrintWriter(new FileWriter(tf_Logfile.getText(), false)); // write data to a empty file
+                        }
+                        logFlag = true;
                     } else {
-                        pw = new PrintWriter(new FileWriter(tf_Logfile.getText())); // write data to a empty file
+                        logFlag = false;
                     }
-                    logFlag = true;
-                } else {
-                    logFlag = false;
-                }
-                String line;
-                serialBufferedReader = new BufferedReader(new InputStreamReader(chosenPort.getInputStream()));
-                while (((line = serialBufferedReader.readLine()) != null) && !isCancelled()) {
-                    publish(line);
-                    if (logFlag) {
-                        pw.println(line); // save to buffer (file)
-                        pw.flush(); // flush buffer and tries to save every line to the file immediately
+                    String line;
+                    serialBufferedReader = new BufferedReader(new InputStreamReader(chosenPort.getInputStream()));
+                    while (((line = serialBufferedReader.readLine()) != null) && !isCancelled()) {
+                        publish(line);
+                        if (logFlag) {
+                            pw.println(line); // save to buffer (file)
+                            pw.flush(); // flush buffer and tries to save every line to the file immediately
+                        }
                     }
+                    return false;
+                } catch (IOException ex) {
+                    //Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
+                    System.err.println(ex.getMessage());
+                    Helper.showLogIOException(ex.getMessage());
+                    // Clean up
+                    toggleGuiElements(true);
+                    chosenPort.closePort();
+                    return true;
                 }
-                return false;
             } else {
                 JOptionPane.showMessageDialog(SerialLogger.getFrames()[0],
                         "Could not open serial port\n" + portName + "\n",
@@ -354,9 +364,9 @@ public class SerialLogger extends JFrame {
     }
 
     /**
-     * Set settings from stored preferences 
+     * Set settings from stored preferences
      * <li>Window position and size
-     * <li>Serial settings 
+     * <li>Serial settings
      * <li>Log file name and path
      */
     private void setPrefs() {
@@ -716,9 +726,22 @@ public class SerialLogger extends JFrame {
      * @param evt
      */
     private void bt_OpenPortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_OpenPortActionPerformed
-//        System.out.println("OpenPort gedrückt");
-
-        // Clear textarea
+        // Clear textarea if desired
+//        if (!ta_LogPanel.getText().isEmpty()) { // Buffer not empty
+//            Object[] options = {"Delete Buffer", "Cancel"};
+//            int ans = JOptionPane.showOptionDialog(this,
+//                    "Buffer is not empty and not saved\n"
+//                    + "Delete buffer and continue?",
+//                    "Buffer not empty",
+//                    JOptionPane.YES_NO_OPTION,
+//                    JOptionPane.WARNING_MESSAGE,
+//                    null, options, options[1]);
+//            if (ans == 0) {                
+//                ta_LogPanel.setText("");
+//            } else {
+//                return;
+//            }
+//        }
         ta_LogPanel.setText("");
 
         // Check for consistent logging settings
@@ -807,7 +830,7 @@ public class SerialLogger extends JFrame {
                 newLogfilePath = oldLogfilePath;
             }
         } else {
-            FileDialog fd = new FileDialog(this, dialogTitle, FileDialog.SAVE);
+            FileDialog fd = new FileDialog(this, dialogTitle, FileDialog.LOAD);
             FilenameFilter filter = new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String name) {
@@ -824,7 +847,7 @@ public class SerialLogger extends JFrame {
                 newLogfilePath = oldLogfilePath;
             }
         }
-        tf_Logfile.setText(newLogfilePath);
+        tf_Logfile.setText(newLogfilePath);       
     }//GEN-LAST:event_bt_FileselectorActionPerformed
 
     /**

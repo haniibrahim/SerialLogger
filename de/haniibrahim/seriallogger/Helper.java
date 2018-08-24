@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import javax.swing.JOptionPane;
 
 /**
  * Helper Class
@@ -55,6 +56,15 @@ final class Helper {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
         df.setTimeZone(tz);
         return df.format(new Date()); // ISO 8601 Timestamp format
+    }
+    
+    /**
+     * Show alertbox when writing in log file fails
+     */
+    static void showLogIOException(String ex){
+        JOptionPane.showMessageDialog(SerialLogger.getFrames()[0],
+                "ERROR:\n" + ex, 
+                "Log file error", JOptionPane.ERROR_MESSAGE);
     }
 
 }
