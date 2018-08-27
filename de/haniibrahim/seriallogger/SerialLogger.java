@@ -64,7 +64,6 @@ public class SerialLogger extends JFrame {
         // Set app icon in JFrame properties
 //        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("serial.png"))); // parent class has to be final to avoid side effects
 //        this.setIconImage(new ImageIcon(getClass().getResource("serial.png")).getImage()); // <= JFRame properties Design mode
-
         // Load prefs at startup and save at shutdown
         setPrefs();
 
@@ -180,7 +179,8 @@ public class SerialLogger extends JFrame {
                 JOptionPane.showMessageDialog(SerialLogger.getFrames()[0],
                         "CommPort is empty",
                         "Error", JOptionPane.ERROR_MESSAGE);
-                return true;
+                toggleGuiElements(true);
+                return false;
             }
 
             chosenPort = SerialPort.getCommPort(portName); // Register chosen port
@@ -742,7 +742,7 @@ public class SerialLogger extends JFrame {
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.WARNING_MESSAGE,
                     null, options, options[1]);
-            if (ans == 0) {                
+            if (ans == 0) {
                 ta_LogPanel.setText("");
             } else {
                 return;
@@ -853,7 +853,7 @@ public class SerialLogger extends JFrame {
                 newLogfilePath = oldLogfilePath;
             }
         }
-        tf_Logfile.setText(newLogfilePath);       
+        tf_Logfile.setText(newLogfilePath);
     }//GEN-LAST:event_bt_FileselectorActionPerformed
 
     /**

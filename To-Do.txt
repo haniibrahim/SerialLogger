@@ -2,5 +2,7 @@
 [x] invalid log file path handling
 [x] Warning if open new port and buffer has data and no file-logging was specified
 [x] get rid of the overwriting warning when choose an existing filename w/ FileDialog()
-[ ] Change little standard Java icon in FileDialog
-
+[-] Change little standard Java icon in FileDialog on Windows
+[x] Get rid of the cosmetic "Empty Commport" GUI bug
+[ ] Timestamp feature
+[ ] CLI interface
