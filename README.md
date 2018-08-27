@@ -6,18 +6,20 @@
 ## Features
 
 * Cross-platform: Windows (Intel), macOS (Intel), GNU/Linux (Intel/ARM), 32- and 64-bit architectures
-* Fail-proof data collection. Save every collected line of data immediately to the optional log file avoiding data loss even at power breakdowns
+* Logs serial data to screen (GUI), console and optionally in a file
+* Fail-proof data collection. Save every collected line of data immediately to the optional log file avoiding data loss even at power breakdowns or computer/application crash.
+* Warning of unintentional overwriting of unlogged buffer
+* Impossible to overwrite log file from application
 * Graphical User Interface (GUI)
 * Get serial port names from the OS
-* Logs serial data to screen (GUI), console and optionally in a file
 * Serial port name is editable in the GUI (for pseudo ports as `/dev/pts/[x]`)
 * Arbitrary baud rate (if hardware supports it)
 * Hardware (CTS/RTS) and Software (Xon/Xoff) handshake available
 
 ## Screenshot
-![SerialLogger Screenshot (Windows)](http://blog.hani-ibrahim.de/wp-content/uploads/seriallogger.png "Screenshot")
+![](http://blog.hani-ibrahim.de/wp-content/uploads/seriallogger-1.0.0-beta_windows.png "Screenshot")
 
-SerialLogger v0.9.0 on Windows 10
+SerialLogger v1.0.0-beta on Windows 10
 
 ## Requirements
 
@@ -35,7 +37,9 @@ Build in Netbeans.
 
 ## Binary
 
-For JARs and installers go to the [RELEASE](https://github.com/haniibrahim/SerialLogger/releases) section.
+For JARs and platform related installers* go to the [RELEASE](https://github.com/haniibrahim/SerialLogger/releases) section.
+
+*for non-preview releases only
 
 ## Changelog
 

@@ -36,11 +36,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * to a GUI interface, the console and optionally to a file
  *
  * @author Hani Andreas Ibrahim
- * @version 1.0.0-beta
+ * @version 1.0.0
  */
 public class SerialLogger extends JFrame {
 
-    static String version = "1.0.0-beta"; // CHANGE VERSION NUMBER AS NECESSARY - Shown in info dialog
+    static String version = "1.0.0"; // CHANGE VERSION NUMBER AS NECESSARY - Shown in info dialog
 
     private static SerialPort chosenPort;
     private static String stdLogfileName;
