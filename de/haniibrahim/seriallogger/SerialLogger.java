@@ -65,7 +65,7 @@ public class SerialLogger extends JFrame {
         // Checking before close frame
         this.addWindowListener(new WindowAdapter() {
             /**
-             * Checks if buffer is empty and saved
+             * Checks if buffer is empty and saved before closinf window
              * If not it asks whether it should proceed to quit
              * 
              * @param e WindowEvent
@@ -122,10 +122,6 @@ public class SerialLogger extends JFrame {
         // Open and close button diabled till updatePortList finished
         bt_OpenPort.setEnabled(false);
         bt_ClosePort.setEnabled(false);
-
-        // Handshake deactivated - NOT IMPLEMENTED YET
-        lb_Handshake.setVisible(true);
-        cb_Handshake.setVisible(true);
 
         // Hide Info Button for macOS
         if (Helper.getOS().equals("mac")) {
