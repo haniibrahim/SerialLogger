@@ -66,5 +66,5 @@ final class Helper {
                 "ERROR:\n" + ex, 
                 "Log file error", JOptionPane.ERROR_MESSAGE);
     }
-
+    
 }

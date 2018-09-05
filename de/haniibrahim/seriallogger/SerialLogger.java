@@ -5,6 +5,8 @@ import com.fazecast.jSerialComm.*;
 import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
@@ -25,6 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 //</editor-fold>
 
@@ -58,12 +61,43 @@ public class SerialLogger extends JFrame {
     public SerialLogger() {
 
         initComponents();
-
+        
+        // Checking before close frame
+        this.addWindowListener(new WindowAdapter() {
+            /**
+             * Checks if buffer is empty and saved
+             * If not it asks whether it should proceed to quit
+             * 
+             * @param e WindowEvent
+             */
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Check for unsaved buffer
+                if (!ta_LogPanel.getText().isEmpty() && printLogFlag == false) {
+                    Object[] options = {"Delete Buffer and Quit", "Cancel"};
+                    int ans = JOptionPane.showOptionDialog(SerialLogger.getFrames()[0],
+                            "Buffer is not empty and not saved\n",
+                            "Buffer not empty",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.WARNING_MESSAGE,
+                            null, options, options[1]);
+                    if (ans == 0) {
+                        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                    } else {
+                        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+                    }
+                }
+            }
+        });
+        
+        // Set preferences to default or from storePrefs()
         setPrefs();
 
+        // To-Do just before app shutdown
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {
+                // Store preferences
                 try {
                     storePrefs();
                 } catch (BackingStoreException ex) {
@@ -99,7 +133,7 @@ public class SerialLogger extends JFrame {
         // Initial values for CommPorts in combobox
         updatePortList();
     }
-
+    
     /**
      * Inner SwingWorker class: Reading serial data
      * <li>Read serial data
@@ -675,8 +709,7 @@ public class SerialLogger extends JFrame {
         if (!ta_LogPanel.getText().isEmpty() && printLogFlag == false) { // Buffer not empty
             Object[] options = {"Delete Buffer", "Cancel"};
             int ans = JOptionPane.showOptionDialog(this,
-                    "Buffer is not empty and not saved\n"
-                    + "Delete buffer and continue?",
+                    "Buffer is not empty and not saved",
                     "Buffer not empty",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.WARNING_MESSAGE,
