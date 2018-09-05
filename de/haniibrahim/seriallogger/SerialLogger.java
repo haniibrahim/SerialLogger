@@ -779,10 +779,11 @@ public class SerialLogger extends JFrame {
         String pathName = oldLogfilePath.substring(0, // Extract path w/o filename
                 oldLogfilePath.lastIndexOf(System.getProperty("file.separator")) + 1);
 
-        // If Linux AND JRE 6 than use JFilechooser() otherwise the native FileDialog()
+        // If Windows or Linux AND JRE 6 than use JFilechooser() otherwise the native FileDialog()
         // the native filechooser is ugly on Linux with Jave 6
-        if (System.getProperty("os.name").toLowerCase().contains("linux")
-                && System.getProperty("java.version").startsWith("1.6")) {
+        if ((Helper.getOS().equals("linux")
+                && System.getProperty("java.version").startsWith("1.6")) 
+                || (Helper.getOS().equals("win"))) {
             JFileChooser fd = new JFileChooser(pathName);
             fd.setDialogTitle(dialogTitle);
             fd.setDialogType(JFileChooser.SAVE_DIALOG);
