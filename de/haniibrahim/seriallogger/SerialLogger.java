@@ -210,6 +210,7 @@ public class SerialLogger extends JFrame {
 
             chosenPort = SerialPort.getCommPort(portName); // Register chosen port
             chosenPort.setComPortParameters(baud, databits, stopbits, parity); // Set serial parameters to the chosen port
+            chosenPort.setFlowControl(handshake); // set flow control (RTS/CTS or XON/XOFF)
             chosenPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
             chosenPort.openPort();
             if (chosenPort.isOpen()) {
