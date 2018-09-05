@@ -15,8 +15,6 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import javax.swing.Icon;
@@ -31,7 +29,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 //</editor-fold>
 
 /**
- * *
+ *
  * "SerialLogger" simply logs the data stream received from a serial interface
  * to a GUI interface, the console and optionally to a file
  *
@@ -61,10 +59,6 @@ public class SerialLogger extends JFrame {
 
         initComponents();
 
-        // Set app icon in JFrame properties
-//        this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("serial.png"))); // parent class has to be final to avoid side effects
-//        this.setIconImage(new ImageIcon(getClass().getResource("serial.png")).getImage()); // <= JFRame properties Design mode
-        // Load prefs at startup and save at shutdown
         setPrefs();
 
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
@@ -104,9 +98,6 @@ public class SerialLogger extends JFrame {
 
         // Initial values for CommPorts in combobox
         updatePortList();
-
-        // Warning if platform other than Windows is used
-        //unixWarning(); // problem on macOS and Linux solved w/ JSerialComm 2.1.0
     }
 
     /**
@@ -213,7 +204,6 @@ public class SerialLogger extends JFrame {
                     }
                     return false;
                 } catch (IOException ex) {
-//                    Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
                     System.err.println(ex.getMessage());
                     Helper.showLogIOException(ex.getMessage());
                     // Clean up
@@ -252,36 +242,17 @@ public class SerialLogger extends JFrame {
                 if (get() == true) {
                     // Disable GUI elements
                     toggleGuiElements(false);
-//                    cb_Commport.setEnabled(true);
-//                    bt_Update.setEnabled(true);
-//                    cb_Baud.setEnabled(true);
-//                    cb_DataBits.setEnabled(true);
-//                    cb_StopBits.setEnabled(true);
-//                    cb_Parity.setEnabled(true);
-//                    cb_Handshake.setEnabled(true);
-//                    bt_OpenPort.setEnabled(true);
-//                    bt_ClosePort.setEnabled(false);
-//                    ck_Logfile.setEnabled(true);
-//                    tf_Logfile.setEnabled(true);
-//                    bt_Fileselector.setEnabled(true);
                 }
             } catch (InterruptedException ex) {
-                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, "DONE: Interrupted", ex);
+                System.err.println(ex.getMessage());
             } catch (ExecutionException ex) {
-                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, "DONE: Cancelled", ex);
+                System.err.println(ex.getMessage());
             } catch (CancellationException ex) { // important
-//                try {
-//                    serialBufferedReader.close();
-//                } catch (IOException ex) {
-//                    Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, "BufferedReader.close() failed", ex);
-//                }
+                System.err.println(ex.getMessage());
                 if (chosenPort.isOpen()) {
                     // Close serial port
                     chosenPort.closePort();
                 } else {
-//                JOptionPane.showMessageDialog(SerialLogger.getFrames()[0],
-//                        "Port was not open",
-//                        "Error", JOptionPane.ERROR_MESSAGE);
                     System.err.println("Final close port fails, port was not open");
                 }
                 if (ck_Logfile.isSelected()) {
@@ -321,12 +292,9 @@ public class SerialLogger extends JFrame {
                     bt_OpenPort.setEnabled(true);
 
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(SerialLogger.class
-                            .getName()).log(Level.SEVERE, null, ex);
-
+                    System.err.println(ex.getMessage());
                 } catch (ExecutionException ex) {
-                    Logger.getLogger(SerialLogger.class
-                            .getName()).log(Level.SEVERE, null, ex);
+                    System.err.println(ex.getMessage());
                 }
             }
         };
@@ -440,23 +408,6 @@ public class SerialLogger extends JFrame {
         ck_Logfile.setEnabled(toggle);
         tf_Logfile.setEnabled(toggle);
         bt_Fileselector.setEnabled(toggle);
-    }
-
-    /**
-     * DEPRECATED Warning if not Windows is used because of macOS and GNU/Linux
-     * bug => Bug solved w/ JSerialComm 2.1.0
-     *
-     * @deprecated
-     */
-    private void unixWarning() {
-        if (!Helper.getOS().equals("win")) {
-            JOptionPane.showMessageDialog(null,
-                    "<html><span style=\"font-weight:bold; color: red;\">DO NOT USE SerialLogger</span></html>\n"
-                    + "on platforms other than Windows®\n"
-                    + "at the moment.\n\n"
-                    + "Unexpected behavior may occur.\n" + " ",
-                    "Severe Warning", JOptionPane.WARNING_MESSAGE);
-        }
     }
 
     /**
@@ -689,18 +640,6 @@ public class SerialLogger extends JFrame {
     private void bt_ClosePortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_ClosePortActionPerformed
         // Enable GUI elements
         toggleGuiElements(true);
-//        cb_Commport.setEnabled(true);
-//        bt_Update.setEnabled(true);
-//        cb_Baud.setEnabled(true);
-//        cb_DataBits.setEnabled(true);
-//        cb_StopBits.setEnabled(true);
-//        cb_Parity.setEnabled(true);
-//        cb_Handshake.setEnabled(true);
-//        bt_OpenPort.setEnabled(true);
-//        bt_ClosePort.setEnabled(false);
-//        ck_Logfile.setEnabled(true);
-//        tf_Logfile.setEnabled(true);
-//        bt_Fileselector.setEnabled(true);
 
         // flag main swingworker class as cancel
         serialReader.cancel(true);
@@ -780,18 +719,6 @@ public class SerialLogger extends JFrame {
         } else { // no problems
             // Disable GUI elements
             toggleGuiElements(false);
-//            cb_Commport.setEnabled(false);
-//            bt_Update.setEnabled(false);
-//            cb_Baud.setEnabled(false);
-//            cb_DataBits.setEnabled(false);
-//            cb_StopBits.setEnabled(false);
-//            cb_Parity.setEnabled(false);
-//            cb_Handshake.setEnabled(false);
-//            bt_OpenPort.setEnabled(false);
-//            bt_ClosePort.setEnabled(true);
-//            ck_Logfile.setEnabled(false);
-//            tf_Logfile.setEnabled(false);
-//            bt_Fileselector.setEnabled(false);
             // Read from the serial interface
             serialReader = new SerialReadTask();
             serialReader.execute();
