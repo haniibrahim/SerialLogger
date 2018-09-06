@@ -8,7 +8,7 @@
 * Cross-platform: Windows (Intel), macOS (Intel), GNU/Linux (Intel/ARM), 32- and 64-bit architectures
 * Logs serial data to screen (GUI), console and optionally in a file
 * Fail-proof data collection. Save every collected line of data immediately to the optional log file avoiding data loss even at power breakdowns or computer/application crash.
-* Warning of unintentional overwriting of unlogged buffer
+* Warning of unintentional overwriting or deleting of unlogged buffer
 * Impossible to overwrite log file from application
 * Graphical User Interface (GUI)
 * Get serial port names from the OS
@@ -19,7 +19,7 @@
 ## Screenshot
 ![](http://blog.hani-ibrahim.de/wp-content/uploads/seriallogger-1.0.0-beta_windows.png "Screenshot")
 
-SerialLogger v1.0.0-beta on Windows 10
+SerialLogger v1.0.0 on Windows 10
 
 ## Requirements
 
@@ -33,25 +33,27 @@ SerialLogger v1.0.0-beta on Windows 10
 * [jSerialComm](http://fazecast.github.io/jSerialComm/ "") library, version 2.1.0 or higher
 * [AppleJavaExtensions](http://www.java2s.com/Code/Jar/a/applejavaextensions.htm "") library for platforms other than macOS
 
-Build in Netbeans. 
+Build in Netbeans with JDK 1.6. 
 
-## Binary
+## Binaries
 
-For JARs and platform related installers* go to the [RELEASE](https://github.com/haniibrahim/SerialLogger/releases) section.
-
-*for non-preview releases only
+For JARs and platform related installers go to the [RELEASE](https://github.com/haniibrahim/SerialLogger/releases) section.
 
 ## Changelog
 
 | Version | Notes |
 |-------|--------|
-| 0.9.0      | Basic logging functions and serial settings, fail-proof log file feature, full cross-platform functionality|
-| 1.0.0-beta | Hardware (CTS/RTS) and Software (Xon/Xoff) handshake option, append data to existing file feature, invalid path bug fixed, warning of overwriting the unsaved buffer |
+| 0.9.0-alpha | Basic functions, works just in Windows |
+| 0.9.0      | Basic logging functions and serial settings, fail-proof log file feature, full cross-platform functionality (Windows, macOS, GNU/Linux) |
+| 1.0.0-beta | Hardware (CTS/RTS) and Software (Xon/Xoff) flowcontrol option, append data to existing file feature, invalid path bug fixed, warning of overwriting unsaved/unlogged buffer at new connections|
+| 1.0.0 | Check & warn for unsaved/unlogged puffer at app closing, empty commport bug fixed, flowcontrol bug fixed, filedialog bug fixed on macOS & Windows, code clean-up |
 
 ## Roadmap
 
-* Time-stamp feature (v1.1.0)
-* Command line features (v2.0.0)
+| Version | Notes |
+|-------|--------|
+| 1.1.0 | Time-stamp feature |
+| 2.0.0 | Command line features |
 
 ## Known bugs
 
