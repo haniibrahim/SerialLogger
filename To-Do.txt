@@ -1,7 +1,7 @@
 [x] testing append-logging
 [x] invalid log file path handling
 [x] Warning if open new port and buffer is not emty and not logged
-[x] get rid of the overwriting warning when choose an existing filename w/ FileDialog()
+[-] get rid of the overwriting warning when choose an existing filename w/ FileDialog() - NOT POSSIBLE W/ FILEDIALOG
 [x] Change little standard Java icon in FileDialog on Windows - => JFileChooser() on WIndows
 [x] Get rid of the cosmetic "Empty Commport" GUI bug
 [x] Warning when close window/quit app and buffer is not empty and not logged.

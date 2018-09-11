@@ -106,7 +106,8 @@ final class Helper {
      *
      * This format is excellent to process data in spreadsheets apps
      *
-     * Example: 13:45:42 1:45:42pm at September 6th, 2018
+     * Example: 13:45:42 
+     * 1:45:42pm at September 6th, 2018
      *
      * @param separator Separator sign (e.g. [blank],[,],[;])
      * @return date/separator/time timestamp
@@ -115,17 +116,35 @@ final class Helper {
         DateFormat tf = new SimpleDateFormat("HH:mm:ss"); // Time
         return tf.format(new Date()) + separator;
     }
+    
+    /**
+     * Returns timestamp with day of the year
+     * 
+     * Example 2018,249,13:45:42
+     * 1:45:42pm at September 6th, 2018 (day 249 of 2018)
+     * 
+     * @param separator Separator sign (e.g. [blank],[,],[;])
+     * @return 
+     */
+    static String getDayOfYearTimstamp(String separator){
+       Calendar cal = Calendar.getInstance(); // get current date and time
+        return Integer.toString(cal.get(Calendar.YEAR)) + separator 
+                + Integer.toString(cal.get(Calendar.DAY_OF_YEAR)) + separator
+                + Integer.toString(cal.get(Calendar.HOUR_OF_DAY)) + ":"
+                + Integer.toString(cal.get(Calendar.MINUTE)) + ":"
+                + Integer.toString(cal.get(Calendar.SECOND));
+    }
 
     /**
-     * Calculate Modified Julian Date from calendar object
-     *
-     * @param cal Calendar object
-     * @return Modified Julian Date (UT)
+     * Returns timestamp as modified Julian Date including time as floating point
+     * 
+     * @param separator Separator sign (e.g. [blank],[,],[;])
+     * @return 
      */
-    static String calcMjd(Calendar cal, String separator) {
+    static String getMjd(String separator) {
+        Calendar cal = Calendar.getInstance(); // get current date and time
         double sec = cal.get(Calendar.SECOND) + cal.get(Calendar.MILLISECOND) / 1000.0;
-        String res = Double.toString(sec);
-        return Double.toString(calcMjd(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), sec))
+        return Double.toString(getMjd(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DATE), cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), sec))
                 + separator;
     }
 
@@ -140,7 +159,7 @@ final class Helper {
      * @param sec calendar sec
      * @return Modified Julian Date (UT)
      */
-    private static double calcMjd(int year, int month, int day, int hour, int min, double sec) {
+    private static double getMjd(int year, int month, int day, int hour, int min, double sec) {
         // Variables 
         long MjdMidnight;
         double FracOfDay;

@@ -796,7 +796,7 @@ public class SerialLogger extends JFrame {
                 newLogfilePath = oldLogfilePath;
             }
         } else {
-            FileDialog fd = new FileDialog(this, dialogTitle, FileDialog.LOAD);
+            FileDialog fd = new FileDialog(this, dialogTitle, FileDialog.SAVE);
             FilenameFilter filter = new FilenameFilter() {
                 @Override
                 public boolean accept(File dir, String name) {
