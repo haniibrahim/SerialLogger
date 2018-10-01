@@ -369,10 +369,12 @@ public class SerialLogger extends JFrame {
             return Helper.getDateTimeTimestamp(delimiter);
         } else if (cb_Timestamp.getSelectedItem().toString().equals("Time")){
             return Helper.getTimeTimestamp(delimiter);
-        } else if (cb_Timestamp.getSelectedItem().toString().equals("MJD")){
+        } else if (cb_Timestamp.getSelectedItem().toString().equals("Mod. Julian Date")){
             return Helper.getMjd(delimiter);
         } else if (cb_Timestamp.getSelectedItem().toString().equals("Year|Day of year|Time")){
             return Helper.getDayOfYearTimestamp(delimiter);
+         } else if (cb_Timestamp.getSelectedItem().toString().equals("yyyy MM dd HH mm ss Tz")){
+            return Helper.getYMDhmsTz(delimiter);
         } else {
             return "";
         }
@@ -618,7 +620,7 @@ public class SerialLogger extends JFrame {
             }
         });
 
-        cb_Timestamp.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "none", "ISO 8601", "Date|Time|Timezone", "Date|Time", "Time", "MJD", "Year|Day of year|Time" }));
+        cb_Timestamp.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "none", "ISO 8601", "Date|Time|Timezone", "Date|Time", "Time", "Mod. Julian Date", "Year|Day of year|Time", "yyyy MM dd HH mm ss Tz" }));
         cb_Timestamp.setToolTipText("Timestamp (before each committed line)");
         cb_Timestamp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -650,7 +652,7 @@ public class SerialLogger extends JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(bt_Update, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lb_VirtalPrint))
-                        .addGap(0, 143, Short.MAX_VALUE))
+                        .addGap(0, 131, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()

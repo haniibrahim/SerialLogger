@@ -45,7 +45,7 @@
                           </Group>
                           <Component id="lb_VirtalPrint" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="143" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="131" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
@@ -362,14 +362,15 @@
     <Component class="javax.swing.JComboBox" name="cb_Timestamp">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="7">
+          <StringArray count="8">
             <StringItem index="0" value="none"/>
             <StringItem index="1" value="ISO 8601"/>
             <StringItem index="2" value="Date|Time|Timezone"/>
             <StringItem index="3" value="Date|Time"/>
             <StringItem index="4" value="Time"/>
-            <StringItem index="5" value="MJD"/>
+            <StringItem index="5" value="Mod. Julian Date"/>
             <StringItem index="6" value="Year|Day of year|Time"/>
+            <StringItem index="7" value="yyyy MM dd HH mm ss Tz"/>
           </StringArray>
         </Property>
         <Property name="toolTipText" type="java.lang.String" value="Timestamp (before each committed line)"/>

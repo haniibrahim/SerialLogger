@@ -78,7 +78,7 @@ final class Helper {
         DateFormat tzf = new SimpleDateFormat("Z");
         tzf.setTimeZone(tz);
 
-        DateFormat df = new SimpleDateFormat("dd-MM-yyyy"); // Date
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd"); // Date
         DateFormat tf = new SimpleDateFormat("HH:mm:ss"); // Time
         return df.format(new Date()) + delimiter + tf.format(new Date())
                 + delimiter + tzf.format(new Date()) + delimiter;
@@ -96,7 +96,7 @@ final class Helper {
      * @return date/delimiter/time timestamp
      */
     static String getDateTimeTimestamp(String delimiter) {
-        DateFormat df = new SimpleDateFormat("dd-MM-yyyy"); // Date
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd"); // Date
         DateFormat tf = new SimpleDateFormat("HH:mm:ss"); // Time
         return df.format(new Date()) + delimiter + tf.format(new Date()) + delimiter;
     }
@@ -134,6 +134,23 @@ final class Helper {
                 + Integer.toString(cal.get(Calendar.MINUTE)) + ":"
                 + Integer.toString(cal.get(Calendar.SECOND))
                 + delimiter;
+    }
+    
+    static String getYMDhmsTz(String delimiter){
+        Calendar cal = Calendar.getInstance(); // get current date and time
+        
+        // Timezone
+        TimeZone tz = TimeZone.getDefault();
+        DateFormat tzf = new SimpleDateFormat("Z");
+        tzf.setTimeZone(tz);
+        
+        return Integer.toString(cal.get(Calendar.YEAR)) + delimiter 
+                + Integer.toString(cal.get(Calendar.MONTH)+1) + delimiter // +1 because January=0
+                + Integer.toString(cal.get(Calendar.DAY_OF_MONTH)) + delimiter
+                + Integer.toString(cal.get(Calendar.HOUR_OF_DAY)) + delimiter
+                + Integer.toString(cal.get(Calendar.MINUTE)) + delimiter
+                + Integer.toString(cal.get(Calendar.SECOND)) + delimiter
+                + tzf.format(new Date()) + delimiter;
     }
 
     /**
