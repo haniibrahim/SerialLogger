@@ -37,11 +37,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * to a GUI interface, the console and optionally to a file
  *
  * @author Hani Andreas Ibrahim
- * @version 1.0.0
+ * @version 1.1.0-alpha
  */
 public class SerialLogger extends JFrame {
 
-    static String version = "1.0.0"; // CHANGE VERSION NUMBER AS NECESSARY - Shown in info dialog
+    static String version = "1.1.0-alpha"; // CHANGE VERSION NUMBER AS NECESSARY - Shown in info dialog
 
     private static SerialPort chosenPort;
     private static String stdLogfileName;
@@ -61,13 +61,13 @@ public class SerialLogger extends JFrame {
     public SerialLogger() {
 
         initComponents();
-        
+
         // Checking before close frame
         this.addWindowListener(new WindowAdapter() {
             /**
-             * Checks if buffer is empty and saved before closinf window
-             * If not it asks whether it should proceed to quit
-             * 
+             * Checks if buffer is empty and saved before closinf window If not
+             * it asks whether it should proceed to quit
+             *
              * @param e WindowEvent
              */
             @Override
@@ -91,7 +91,7 @@ public class SerialLogger extends JFrame {
                 }
             }
         });
-        
+
         // Set preferences to default or from storePrefs()
         setPrefs();
 
@@ -119,10 +119,10 @@ public class SerialLogger extends JFrame {
         ta_LogPanel.addMouseListener(new ContextMenuMouseListener());
         tf_Logfile.addMouseListener(new ContextMenuMouseListener());
 
-        // Open and close button diabled till updatePortList finished
+        // Open and close button disabled till updatePortList finished
         bt_OpenPort.setEnabled(false);
         bt_ClosePort.setEnabled(false);
-
+        
         // Hide Info Button for macOS
         if (Helper.getOS().equals("mac")) {
             bt_Info.setVisible(false);
@@ -131,7 +131,7 @@ public class SerialLogger extends JFrame {
         // Initial values for CommPorts in combobox
         updatePortList();
     }
-    
+
     /**
      * Inner SwingWorker class: Reading serial data
      * <li>Read serial data
@@ -256,16 +256,10 @@ public class SerialLogger extends JFrame {
 
         @Override
         protected void process(List<String> chunk) {
-            if (ck_Logfile.isSelected()) { // Output on GUI, console AND logfile
-                for (String line : chunk) {
-                    ta_LogPanel.append(line + "\n"); // display in GUI
-                    System.out.println(line); // print on console
-                }
-            } else { // Output on GUI and console only
-                for (String line : chunk) {
-                    ta_LogPanel.append(line + "\n");
-                    System.out.println(line);
-                }
+
+            for (String line : chunk) {               
+                ta_LogPanel.append(line + "\n");
+                System.out.println(line);
             }
         }
 
@@ -333,6 +327,56 @@ public class SerialLogger extends JFrame {
         };
         worker.execute();
     }
+    
+    /**
+     * Get delimiter string from combobox which is used between timestamp and
+     * data.
+     * 
+     * @return delimiter delimiter string
+     */
+    private String getDelimiter(){
+        if (cb_Delimiter.getSelectedItem().toString().equals("blank")){
+            return " ";
+        } else if (cb_Delimiter.getSelectedItem().toString().equals("komma")){
+            return ",";
+        } else if (cb_Delimiter.getSelectedItem().toString().equals("semicolon")){
+            return ";";
+        } else {
+            return "";
+        }
+    }
+    
+    /**
+     * Get a timestamp string of the current date & time in different formats
+     * <ul>
+     * <li>ISO 8601
+     * <li>Date, time, timezone
+     * <li>Date, time
+     * <li>Time
+     * <li>Modified Julian Date
+     * <li>Year, day of the year, time
+     * </ul>
+     * 
+     * @return timestamp 
+     */
+    private String getTimestamp(){
+        String delimiter = getDelimiter();
+        if (cb_Timestamp.getSelectedItem().toString().equals("ISO 8601")){
+            return Helper.getIsoTimestamp(delimiter);
+        } else if (cb_Timestamp.getSelectedItem().toString().equals("Date|Time|Timezone")){
+            return Helper.getDateTimeTz(delimiter);
+        } else if (cb_Timestamp.getSelectedItem().toString().equals("Date|Time")){
+            return Helper.getDateTimeTimestamp(delimiter);
+        } else if (cb_Timestamp.getSelectedItem().toString().equals("Time")){
+            return Helper.getTimeTimestamp(delimiter);
+        } else if (cb_Timestamp.getSelectedItem().toString().equals("MJD")){
+            return Helper.getMjd(delimiter);
+        } else if (cb_Timestamp.getSelectedItem().toString().equals("Year|Day of year|Time")){
+            return Helper.getDayOfYearTimestamp(delimiter);
+        } else {
+            return "";
+        }
+    }
 
     /**
      * Store settings in preferences - Window position and size - Serial
@@ -358,6 +402,8 @@ public class SerialLogger extends JFrame {
         prefs.put("stopbits", cb_StopBits.getSelectedItem().toString());
         prefs.put("parity", cb_Parity.getSelectedItem().toString());
         prefs.put("handshake", cb_Handshake.getSelectedItem().toString());
+        prefs.put("timestamp", cb_Timestamp.getSelectedItem().toString());
+        prefs.put("delimiter", cb_Delimiter.getSelectedItem().toString());
 
         // Save Logfile name
         if (tf_Logfile.getText().isEmpty()) {
@@ -404,6 +450,8 @@ public class SerialLogger extends JFrame {
         String stopbits = prefs.get("stopbits", "1");
         String parity = prefs.get("parity", "none");
         String handshake = prefs.get("handshake", "none");
+        String timestamp = prefs.get("timestamp", "none");
+        String delimiter = prefs.get("delimiter", "blank");
         String logfile = prefs.get("logfile", stdLogfileName);
         boolean logto = prefs.getBoolean("logto", false);
 
@@ -413,8 +461,15 @@ public class SerialLogger extends JFrame {
         cb_StopBits.setSelectedItem(stopbits);
         cb_Parity.setSelectedItem(parity);
         cb_Handshake.setSelectedItem(handshake);
+        cb_Timestamp.setSelectedItem(timestamp);
+        cb_Delimiter.setSelectedItem(delimiter);
         tf_Logfile.setText(logfile);
         ck_Logfile.setSelected(logto);
+        
+        // No timestamp diabled delimiter combobox
+        if (timestamp.equals("none")){
+            cb_Delimiter.setEnabled(false);
+        }
     }
 
     /**
@@ -474,6 +529,10 @@ public class SerialLogger extends JFrame {
         ck_Logfile = new javax.swing.JCheckBox();
         tf_Logfile = new javax.swing.JTextField();
         bt_Fileselector = new javax.swing.JButton();
+        cb_Timestamp = new javax.swing.JComboBox();
+        cb_Delimiter = new javax.swing.JComboBox();
+        lb_Timestamp = new javax.swing.JLabel();
+        lb_Delimiter = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SerialLogger");
@@ -545,8 +604,8 @@ public class SerialLogger extends JFrame {
 
         lb_Handshake.setText("Handshake:");
 
-        cb_Handshake.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "RTS/CTS", "XON/XOFF", "none" }));
-        cb_Handshake.setToolTipText("Flow Control");
+        cb_Handshake.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "none", "RTS/CTS", "XON/XOFF" }));
+        cb_Handshake.setToolTipText("Flow Control (RTS/CTS=Hardware | XON/XOFF=Software)");
 
         ck_Logfile.setText("Log to:");
         ck_Logfile.setToolTipText("Enable/Disable logging");
@@ -558,6 +617,22 @@ public class SerialLogger extends JFrame {
                 bt_FileselectorActionPerformed(evt);
             }
         });
+
+        cb_Timestamp.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "none", "ISO 8601", "Date|Time|Timezone", "Date|Time", "Time", "MJD", "Year|Day of year|Time" }));
+        cb_Timestamp.setToolTipText("Timestamp (before each committed line)");
+        cb_Timestamp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_TimestampActionPerformed(evt);
+            }
+        });
+
+        cb_Delimiter.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "blank", "komma", "semicolon", "none" }));
+        cb_Delimiter.setToolTipText("Delimiter between timestamp and data");
+
+        lb_Timestamp.setText("Timestamp:");
+
+        lb_Delimiter.setText("Delimiter:");
+        lb_Delimiter.setToolTipText("Delimiter between timestamp and data");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -575,7 +650,7 @@ public class SerialLogger extends JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(bt_Update, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lb_VirtalPrint))
-                        .addGap(0, 181, Short.MAX_VALUE))
+                        .addGap(0, 143, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
@@ -591,16 +666,21 @@ public class SerialLogger extends JFrame {
                     .addComponent(bt_OpenPort, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(bt_ClosePort, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lb_Baud, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lb_DataBits))
-                                .addComponent(lb_StopBits))
-                            .addComponent(lb_Handshake)
-                            .addComponent(lb_Parity, javax.swing.GroupLayout.Alignment.TRAILING))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lb_Baud, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(lb_DataBits))
+                                    .addComponent(lb_StopBits))
+                                .addComponent(lb_Handshake)
+                                .addComponent(lb_Parity, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(lb_Timestamp, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lb_Delimiter))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cb_Delimiter, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cb_Timestamp, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cb_Handshake, 0, 1, Short.MAX_VALUE)
                             .addComponent(cb_Parity, 0, 1, Short.MAX_VALUE)
                             .addComponent(cb_StopBits, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -640,7 +720,15 @@ public class SerialLogger extends JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cb_Handshake, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lb_Handshake))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 176, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cb_Timestamp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lb_Timestamp))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cb_Delimiter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lb_Delimiter))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
                         .addComponent(bt_OpenPort))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -780,7 +868,7 @@ public class SerialLogger extends JFrame {
         // If Windows or Linux AND JRE 6 than use JFilechooser() otherwise the native FileDialog()
         // the native filechooser is ugly on Linux with Jave 6
         if ((Helper.getOS().equals("linux")
-                && System.getProperty("java.version").startsWith("1.6")) 
+                && System.getProperty("java.version").startsWith("1.6"))
                 || (Helper.getOS().equals("win"))) {
             JFileChooser fd = new JFileChooser(pathName);
             fd.setDialogTitle(dialogTitle);
@@ -816,6 +904,14 @@ public class SerialLogger extends JFrame {
         tf_Logfile.setText(newLogfilePath);
     }//GEN-LAST:event_bt_FileselectorActionPerformed
 
+    private void cb_TimestampActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_TimestampActionPerformed
+        if (!cb_Timestamp.getSelectedItem().toString().equals("none")){
+            cb_Delimiter.setEnabled(true);
+        } else {
+            cb_Delimiter.setEnabled(false);
+        }
+    }//GEN-LAST:event_cb_TimestampActionPerformed
+    
     /**
      * @param args the command line arguments
      */
@@ -863,16 +959,20 @@ public class SerialLogger extends JFrame {
     private javax.swing.JComboBox cb_Baud;
     private javax.swing.JComboBox cb_Commport;
     private javax.swing.JComboBox cb_DataBits;
+    private javax.swing.JComboBox cb_Delimiter;
     private javax.swing.JComboBox cb_Handshake;
     private javax.swing.JComboBox cb_Parity;
     private javax.swing.JComboBox cb_StopBits;
+    private javax.swing.JComboBox cb_Timestamp;
     private javax.swing.JCheckBox ck_Logfile;
     private javax.swing.JLabel lb_Baud;
     private javax.swing.JLabel lb_Commport;
     private javax.swing.JLabel lb_DataBits;
+    private javax.swing.JLabel lb_Delimiter;
     private javax.swing.JLabel lb_Handshake;
     private javax.swing.JLabel lb_Parity;
     private javax.swing.JLabel lb_StopBits;
+    private javax.swing.JLabel lb_Timestamp;
     private javax.swing.JLabel lb_VirtalPrint;
     private javax.swing.JScrollPane sp_VirtualPrint;
     private javax.swing.JTextArea ta_LogPanel;

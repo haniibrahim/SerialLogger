@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.5" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.8" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
     <Property name="title" type="java.lang.String" value="SerialLogger"/>
@@ -45,7 +45,7 @@
                           </Group>
                           <Component id="lb_VirtalPrint" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="181" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="143" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
@@ -66,19 +66,25 @@
                   <Component id="bt_OpenPort" alignment="1" max="32767" attributes="0"/>
                   <Component id="bt_ClosePort" alignment="1" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                                  <Component id="lb_Baud" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lb_DataBits" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                                      <Component id="lb_Baud" alignment="1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lb_DataBits" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="lb_StopBits" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="lb_StopBits" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="lb_Handshake" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="lb_Parity" alignment="1" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="lb_Handshake" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="lb_Parity" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="lb_Timestamp" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lb_Delimiter" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="cb_Delimiter" max="32767" attributes="0"/>
+                          <Component id="cb_Timestamp" max="32767" attributes="0"/>
                           <Component id="cb_Handshake" pref="0" max="32767" attributes="0"/>
                           <Component id="cb_Parity" pref="0" max="32767" attributes="0"/>
                           <Component id="cb_StopBits" max="32767" attributes="0"/>
@@ -129,7 +135,17 @@
                           <Component id="cb_Handshake" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lb_Handshake" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="176" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="cb_Timestamp" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lb_Timestamp" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="cb_Delimiter" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lb_Delimiter" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="118" max="32767" attributes="0"/>
                       <Component id="bt_OpenPort" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
@@ -318,12 +334,12 @@
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="3">
-            <StringItem index="0" value="RTS/CTS"/>
-            <StringItem index="1" value="XON/XOFF"/>
-            <StringItem index="2" value="none"/>
+            <StringItem index="0" value="none"/>
+            <StringItem index="1" value="RTS/CTS"/>
+            <StringItem index="2" value="XON/XOFF"/>
           </StringArray>
         </Property>
-        <Property name="toolTipText" type="java.lang.String" value="Flow Control"/>
+        <Property name="toolTipText" type="java.lang.String" value="Flow Control (RTS/CTS=Hardware | XON/XOFF=Software)"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JCheckBox" name="ck_Logfile">
@@ -342,6 +358,55 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_FileselectorActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="cb_Timestamp">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="7">
+            <StringItem index="0" value="none"/>
+            <StringItem index="1" value="ISO 8601"/>
+            <StringItem index="2" value="Date|Time|Timezone"/>
+            <StringItem index="3" value="Date|Time"/>
+            <StringItem index="4" value="Time"/>
+            <StringItem index="5" value="MJD"/>
+            <StringItem index="6" value="Year|Day of year|Time"/>
+          </StringArray>
+        </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Timestamp (before each committed line)"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cb_TimestampActionPerformed"/>
+      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="cb_Delimiter">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="4">
+            <StringItem index="0" value="blank"/>
+            <StringItem index="1" value="komma"/>
+            <StringItem index="2" value="semicolon"/>
+            <StringItem index="3" value="none"/>
+          </StringArray>
+        </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Delimiter between timestamp and data"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lb_Timestamp">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Timestamp:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lb_Delimiter">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Delimiter:"/>
+        <Property name="toolTipText" type="java.lang.String" value="Delimiter between timestamp and data"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
