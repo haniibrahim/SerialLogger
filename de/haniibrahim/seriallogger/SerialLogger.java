@@ -494,6 +494,8 @@ public class SerialLogger extends JFrame {
         cb_StopBits.setEnabled(toggle);
         cb_Parity.setEnabled(toggle);
         cb_Handshake.setEnabled(toggle);
+        cb_Timestamp.setEnabled(toggle);
+        cb_Delimiter.setEnabled(toggle);
         bt_OpenPort.setEnabled(toggle);
         ck_Logfile.setEnabled(toggle);
         tf_Logfile.setEnabled(toggle);
