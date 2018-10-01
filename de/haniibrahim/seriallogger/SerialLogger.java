@@ -231,7 +231,7 @@ public class SerialLogger extends JFrame {
                     while (((line = serialBufferedReader.readLine()) != null) && !isCancelled()) {
                         publish(line);
                         if (logFlag) {
-                            pw.println(line); // save to buffer (file)
+                            pw.println(getTimestamp() + line); // save to buffer (file)
                             pw.flush(); // flush buffer and tries to save every line to the file immediately
                         }
                     }
@@ -256,10 +256,10 @@ public class SerialLogger extends JFrame {
 
         @Override
         protected void process(List<String> chunk) {
-
-            for (String line : chunk) {               
-                ta_LogPanel.append(line + "\n");
-                System.out.println(line);
+            String timestamp;
+            for (String line : chunk) {
+                ta_LogPanel.append(getTimestamp() + line + "\n");
+                System.out.println(getTimestamp() + line);
             }
         }
 

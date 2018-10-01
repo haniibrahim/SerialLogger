@@ -78,7 +78,7 @@ final class Helper {
         DateFormat tzf = new SimpleDateFormat("Z");
         tzf.setTimeZone(tz);
 
-        DateFormat df = new SimpleDateFormat("dd-MM-YYYY"); // Date
+        DateFormat df = new SimpleDateFormat("dd-MM-yyyy"); // Date
         DateFormat tf = new SimpleDateFormat("HH:mm:ss"); // Time
         return df.format(new Date()) + delimiter + tf.format(new Date())
                 + delimiter + tzf.format(new Date()) + delimiter;
@@ -96,7 +96,7 @@ final class Helper {
      * @return date/delimiter/time timestamp
      */
     static String getDateTimeTimestamp(String delimiter) {
-        DateFormat df = new SimpleDateFormat("dd-MM-YYYY"); // Date
+        DateFormat df = new SimpleDateFormat("dd-MM-yyyy"); // Date
         DateFormat tf = new SimpleDateFormat("HH:mm:ss"); // Time
         return df.format(new Date()) + delimiter + tf.format(new Date()) + delimiter;
     }
