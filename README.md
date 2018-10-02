@@ -15,6 +15,7 @@
 * Serial port name is editable in the GUI (for pseudo ports as `/dev/pts/[x]`)
 * Arbitrary baud rate (if hardware supports it)
 * Hardware (CTS/RTS) and Software (Xon/Xoff) handshake available
+* Timestamp function (ISO 8601, MJD, ...)
 
 ## Screenshot
 ![](http://blog.hani-ibrahim.de/wp-content/uploads/Seriallogger-1.1.0-alpha.png "Screenshot")
@@ -41,20 +42,20 @@ For JARs and platform related installers go to the [RELEASE](https://github.com/
 
 ## Changelog
 
-| Version | Notes |
-|-------|--------|
+| Version     | Notes  |
+|-------------|--------|
 | 0.9.0-alpha | Basic functions, works just in Windows |
-| 0.9.0      | Basic logging functions and serial settings, fail-proof log file feature, full cross-platform functionality (Windows, macOS, GNU/Linux) |
-| 1.0.0-beta | Hardware (CTS/RTS) and Software (Xon/Xoff) flowcontrol option, append data to existing file feature, invalid path bug fixed, warning of overwriting unsaved/unlogged buffer at new connections|
-| 1.0.0 | Check & warn for unsaved/unlogged puffer at app closing, empty commport bug fixed, flowcontrol bug fixed, filedialog bug fixed on macOS & Windows, code clean-up |
-| 1.1.0-alpha | Timestamp feature | 
+| 0.9.0       | Basic logging functions and serial settings, fail-proof log file feature, full cross-platform functionality (Windows, macOS, GNU/Linux) |
+| 1.0.0-beta  | Hardware (CTS/RTS) and Software (Xon/Xoff) flowcontrol option, append data to existing file feature, invalid path bug fixed, warning of overwriting unsaved/unlogged buffer at new connections|
+| 1.0.0       | Check & warn for unsaved/unlogged puffer at app closing, empty commport bug fixed, flowcontrol bug fixed, filedialog bug fixed on macOS & Windows, code clean-up |
+| 1.1.0-alpha | Timestamp feature (see Notes.md for details) | 
 
 ## Roadmap
 
-| Version | Notes |
-|-------|--------|
-| 1.1.0 | Time-stamp feature |
-| 2.0.0 | Command line features |
+| Version | Notes                 |
+|---------|-----------------------|
+| 1.1.0   | Time-stamp feature    |
+| 2.0.0   | Command line features |
 
 ## Known bugs
 
