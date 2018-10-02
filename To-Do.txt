@@ -6,6 +6,6 @@
 [x] Get rid of the cosmetic "Empty Commport" GUI bug
 [x] Warning when close window/quit app and buffer is not empty and not logged.
 [x] Flowcontrol bug fixed
-[ ] Timestamp feature
+[x] Timestamp feature
 [ ] Save option for buffer
 [ ] CLI interface

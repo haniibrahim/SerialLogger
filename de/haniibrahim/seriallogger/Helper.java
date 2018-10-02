@@ -47,11 +47,12 @@ final class Helper {
     }
 
     /**
-     * Return a timestamp in ISO 8601, format: yyyy-MM-dd'T'HH:mm:ssZ, delimiter
-
- Example: 2018-09-06T13:45:42+0200 1:45:42pm at September 6th, 2018 CEST
- (Central European Summer Time)
-     *
+     * Return a timestamp in ISO 8601, format: yyyy-MM-dd'T'HH:mm:ssZ, delimiter 
+     * 
+     * Example: 2018-09-06T13:45:42+0200 1:45:42pm at September 6th, 2018 CEST
+     * (Central European Summer Time)
+     * 
+     * @param delimiter Separator sign (e.g. [blank],[,],[;]) 
      * @return ISO 8601 timestamp
      */
     static String getIsoTimestamp(String delimiter) {
@@ -62,13 +63,13 @@ final class Helper {
     }
 
     /**
-     * Return a timestamp formated as date, sepearator, time, delimiter
- timezone, delimiter
-
- This format is excellent to process data in spreadsheets apps
-
- Example: 06.09.2016,13:45:42,+0200 1:45:42pm at September 6th, 2018 CEST,
- comma is the delimiter
+     * Return a timestamp formated as date, sepearator, time, delimiter 
+     * timezone, delimiter
+     * 
+     * This format is excellent to process data in spreadsheets apps
+     * 
+     * Example: 06.09.2016,13:45:42,+0200 
+     * 1:45:42pm at September 6th, 2018 CEST, comma is the delimiter
      *
      * @param delimiter Separator sign (e.g. [blank],[,],[;])
      * @return date/delimiter/time timestamp
@@ -86,11 +87,11 @@ final class Helper {
 
     /**
      * Return a timestamp formated as date, sepearator, time, delimiter
-
- This format is excellent to process data in spreadsheets apps
-
- Example: 06.09.2016,13:45:42 1:45:42pm at September 6th, 2018, comma is
- the delimiter
+     * 
+     * This format is excellent to process data in spreadsheets apps
+     * 
+     * Example: 06.09.2016,13:45:42 
+     * 1:45:42pm at September 6th, 2018, comma is the delimiter
      *
      * @param delimiter Separator sign (e.g. [blank],[,],[;])
      * @return date/delimiter/time timestamp
@@ -107,7 +108,7 @@ final class Helper {
      * This format is excellent to process data in spreadsheets apps
      *
      * Example: 13:45:42 
-     * 1:45:42pm at September 6th, 2018
+     * 1:45:42pm
      *
      * @param delimiter Separator sign (e.g. [blank],[,],[;])
      * @return date/delimiter/time timestamp
@@ -124,7 +125,7 @@ final class Helper {
      * 1:45:42pm at September 6th, 2018 (day 249 of 2018)
      * 
      * @param delimiter Separator sign (e.g. [blank],[,],[;])
-     * @return 
+     * @return day of the year timestamp
      */
     static String getDayOfYearTimestamp(String delimiter){
        Calendar cal = Calendar.getInstance(); // get current date and time
@@ -135,7 +136,15 @@ final class Helper {
                 + Integer.toString(cal.get(Calendar.SECOND))
                 + delimiter;
     }
-    
+    /**
+     * Return timestamp in seperate date and time components incl. timezone
+     * 
+     * Example: 2018 10 2 10 21 48 +0200
+     * 10:21:48am at October 2nd, 2018 CEST, [blank] is the delimiter
+     * 
+     * @param delimiter Separator sign (e.g. [blank],[,],[;])
+     * @return Year|month|day|hours|minutes|seconds|timezone timestamp
+     */
     static String getYMDhmsTz(String delimiter){
         Calendar cal = Calendar.getInstance(); // get current date and time
         
@@ -157,7 +166,7 @@ final class Helper {
      * Returns timestamp as modified Julian Date including time as floating point
      * 
      * @param delimiter Separator sign (e.g. [blank],[,],[;])
-     * @return 
+     * @return Modified Julian Date timestamp
      */
     static String getMjd(String delimiter) {
         Calendar cal = Calendar.getInstance(); // get current date and time
