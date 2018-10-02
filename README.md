@@ -15,7 +15,7 @@
 * Serial port name is editable in the GUI (for pseudo ports as `/dev/pts/[x]`)
 * Arbitrary baud rate (if hardware supports it)
 * Hardware (CTS/RTS) and Software (Xon/Xoff) handshake available
-* Timestamp function (ISO 8601, MJD, ...)
+* ***NEW*** Timestamp function (ISO 8601, MJD, ...)
 
 ## Screenshot
 ![](http://blog.hani-ibrahim.de/wp-content/uploads/Seriallogger-1.1.0-alpha.png "Screenshot")
