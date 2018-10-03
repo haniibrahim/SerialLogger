@@ -48,7 +48,8 @@ For JARs and platform related installers go to the [RELEASE](https://github.com/
 | 0.9.0       | Basic logging functions and serial settings, fail-proof log file feature, full cross-platform functionality (Windows, macOS, GNU/Linux) |
 | 1.0.0-beta  | Hardware (CTS/RTS) and Software (Xon/Xoff) flowcontrol option, append data to existing file feature, invalid path bug fixed, warning of overwriting unsaved/unlogged buffer at new connections|
 | 1.0.0       | Check & warn for unsaved/unlogged puffer at app closing, empty commport bug fixed, flowcontrol bug fixed, filedialog bug fixed on macOS & Windows, code clean-up |
-| 1.1.0-alpha | Timestamp feature (see Notes.md for details) | 
+| 1.1.0-alpha | Timestamp feature (see Notes.md for details) |
+| 1.1.0-beta  | ISO 8601 timezone bug fixed. All other timezone strings now ISO 8601 compatible. Delimiter combobox bug fixed |
 
 ## Roadmap
 
