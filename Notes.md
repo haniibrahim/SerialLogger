@@ -17,9 +17,9 @@ The delimiter sign is added between timestamp components (if necessary) and at t
 
 ### Timestamp formats
 - *ISO 8601:* 
-  Format: `2018-09-06T13:45:42+0200` => 1:45:42pm at September 6th, 2018 CEST (Central European Summer Time)
+  Format: `2018-09-06T13:45:42+02:00` => 1:45:42pm at September 6th, 2018 CEST (Central European Summer Time)
 - *Date|Time|Timezone:*
-  Format: `06.09.2016,13:45:42,+0200` => 1:45:42pm at September 6th, 2018 CEST, comma is the delimiter
+  Format: `06.09.2016,13:45:42,+02:00` => 1:45:42pm at September 6th, 2018 CEST, comma is the delimiter
 - *Date|Time:*
   Format: `06.09.2016,13:45:42` => 1:45:42pm at September 6th, 2018, comma is the delimiter
 - *Time:*
@@ -33,7 +33,7 @@ The delimiter sign is added between timestamp components (if necessary) and at t
   Format: `2018 275 10:21:48` => 10:21:48am at October 2nd, 2018, [blank] is the delimiter
 - *Year|month|day|hours|minutes|seconds|timezone:* This timestamp offers all standard date and time components in
   sepratate fields for easier post-processing handling
-  Format: `2018 10 2 10 21 48 +0200` => 10:21:48am at October 2nd, 2018 CEST, [blank] is the delimiter
+  Format: `2018 10 2 10 21 48 +02:00` => 10:21:48am at October 2nd, 2018 CEST, [blank] is the delimiter
 
 ## Settings storage
 *WINDOWS:* Settings are stored in the regitry (regedit.exe) in the key:

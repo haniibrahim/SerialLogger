@@ -45,21 +45,57 @@ final class Helper {
         }
         return "noarch";
     }
+    
+    /**
+     * Returns the current and local timezone string in ISO 8601 format 
+     * (e.g. +02:00)
+     * 
+     * @return ISO 8601 timezone string (e.g. +02:00)
+     */
+    static String getIsoTzString(){
+        double offsetInHrDbl; // Timezone offset in hours (double)
+        int dstOffset;
+        String prefix; // Prefix of the numer (+/-)
+
+        Calendar cal = Calendar.getInstance(); // Current Date/Time
+        cal.set(2018, 7, 1);
+        System.out.println(cal.getTime());
+        boolean dst = cal.getTimeZone().inDaylightTime(cal.getTime()); // summertime?
+        int rawOffset = cal.getTimeZone().getRawOffset(); // Time offset of the local timezone (w/o DST) in ms
+        
+        // Set DST offset if summertime
+        if (dst){ // summertime
+            dstOffset = cal.getTimeZone().getDSTSavings(); // General local DST in ms
+        } else { // wintertime
+            dstOffset = 0;
+        }
+        
+        if (rawOffset < 0) { // Negative raw offset (w/o dst)
+            offsetInHrDbl = Math.abs((rawOffset - dstOffset) / 3.6e6); // Offset in decimal hr w/o prefix
+            prefix = "-";
+        } else { // Positive raw offset or 0 (w/o dst)
+            offsetInHrDbl = (rawOffset + dstOffset) / 3.6e6; // Offset in decimal hr
+            prefix = "+";
+        }
+        int offsetHrInt = (int) offsetInHrDbl; // Offset hr only
+        int offsetMnInt = (int) ((offsetInHrDbl - (double) offsetHrInt) * 60); // Offset min only
+        
+        return prefix + String.format("%02d", offsetHrInt) + ":"
+                + String.format("%02d", offsetMnInt);
+    }
 
     /**
      * Return a timestamp in ISO 8601, format: yyyy-MM-dd'T'HH:mm:ssZ, delimiter 
      * 
-     * Example: 2018-09-06T13:45:42+0200 1:45:42pm at September 6th, 2018 CEST
+     * Example: 2018-09-06T13:45:42+02:00 1:45:42pm at September 6th, 2018 CEST
      * (Central European Summer Time)
      * 
      * @param delimiter Separator sign (e.g. [blank],[,],[;]) 
      * @return ISO 8601 timestamp
      */
     static String getIsoTimestamp(String delimiter) {
-        TimeZone tz = TimeZone.getDefault();
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-        df.setTimeZone(tz);
-        return df.format(new Date()) + delimiter; // ISO 8601 Timestamp format
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        return df.format(new Date()) + getIsoTzString() + delimiter; // ISO 8601 Timestamp format
     }
 
     /**
@@ -68,21 +104,21 @@ final class Helper {
      * 
      * This format is excellent to process data in spreadsheets apps
      * 
-     * Example: 06.09.2016,13:45:42,+0200 
+     * Example: 06.09.2016,13:45:42,+02:00 
      * 1:45:42pm at September 6th, 2018 CEST, comma is the delimiter
      *
      * @param delimiter Separator sign (e.g. [blank],[,],[;])
      * @return date/delimiter/time timestamp
      */
     static String getDateTimeTz(String delimiter) {
-        TimeZone tz = TimeZone.getDefault();
-        DateFormat tzf = new SimpleDateFormat("Z");
-        tzf.setTimeZone(tz);
+//        TimeZone tz = TimeZone.getDefault();
+//        DateFormat tzf = new SimpleDateFormat("Z");
+//        tzf.setTimeZone(tz);
 
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd"); // Date
         DateFormat tf = new SimpleDateFormat("HH:mm:ss"); // Time
         return df.format(new Date()) + delimiter + tf.format(new Date())
-                + delimiter + tzf.format(new Date()) + delimiter;
+                + delimiter + getIsoTzString() + delimiter;
     }
 
     /**
@@ -149,9 +185,9 @@ final class Helper {
         Calendar cal = Calendar.getInstance(); // get current date and time
         
         // Timezone
-        TimeZone tz = TimeZone.getDefault();
-        DateFormat tzf = new SimpleDateFormat("Z");
-        tzf.setTimeZone(tz);
+//        TimeZone tz = TimeZone.getDefault();
+//        DateFormat tzf = new SimpleDateFormat("Z");
+//        tzf.setTimeZone(tz);
         
         return Integer.toString(cal.get(Calendar.YEAR)) + delimiter 
                 + Integer.toString(cal.get(Calendar.MONTH)+1) + delimiter // +1 because January=0
@@ -159,7 +195,7 @@ final class Helper {
                 + Integer.toString(cal.get(Calendar.HOUR_OF_DAY)) + delimiter
                 + Integer.toString(cal.get(Calendar.MINUTE)) + delimiter
                 + Integer.toString(cal.get(Calendar.SECOND)) + delimiter
-                + tzf.format(new Date()) + delimiter;
+                + getIsoTzString() + delimiter;
     }
 
     /**
