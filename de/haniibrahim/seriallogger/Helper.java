@@ -181,7 +181,7 @@ final class Helper {
      * @param delimiter Separator sign (e.g. [blank],[,],[;])
      * @return Year|month|day|hours|minutes|seconds|timezone timestamp
      */
-    static String getYMDhmsTz(String delimiter){
+    static String getYMDhms(String delimiter){
         Calendar cal = Calendar.getInstance(); // get current date and time
         
         // Timezone
@@ -194,8 +194,7 @@ final class Helper {
                 + Integer.toString(cal.get(Calendar.DAY_OF_MONTH)) + delimiter
                 + Integer.toString(cal.get(Calendar.HOUR_OF_DAY)) + delimiter
                 + Integer.toString(cal.get(Calendar.MINUTE)) + delimiter
-                + Integer.toString(cal.get(Calendar.SECOND)) + delimiter
-                + getIsoTzString() + delimiter;
+                + Integer.toString(cal.get(Calendar.SECOND)) + delimiter;
     }
 
     /**

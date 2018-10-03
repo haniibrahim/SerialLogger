@@ -45,7 +45,7 @@
                           </Group>
                           <Component id="lb_VirtalPrint" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="131" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="127" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
@@ -370,7 +370,7 @@
             <StringItem index="4" value="Time"/>
             <StringItem index="5" value="Mod. Julian Date"/>
             <StringItem index="6" value="Year|Day of year|Time"/>
-            <StringItem index="7" value="yyyy MM dd HH mm ss Tz"/>
+            <StringItem index="7" value="yyyy|MM|dd|HH|mm|ss"/>
           </StringArray>
         </Property>
         <Property name="toolTipText" type="java.lang.String" value="Timestamp (before each committed line)"/>

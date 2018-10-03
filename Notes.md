@@ -31,9 +31,9 @@ The delimiter sign is added between timestamp components (if necessary) and at t
   Format: `58393.431814675925` => 10:21:48am at October 2nd, 2018 CEST
 - *Year|Day of year|Time:* The Day of the year is the counted day from Jan. 1st = 1 onwards till 365 or 366 resp. This 
   Format: `2018 275 10:21:48` => 10:21:48am at October 2nd, 2018, [blank] is the delimiter
-- *Year|month|day|hours|minutes|seconds|timezone:* This timestamp offers all standard date and time components in
+- *Year|month|day|hours|minutes|seconds:* This timestamp offers all standard date and time components in
   sepratate fields for easier post-processing handling
-  Format: `2018 10 2 10 21 48 +02:00` => 10:21:48am at October 2nd, 2018 CEST, [blank] is the delimiter
+  Format: `2018 10 2 10 21 48` => 10:21:48am at October 2nd, 2018, [blank] is the delimiter
 
 ## Settings storage
 *WINDOWS:* Settings are stored in the regitry (regedit.exe) in the key:
