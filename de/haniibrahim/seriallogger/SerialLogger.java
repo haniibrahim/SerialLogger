@@ -480,12 +480,13 @@ public class SerialLogger extends JFrame {
      * @param toggle Enables or disables GUI elements (T/F)
      */
     private void toggleGuiElements(boolean toggle) {
-        // Exception for ClosePort button
+        // ClosePort button toggling
         if (toggle == true) {
             bt_ClosePort.setEnabled(false);
         } else if (toggle == false) {
             bt_ClosePort.setEnabled(true);
         }
+
         // other elements
         cb_Commport.setEnabled(toggle);
         bt_Update.setEnabled(toggle);
@@ -495,11 +496,17 @@ public class SerialLogger extends JFrame {
         cb_Parity.setEnabled(toggle);
         cb_Handshake.setEnabled(toggle);
         cb_Timestamp.setEnabled(toggle);
-        cb_Delimiter.setEnabled(toggle);
         bt_OpenPort.setEnabled(toggle);
         ck_Logfile.setEnabled(toggle);
         tf_Logfile.setEnabled(toggle);
         bt_Fileselector.setEnabled(toggle);
+        
+        // Delimiter combobox toggling
+        if (toggle && cb_Timestamp.getSelectedItem().equals("none")){
+            cb_Delimiter.setEnabled(false);
+        } else {
+            cb_Delimiter.setEnabled(toggle);
+        }
     }
 
     /**
