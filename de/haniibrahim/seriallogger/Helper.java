@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 import javax.swing.JOptionPane;
 
 /**
@@ -60,7 +59,7 @@ final class Helper {
         Calendar cal = Calendar.getInstance(); // Current Date/Time
         cal.set(2018, 7, 1);
         System.out.println(cal.getTime());
-        boolean dst = cal.getTimeZone().inDaylightTime(cal.getTime()); // summertime?
+        boolean dst = cal.getTimeZone().inDaylightTime(cal.getTime()); // summertime=yes, wintertime=false
         int rawOffset = cal.getTimeZone().getRawOffset(); // Time offset of the local timezone (w/o DST) in ms
         
         // Set DST offset if summertime
@@ -70,10 +69,10 @@ final class Helper {
             dstOffset = 0;
         }
         
-        if (rawOffset < 0) { // Negative raw offset (w/o dst)
+        if (rawOffset < 0) { // Negative raw offset (w/o DST)
             offsetInHrDbl = Math.abs((rawOffset - dstOffset) / 3.6e6); // Offset in decimal hr w/o prefix
             prefix = "-";
-        } else { // Positive raw offset or 0 (w/o dst)
+        } else { // Positive raw offset or 0 (w/o DST)
             offsetInHrDbl = (rawOffset + dstOffset) / 3.6e6; // Offset in decimal hr
             prefix = "+";
         }
@@ -111,10 +110,6 @@ final class Helper {
      * @return date/delimiter/time timestamp
      */
     static String getDateTimeTz(String delimiter) {
-//        TimeZone tz = TimeZone.getDefault();
-//        DateFormat tzf = new SimpleDateFormat("Z");
-//        tzf.setTimeZone(tz);
-
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd"); // Date
         DateFormat tf = new SimpleDateFormat("HH:mm:ss"); // Time
         return df.format(new Date()) + delimiter + tf.format(new Date())
@@ -183,12 +178,6 @@ final class Helper {
      */
     static String getYMDhms(String delimiter){
         Calendar cal = Calendar.getInstance(); // get current date and time
-        
-        // Timezone
-//        TimeZone tz = TimeZone.getDefault();
-//        DateFormat tzf = new SimpleDateFormat("Z");
-//        tzf.setTimeZone(tz);
-        
         return Integer.toString(cal.get(Calendar.YEAR)) + delimiter 
                 + Integer.toString(cal.get(Calendar.MONTH)+1) + delimiter // +1 because January=0
                 + Integer.toString(cal.get(Calendar.DAY_OF_MONTH)) + delimiter
@@ -252,5 +241,4 @@ final class Helper {
                 "ERROR:\n" + ex,
                 "Log file error", JOptionPane.ERROR_MESSAGE);
     }
-
 }

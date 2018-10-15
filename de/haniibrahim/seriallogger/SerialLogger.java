@@ -37,11 +37,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * to a GUI interface, the console and optionally to a file
  *
  * @author Hani Andreas Ibrahim
- * @version 1.1.0-beta
+ * @version 1.1.0
  */
 public class SerialLogger extends JFrame {
 
-    static String version = "1.1.0-beta"; // CHANGE VERSION NUMBER AS NECESSARY - Shown in info dialog
+    static String version = "1.1.0"; // CHANGE VERSION NUMBER AS NECESSARY - Shown in info dialog
 
     private static SerialPort chosenPort;
     private static String stdLogfileName;
@@ -857,62 +857,11 @@ public class SerialLogger extends JFrame {
     }//GEN-LAST:event_bt_OpenPortActionPerformed
 
     /**
-     * Logfile's fileselector button event
-     *
+     * Logfile's fileselector button event. Choose logfile name incl. path
      * @param evt
      */
     private void bt_FileselectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_FileselectorActionPerformed
-
-        String dialogTitle = "Specify log file ..";
-        String newLogfilePath;
-
-        // Logfilename: Extract pathname (w/o filename) from tf_Logfile
-        String oldLogfilePath = tf_Logfile.getText();
-        if (oldLogfilePath.isEmpty()) { // if tf_Logfile is empty set standard logfile path
-            oldLogfilePath = System.getProperty("user.home")
-                    + System.getProperty("file.separator")
-                    + "serial.log";
-        }
-        String pathName = oldLogfilePath.substring(0, // Extract path w/o filename
-                oldLogfilePath.lastIndexOf(System.getProperty("file.separator")) + 1);
-
-        // If Windows or Linux AND JRE 6 than use JFilechooser() otherwise the native FileDialog()
-        // the native filechooser is ugly on Linux with Jave 6
-        if ((Helper.getOS().equals("linux")
-                && System.getProperty("java.version").startsWith("1.6"))
-                || (Helper.getOS().equals("win"))) {
-            JFileChooser fd = new JFileChooser(pathName);
-            fd.setDialogTitle(dialogTitle);
-            fd.setDialogType(JFileChooser.SAVE_DIALOG);
-            FileNameExtensionFilter logFilter = new FileNameExtensionFilter(
-                    "Logfile (*.log, *.txt)", "log", "txt");
-            fd.setFileFilter(logFilter);
-            fd.setVisible(true);
-            int retVal = fd.showSaveDialog(this);
-            if (retVal == JFileChooser.APPROVE_OPTION) {
-                newLogfilePath = fd.getSelectedFile().toString();
-            } else {
-                newLogfilePath = oldLogfilePath;
-            }
-        } else {
-            FileDialog fd = new FileDialog(this, dialogTitle, FileDialog.SAVE);
-            FilenameFilter filter = new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String name) {
-                    return (name.endsWith(".txt") || name.endsWith(".log"));
-                }
-            };
-            fd.setFilenameFilter(filter);
-
-            fd.setDirectory(pathName);  // Set default path to last selected path
-            fd.setVisible(true);
-            if (fd.getFile() != null) {
-                newLogfilePath = fd.getDirectory() + fd.getFile();
-            } else {
-                newLogfilePath = oldLogfilePath;
-            }
-        }
-        tf_Logfile.setText(newLogfilePath);
+        tf_Logfile.setText(FileSelector.getSaveFilename(this, "serial.log", tf_Logfile.getText(), "Specify log file ..."));
     }//GEN-LAST:event_bt_FileselectorActionPerformed
 
     private void cb_TimestampActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_TimestampActionPerformed
