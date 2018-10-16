@@ -5,6 +5,7 @@
  */
 package de.haniibrahim.seriallogger;
 
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
@@ -17,33 +18,113 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class Options extends javax.swing.JDialog {
 
+    private final int lafNum = UIManager.getInstalledLookAndFeels().length; // Amount of available LaFs
+    private final UIManager.LookAndFeelInfo[] lafClasses = new UIManager.LookAndFeelInfo[lafNum]; // LaF classes
+//    private final UIManager.LookAndFeelInfo[] lafNames = new UIManager.LookAndFeelInfo[lafNum]; // Laf names
+    private final String[] lafNamesStr = new String[lafNum]; // LaF names as Strings
+    private final int lafIdx;
+
     /**
      * Creates new form Options
-     * 
+     *
      * @param parent
      * @param modal
      */
     public Options(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+
+        // Get and put Look and Feels
+        setAvailableLafClasses(); // set class variable lafClasses
+        setAvailableLafNames();   // set class variable lafNames
+        putLafNames(); // put LaF to combobox
+
+        // 
+        lafIdx = Arrays.asList(lafNamesStr).indexOf(getCurrentLaf()); // Get index of current LaF of LaF-list
+        cb_LookAndFeel.setSelectedIndex(lafIdx); // Set curemnt LaF in combobox
+
+//        cb_LookAndFeel.setSelectedItem(getCurrentLaf()); // set combobox entry to current LaF
         myInit();
-        getAvailableLaF();
     }
+    
+    //-------------------------------------------------------------------------
+
+    /**
+     * Getter for LaF classes
+     *
+     * @return LaF classes
+     */
+    public UIManager.LookAndFeelInfo[] getLafClasses() {
+        return this.lafClasses;
+    }
+
+    /**
+     * Getter for LaF index number of current LaF
+     *
+     * @return Index number of current LaF
+     */
+    public int getLafIdx() {
+        return this.lafIdx;
+    }
+    
+    // ------------------------------------------------------------------------
     
     /**
      * My presets for the GUI
      */
-    private void myInit(){
-        this.getRootPane().setDefaultButton(bt_OK); // Set OK-Button to default
+    private void myInit() {
+        this.getRootPane().setDefaultButton(bt_OK); // Set OK-Button to default   
     }
+
+//    private void putAvailableLaF(){
+//        cb_LookAndFeel.removeAllItems();
+//        for (UIManager.LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()){
+//            cb_LookAndFeel.addItem(laf.getClassName());
+//        }
+//    }
     
-    private void getAvailableLaF(){
-        cb_LookAndFeel.removeAllItems();
-        for (UIManager.LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()){
-            cb_LookAndFeel.addItem(laf.getClassName());
+    /**
+     * Fill up the class var lafClasses with the classes of LaFs
+     */
+    private void setAvailableLafClasses() {
+        int i = 0;
+        for (UIManager.LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
+            lafClasses[i] = laf;
+            i++;
         }
     }
-    
+
+    /**
+     * Fill up the class var lafNames with names of LaFs
+     */
+    private void setAvailableLafNames() {
+        int i = 0;
+        for (UIManager.LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
+//            lafNames[i] = laf;
+            lafNamesStr[i] = laf.getName();
+            i++;
+        }
+    }
+
+    /**
+     * Set List of Look and Feels to the combobox in the Options dialog
+     */
+    private void putLafNames() {
+        cb_LookAndFeel.removeAllItems();
+        for (int i = 0; i < lafNum; i++) {
+            cb_LookAndFeel.addItem(lafClasses[i].getName());
+        }
+    }
+
+    /**
+     * Get cuurent Look and Feel
+     *
+     * @return Look and Feel
+     */
+    private String getCurrentLaf() {
+        return UIManager.getLookAndFeel().getName();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -61,6 +142,7 @@ public class Options extends javax.swing.JDialog {
         bt_OK = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Options");
         setModal(true);
         setName("dialogOptions"); // NOI18N
         setResizable(false);
@@ -149,7 +231,8 @@ public class Options extends javax.swing.JDialog {
 
     private void bt_OKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_OKActionPerformed
         try {
-            UIManager.setLookAndFeel(cb_LookAndFeel.getSelectedItem().toString());
+            int x = cb_LookAndFeel.getSelectedIndex();
+            UIManager.setLookAndFeel(lafClasses[x].getClassName());
             SwingUtilities.updateComponentTreeUI(SerialLogger.getFrames()[0]);
             SerialLogger.getFrames()[0].pack();
         } catch (ClassNotFoundException ex) {

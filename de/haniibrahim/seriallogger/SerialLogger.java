@@ -511,6 +511,7 @@ public class SerialLogger extends JFrame {
         ck_Logfile.setEnabled(toggle);
         tf_Logfile.setEnabled(toggle);
         bt_Fileselector.setEnabled(toggle);
+        bt_Options.setEnabled(toggle);
         
         // Delimiter combobox toggling
         if (toggle && cb_Timestamp.getSelectedItem().equals("none")){
