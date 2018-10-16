@@ -69,7 +69,9 @@ class MacImpl implements ClassSelector, AboutHandler, PreferencesHandler, QuitHa
     // Options dialog
     @Override
     public void handlePreferences(PreferencesEvent arg0) {
-        // new OptionsDialog(); 
+        Options optionsDialog = new Options(SerialLogger.getFrames()[0], true);
+        optionsDialog.setLocationRelativeTo(null);
+        optionsDialog.setVisible(true);
         //System.out.println("handlePreferences()"); 
     }
 

@@ -23,6 +23,7 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -64,7 +65,40 @@ public class SerialLogger extends JFrame {
     public SerialLogger() {
 
         initComponents();
+        myInit();
+        
+        // Set preferences to default or from storePrefs()
+        setPrefs();
 
+        // To-Do just before app shutdown
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Store preferences
+                try {
+                    storePrefs();
+                } catch (BackingStoreException ex) {
+
+                }
+                // Close port at shutdown if button "Close Port" was not pressed before
+                if (chosenPort != null && chosenPort.isOpen()) {
+                    chosenPort.closePort();
+                }
+            }
+        }));
+
+        // Add Contextmenu
+        ta_LogPanel.addMouseListener(new ContextMenuMouseListener());
+        tf_Logfile.addMouseListener(new ContextMenuMouseListener());
+
+        // Initial values for CommPorts in combobox
+        updatePortList();
+    }
+    
+    /**
+     * My presets for the GUI and overwritable methods
+     */
+    private void myInit(){
         // Checking before close frame
         this.addWindowListener(new WindowAdapter() {
             /**
@@ -94,45 +128,19 @@ public class SerialLogger extends JFrame {
                 }
             }
         });
-
-        // Set preferences to default or from storePrefs()
-        setPrefs();
-
-        // To-Do just before app shutdown
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // Store preferences
-                try {
-                    storePrefs();
-                } catch (BackingStoreException ex) {
-
-                }
-                // Close port at shutdown if button "Close Port" was not pressed before
-                if (chosenPort != null && chosenPort.isOpen()) {
-                    chosenPort.closePort();
-                }
-            }
-        }));
-
+        
         // Set OK-Button to default
         this.getRootPane().setDefaultButton(bt_OpenPort);
-
-        // Add Contextmenu
-        ta_LogPanel.addMouseListener(new ContextMenuMouseListener());
-        tf_Logfile.addMouseListener(new ContextMenuMouseListener());
-
+        
         // Open and close button disabled till updatePortList finished
         bt_OpenPort.setEnabled(false);
         bt_ClosePort.setEnabled(false);
         
-        // Hide Info Button for macOS
+        // Hide Info and Options Button for macOS
         if (Helper.getOS().equals("mac")) {
             bt_Info.setVisible(false);
+            bt_Options.setVisible(false);
         }
-
-        // Initial values for CommPorts in combobox
-        updatePortList();
     }
 
     /**
@@ -535,7 +543,6 @@ public class SerialLogger extends JFrame {
         ta_LogPanel = new javax.swing.JTextArea();
         bt_Update = new javax.swing.JButton();
         bt_ClosePort = new javax.swing.JButton();
-        bt_Info = new javax.swing.JButton();
         lb_VirtalPrint = new javax.swing.JLabel();
         bt_OpenPort = new javax.swing.JButton();
         lb_Handshake = new javax.swing.JLabel();
@@ -547,10 +554,9 @@ public class SerialLogger extends JFrame {
         cb_Delimiter = new javax.swing.JComboBox();
         lb_Timestamp = new javax.swing.JLabel();
         lb_Delimiter = new javax.swing.JLabel();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
-        cb_Look = new javax.swing.JComboBox();
-        lb_look = new javax.swing.JLabel();
+        fi_01 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
+        bt_Options = new javax.swing.JButton();
+        bt_Info = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SerialLogger");
@@ -602,13 +608,6 @@ public class SerialLogger extends JFrame {
             }
         });
 
-        bt_Info.setText("Info");
-        bt_Info.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bt_InfoActionPerformed(evt);
-            }
-        });
-
         lb_VirtalPrint.setFont(lb_VirtalPrint.getFont());
         lb_VirtalPrint.setText("Output:");
 
@@ -652,16 +651,19 @@ public class SerialLogger extends JFrame {
         lb_Delimiter.setText("Delimiter:");
         lb_Delimiter.setToolTipText("Delimiter between timestamp and data");
 
-        cb_Look.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cb_Look.setToolTipText("Change \"Look and Feel\"");
-        cb_Look.addActionListener(new java.awt.event.ActionListener() {
+        bt_Options.setText("Options");
+        bt_Options.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cb_LookActionPerformed(evt);
+                bt_OptionsActionPerformed(evt);
             }
         });
 
-        lb_look.setText("Look & Feel:");
-        lb_look.setToolTipText("Delimiter between timestamp and data");
+        bt_Info.setText("Info");
+        bt_Info.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_InfoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -677,47 +679,53 @@ public class SerialLogger extends JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bt_Fileselector))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(1, 1, 1)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(sp_VirtualPrint, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(lb_Commport)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(cb_Commport, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bt_Update, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(lb_VirtalPrint)
-                            .addComponent(sp_VirtualPrint, javax.swing.GroupLayout.DEFAULT_SIZE, 536, Short.MAX_VALUE))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lb_Commport)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cb_Commport, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(bt_Update, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(lb_VirtalPrint))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(10, 10, 10)
-                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(fi_01, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(8, 8, 8)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(bt_Info, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(bt_OpenPort, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(bt_ClosePort, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(lb_Baud, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(lb_DataBits))
-                                    .addComponent(lb_StopBits))
-                                .addComponent(lb_Handshake)
-                                .addComponent(lb_Parity, javax.swing.GroupLayout.Alignment.TRAILING))
                             .addComponent(lb_Timestamp, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lb_Delimiter)
-                            .addComponent(lb_look))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(lb_Baud, javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(lb_DataBits))
+                                            .addComponent(lb_StopBits))
+                                        .addComponent(lb_Handshake)
+                                        .addComponent(lb_Parity, javax.swing.GroupLayout.Alignment.TRAILING))
+                                    .addComponent(lb_Delimiter))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(bt_Info, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(bt_Options))
                             .addComponent(cb_Delimiter, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cb_Timestamp, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cb_Timestamp, 0, 144, Short.MAX_VALUE)
                             .addComponent(cb_Handshake, 0, 1, Short.MAX_VALUE)
                             .addComponent(cb_Parity, 0, 1, Short.MAX_VALUE)
                             .addComponent(cb_StopBits, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cb_DataBits, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cb_Baud, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cb_Look, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(cb_Baud, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -728,63 +736,54 @@ public class SerialLogger extends JFrame {
                     .addComponent(lb_Commport)
                     .addComponent(cb_Commport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(bt_Update)
+                    .addComponent(bt_Options)
                     .addComponent(bt_Info))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lb_VirtalPrint)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(sp_VirtualPrint, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(fi_01, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(sp_VirtualPrint, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(cb_Baud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(lb_Baud))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(cb_DataBits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(lb_DataBits))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(cb_StopBits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(lb_StopBits))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(cb_Parity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(lb_Parity))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(cb_Handshake, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(lb_Handshake))))
-                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(cb_Timestamp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lb_Timestamp))
+                                    .addComponent(cb_Baud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lb_Baud))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(cb_Delimiter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lb_Delimiter))
-                                .addGap(18, 18, 18)
+                                    .addComponent(cb_DataBits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lb_DataBits))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(lb_look)
-                                    .addComponent(cb_Look, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(bt_OpenPort)))
+                                    .addComponent(cb_StopBits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lb_StopBits))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(cb_Parity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lb_Parity))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(cb_Handshake, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lb_Handshake))))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cb_Timestamp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lb_Timestamp))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(bt_ClosePort)
-                            .addComponent(tf_Logfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ck_Logfile)
-                            .addComponent(bt_Fileselector, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(83, 83, 83)
-                        .addComponent(filler2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(cb_Delimiter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lb_Delimiter))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bt_OpenPort)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bt_ClosePort)
+                    .addComponent(tf_Logfile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ck_Logfile)
+                    .addComponent(bt_Fileselector, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -810,26 +809,6 @@ public class SerialLogger extends JFrame {
         // flag main swingworker class as cancel
         serialReader.cancel(true);
     }//GEN-LAST:event_bt_ClosePortActionPerformed
-
-    /**
-     * Info button event
-     *
-     * @param evt
-     */
-    private void bt_InfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_InfoActionPerformed
-        JOptionPane.showMessageDialog(this,
-                "<html><span style=\"font-size:large;\"><b>SerialLogger</b></span></html>\n"
-                + "Logs data received from a serial interface\n"
-                + "to GUI, console or file.\n\n"
-                + "Version: " + version + "\n\n"
-                + "(c) 2013-" + Helper.getCurrentYear() + " Hani Ibrahim\n"
-                + "<html><a href=\"mailto:hani.ibrahim@gmx.de>\">hani.ibrahim@gmx.de</a>\n\n"
-                + "GNU Public License 3.0\n\n",
-                "Info", JOptionPane.INFORMATION_MESSAGE, icon);
-//        InfoDialog infoDialog = new InfoDialog(this, true);
-//        infoDialog.setLocationRelativeTo(this);
-//        infoDialog.setVisible(true);
-    }//GEN-LAST:event_bt_InfoActionPerformed
 
     /**
      * Open port button event
@@ -906,9 +885,26 @@ public class SerialLogger extends JFrame {
         }
     }//GEN-LAST:event_cb_TimestampActionPerformed
 
-    private void cb_LookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_LookActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cb_LookActionPerformed
+    private void bt_OptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_OptionsActionPerformed
+        Options optionsDialog = new Options(this, true);
+        optionsDialog.setLocationRelativeTo(this);
+        optionsDialog.setVisible(true);
+    }//GEN-LAST:event_bt_OptionsActionPerformed
+
+    private void bt_InfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_InfoActionPerformed
+        JOptionPane.showMessageDialog(this,
+                "<html><span style=\"font-size:large;\"><b>SerialLogger</b></span></html>\n"
+                + "Logs data received from a serial interface\n"
+                + "to GUI, console or file.\n\n"
+                + "Version: " + version + "\n\n"
+                + "(c) 2013-" + Helper.getCurrentYear() + " Hani Ibrahim\n"
+                + "<html><a href=\"mailto:hani.ibrahim@gmx.de>\">hani.ibrahim@gmx.de</a>\n\n"
+                + "GNU Public License 3.0\n\n",
+                "Info", JOptionPane.INFORMATION_MESSAGE, icon);
+//        InfoDialog infoDialog = new InfoDialog(this, true);
+//        infoDialog.setLocationRelativeTo(this);
+//        infoDialog.setVisible(true);
+    }//GEN-LAST:event_bt_InfoActionPerformed
     
     /**
      * @param args the command line arguments
@@ -953,19 +949,18 @@ public class SerialLogger extends JFrame {
     private javax.swing.JButton bt_Fileselector;
     private javax.swing.JButton bt_Info;
     private javax.swing.JButton bt_OpenPort;
+    private javax.swing.JButton bt_Options;
     private javax.swing.JButton bt_Update;
     private javax.swing.JComboBox cb_Baud;
     private javax.swing.JComboBox cb_Commport;
     private javax.swing.JComboBox cb_DataBits;
     private javax.swing.JComboBox cb_Delimiter;
     private javax.swing.JComboBox cb_Handshake;
-    private javax.swing.JComboBox cb_Look;
     private javax.swing.JComboBox cb_Parity;
     private javax.swing.JComboBox cb_StopBits;
     private javax.swing.JComboBox cb_Timestamp;
     private javax.swing.JCheckBox ck_Logfile;
-    private javax.swing.Box.Filler filler1;
-    private javax.swing.Box.Filler filler2;
+    private javax.swing.Box.Filler fi_01;
     private javax.swing.JLabel lb_Baud;
     private javax.swing.JLabel lb_Commport;
     private javax.swing.JLabel lb_DataBits;
@@ -975,7 +970,6 @@ public class SerialLogger extends JFrame {
     private javax.swing.JLabel lb_StopBits;
     private javax.swing.JLabel lb_Timestamp;
     private javax.swing.JLabel lb_VirtalPrint;
-    private javax.swing.JLabel lb_look;
     private javax.swing.JScrollPane sp_VirtualPrint;
     private javax.swing.JTextArea ta_LogPanel;
     private javax.swing.JTextField tf_Logfile;

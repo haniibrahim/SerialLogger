@@ -42,59 +42,70 @@
                       <Component id="bt_Fileselector" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="filler2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="lb_Commport" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="cb_Commport" min="-2" pref="200" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="bt_Update" min="-2" pref="88" max="-2" attributes="0"/>
+                          <Component id="sp_VirtualPrint" alignment="0" pref="533" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="lb_Commport" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="cb_Commport" min="-2" pref="200" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="bt_Update" min="-2" pref="88" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="lb_VirtalPrint" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="lb_VirtalPrint" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="sp_VirtualPrint" alignment="0" pref="536" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-              <Component id="filler1" min="-2" max="-2" attributes="0"/>
+              <Component id="fi_01" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="bt_Info" alignment="1" min="-2" max="-2" attributes="0"/>
                   <Component id="bt_OpenPort" alignment="1" max="32767" attributes="0"/>
                   <Component id="bt_ClosePort" alignment="1" max="32767" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                                  <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                                      <Component id="lb_Baud" alignment="1" min="-2" max="-2" attributes="0"/>
-                                      <Component id="lb_DataBits" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="lb_StopBits" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="lb_Handshake" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="lb_Parity" alignment="1" min="-2" max="-2" attributes="0"/>
-                          </Group>
                           <Component id="lb_Timestamp" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="lb_Delimiter" min="-2" max="-2" attributes="0"/>
-                          <Component id="lb_look" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                                              <Component id="lb_Baud" alignment="1" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lb_DataBits" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Component id="lb_StopBits" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Component id="lb_Handshake" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lb_Parity" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="lb_Delimiter" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="bt_Info" max="32767" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="bt_Options" min="-2" max="-2" attributes="0"/>
+                          </Group>
                           <Component id="cb_Delimiter" max="32767" attributes="0"/>
-                          <Component id="cb_Timestamp" max="32767" attributes="0"/>
+                          <Component id="cb_Timestamp" pref="144" max="32767" attributes="0"/>
                           <Component id="cb_Handshake" pref="0" max="32767" attributes="0"/>
                           <Component id="cb_Parity" pref="0" max="32767" attributes="0"/>
                           <Component id="cb_StopBits" max="32767" attributes="0"/>
                           <Component id="cb_DataBits" max="32767" attributes="0"/>
                           <Component id="cb_Baud" max="32767" attributes="0"/>
-                          <Component id="cb_Look" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -106,81 +117,68 @@
                   <Component id="lb_Commport" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="cb_Commport" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="bt_Update" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="bt_Options" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="bt_Info" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="lb_VirtalPrint" min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <Component id="sp_VirtualPrint" pref="365" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="fi_01" min="-2" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <EmptySpace min="-2" max="-2" attributes="0"/>
-                              <Component id="sp_VirtualPrint" pref="365" max="32767" attributes="0"/>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="filler1" min="-2" max="-2" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="cb_Baud" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lb_Baud" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="cb_DataBits" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lb_DataBits" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="cb_StopBits" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lb_StopBits" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="cb_Parity" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lb_Parity" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="cb_Handshake" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="lb_Handshake" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                              </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="cb_Timestamp" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lb_Timestamp" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cb_Baud" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lb_Baud" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="cb_Delimiter" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lb_Delimiter" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cb_DataBits" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lb_DataBits" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="lb_look" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="cb_Look" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cb_StopBits" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lb_StopBits" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="bt_OpenPort" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="cb_Parity" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lb_Parity" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="cb_Handshake" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lb_Handshake" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="bt_ClosePort" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="tf_Logfile" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="ck_Logfile" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="bt_Fileselector" max="32767" attributes="0"/>
+                          <Component id="cb_Timestamp" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lb_Timestamp" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="83" max="-2" attributes="0"/>
-                      <Component id="filler2" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="cb_Delimiter" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lb_Delimiter" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="32767" attributes="0"/>
+                      <Component id="bt_OpenPort" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="bt_ClosePort" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="tf_Logfile" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="ck_Logfile" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="bt_Fileselector" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -318,14 +316,6 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_ClosePortActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="bt_Info">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Info"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_InfoActionPerformed"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JLabel" name="lb_VirtalPrint">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.editors2.FontEditor">
@@ -429,7 +419,7 @@
         <Property name="toolTipText" type="java.lang.String" value="Delimiter between timestamp and data"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.Box$Filler" name="filler1">
+    <Component class="javax.swing.Box$Filler" name="fi_01">
       <Properties>
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[0, 32767]"/>
@@ -439,40 +429,21 @@
         <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalStrut"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.Box$Filler" name="filler2">
+    <Component class="javax.swing.JButton" name="bt_Options">
       <Properties>
-        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[0, 32767]"/>
-        </Property>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="classDetails" type="java.lang.String" value="Box.Filler.HorizontalStrut"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JComboBox" name="cb_Look">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
-        </Property>
-        <Property name="toolTipText" type="java.lang.String" value="Change &quot;Look and Feel&quot;"/>
+        <Property name="text" type="java.lang.String" value="Options"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cb_LookActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_OptionsActionPerformed"/>
       </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
-      </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="lb_look">
+    <Component class="javax.swing.JButton" name="bt_Info">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Look &amp; Feel:"/>
-        <Property name="toolTipText" type="java.lang.String" value="Delimiter between timestamp and data"/>
+        <Property name="text" type="java.lang.String" value="Info"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_InfoActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
