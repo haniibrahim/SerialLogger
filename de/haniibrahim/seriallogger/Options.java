@@ -22,7 +22,17 @@ public class Options extends javax.swing.JDialog {
     private final UIManager.LookAndFeelInfo[] lafClasses = new UIManager.LookAndFeelInfo[lafNum]; // LaF classes
 //    private final UIManager.LookAndFeelInfo[] lafNames = new UIManager.LookAndFeelInfo[lafNum]; // Laf names
     private final String[] lafNamesStr = new String[lafNum]; // LaF names as Strings
-    private final int lafIdx;
+    static int lafIdx;
+    static boolean lafFlag = false;
+    
+    public Options(){
+        // Get and put Look and Feels
+        setAvailableLafClasses(); // set class variable lafClasses
+        setAvailableLafNames();   // set class variable lafNames
+        putLafNames(); // put LaF to combobox
+        
+        lafIdx = Arrays.asList(lafNamesStr).indexOf(getCurrentLaf()); // Get index of current LaF of LaF-list
+    }
 
     /**
      * Creates new form Options
@@ -55,17 +65,17 @@ public class Options extends javax.swing.JDialog {
      * @return LaF classes
      */
     public UIManager.LookAndFeelInfo[] getLafClasses() {
-        return this.lafClasses;
+        return lafClasses;
     }
 
-    /**
-     * Getter for LaF index number of current LaF
-     *
-     * @return Index number of current LaF
-     */
-    public int getLafIdx() {
-        return this.lafIdx;
-    }
+//    /**
+//     * Getter for LaF index number of current LaF
+//     *
+//     * @return Index number of current LaF
+//     */
+//    public int getLafIdx() {
+//        return lafIdx;
+//    }
     
     // ------------------------------------------------------------------------
     
@@ -186,7 +196,6 @@ public class Options extends javax.swing.JDialog {
         bt_OK.setToolTipText("");
         bt_OK.setActionCommand("Ok");
         bt_OK.setLabel("OK");
-        bt_OK.setOpaque(false);
         bt_OK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_OKActionPerformed(evt);
@@ -231,6 +240,7 @@ public class Options extends javax.swing.JDialog {
 
     private void bt_OKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_OKActionPerformed
         try {
+            lafFlag = true;
             int x = cb_LookAndFeel.getSelectedIndex();
             UIManager.setLookAndFeel(lafClasses[x].getClassName());
             SwingUtilities.updateComponentTreeUI(SerialLogger.getFrames()[0]);

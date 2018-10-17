@@ -37,7 +37,7 @@ class MacImpl implements ClassSelector, AboutHandler, PreferencesHandler, QuitHa
             application = Application.getApplication();
             application.setAboutHandler(this);
             // PreferenceHandler not used yet
-            // application.setPreferencesHandler(this); 
+            application.setPreferencesHandler(this); 
         } catch (Throwable e) {
             System.err.println("setupMacOSXApplicationListener failed: "
                     + e.getMessage());

@@ -66,7 +66,7 @@ public class SerialLogger extends JFrame {
 
         initComponents();
         myInit();
-        
+
         // Set preferences to default or from storePrefs()
         setPrefs();
 
@@ -94,11 +94,11 @@ public class SerialLogger extends JFrame {
         // Initial values for CommPorts in combobox
         updatePortList();
     }
-    
+
     /**
      * My presets for the GUI and overwritable methods
      */
-    private void myInit(){
+    private void myInit() {
         // Checking before close frame
         this.addWindowListener(new WindowAdapter() {
             /**
@@ -128,14 +128,14 @@ public class SerialLogger extends JFrame {
                 }
             }
         });
-        
+
         // Set OK-Button to default
         this.getRootPane().setDefaultButton(bt_OpenPort);
-        
+
         // Open and close button disabled till updatePortList finished
         bt_OpenPort.setEnabled(false);
         bt_ClosePort.setEnabled(false);
-        
+
         // Hide Info and Options Button for macOS
         if (Helper.getOS().equals("mac")) {
             bt_Info.setVisible(false);
@@ -338,25 +338,25 @@ public class SerialLogger extends JFrame {
         };
         worker.execute();
     }
-    
+
     /**
      * Get delimiter string from combobox which is used between timestamp and
      * data.
-     * 
+     *
      * @return delimiter delimiter string
      */
-    private String getDelimiter(){
-        if (cb_Delimiter.getSelectedItem().toString().equals("blank")){
+    private String getDelimiter() {
+        if (cb_Delimiter.getSelectedItem().toString().equals("blank")) {
             return " ";
-        } else if (cb_Delimiter.getSelectedItem().toString().equals("komma")){
+        } else if (cb_Delimiter.getSelectedItem().toString().equals("komma")) {
             return ",";
-        } else if (cb_Delimiter.getSelectedItem().toString().equals("semicolon")){
+        } else if (cb_Delimiter.getSelectedItem().toString().equals("semicolon")) {
             return ";";
         } else {
             return "";
         }
     }
-    
+
     /**
      * Get a timestamp string of the current date & time in different formats
      * <ul>
@@ -367,24 +367,24 @@ public class SerialLogger extends JFrame {
      * <li>Modified Julian Date
      * <li>Year, day of the year, time
      * </ul>
-     * 
-     * @return timestamp 
+     *
+     * @return timestamp
      */
-    private String getTimestamp(){
+    private String getTimestamp() {
         String delimiter = getDelimiter();
-        if (cb_Timestamp.getSelectedItem().toString().equals("ISO 8601")){
+        if (cb_Timestamp.getSelectedItem().toString().equals("ISO 8601")) {
             return Helper.getIsoTimestamp(delimiter);
-        } else if (cb_Timestamp.getSelectedItem().toString().equals("Date|Time|Timezone")){
+        } else if (cb_Timestamp.getSelectedItem().toString().equals("Date|Time|Timezone")) {
             return Helper.getDateTimeTz(delimiter);
-        } else if (cb_Timestamp.getSelectedItem().toString().equals("Date|Time")){
+        } else if (cb_Timestamp.getSelectedItem().toString().equals("Date|Time")) {
             return Helper.getDateTimeTimestamp(delimiter);
-        } else if (cb_Timestamp.getSelectedItem().toString().equals("Time")){
+        } else if (cb_Timestamp.getSelectedItem().toString().equals("Time")) {
             return Helper.getTimeTimestamp(delimiter);
-        } else if (cb_Timestamp.getSelectedItem().toString().equals("Mod. Julian Date")){
+        } else if (cb_Timestamp.getSelectedItem().toString().equals("Mod. Julian Date")) {
             return Helper.getMjd(delimiter);
-        } else if (cb_Timestamp.getSelectedItem().toString().equals("Year|Day of year|Time")){
+        } else if (cb_Timestamp.getSelectedItem().toString().equals("Year|Day of year|Time")) {
             return Helper.getDayOfYearTimestamp(delimiter);
-         } else if (cb_Timestamp.getSelectedItem().toString().equals("yyyy|MM|dd|HH|mm|ss")){
+        } else if (cb_Timestamp.getSelectedItem().toString().equals("yyyy|MM|dd|HH|mm|ss")) {
             return Helper.getYMDhms(delimiter);
         } else {
             return "";
@@ -418,7 +418,7 @@ public class SerialLogger extends JFrame {
         prefs.put("timestamp", cb_Timestamp.getSelectedItem().toString());
         prefs.put("delimiter", cb_Delimiter.getSelectedItem().toString());
 
-        // Save Logfile name
+        // Save Logfile name and check mark
         if (tf_Logfile.getText().isEmpty()) {
             prefs.put("logfile", stdLogfileName);
         } else {
@@ -426,6 +426,10 @@ public class SerialLogger extends JFrame {
         }
         prefs.putBoolean("logto", ck_Logfile.isSelected());
 
+        // Save LaF index
+        if (Options.lafFlag) { // if Options dialog was opened.
+            prefs.put("lafidx", Integer.toString(Options.lafIdx));
+        }
         prefs.flush();
     }
 
@@ -468,6 +472,10 @@ public class SerialLogger extends JFrame {
         String logfile = prefs.get("logfile", stdLogfileName);
         boolean logto = prefs.getBoolean("logto", false);
 
+        // LaF index
+            int lafidx = prefs.getInt(Integer.toString(Options.lafIdx),
+                    Options.lafIdx);
+
         // Put default/stored serialparameters/logfile in GUI
         cb_Baud.setSelectedItem(baud);
         cb_DataBits.setSelectedItem(databits);
@@ -478,9 +486,9 @@ public class SerialLogger extends JFrame {
         cb_Delimiter.setSelectedItem(delimiter);
         tf_Logfile.setText(logfile);
         ck_Logfile.setSelected(logto);
-        
+
         // No timestamp diabled delimiter combobox
-        if (timestamp.equals("none")){
+        if (timestamp.equals("none")) {
             cb_Delimiter.setEnabled(false);
         }
     }
@@ -512,9 +520,9 @@ public class SerialLogger extends JFrame {
         tf_Logfile.setEnabled(toggle);
         bt_Fileselector.setEnabled(toggle);
         bt_Options.setEnabled(toggle);
-        
+
         // Delimiter combobox toggling
-        if (toggle && cb_Timestamp.getSelectedItem().equals("none")){
+        if (toggle && cb_Timestamp.getSelectedItem().equals("none")) {
             cb_Delimiter.setEnabled(false);
         } else {
             cb_Delimiter.setEnabled(toggle);
@@ -872,6 +880,7 @@ public class SerialLogger extends JFrame {
 
     /**
      * Logfile's fileselector button event. Choose logfile name incl. path
+     *
      * @param evt
      */
     private void bt_FileselectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_FileselectorActionPerformed
@@ -879,7 +888,7 @@ public class SerialLogger extends JFrame {
     }//GEN-LAST:event_bt_FileselectorActionPerformed
 
     private void cb_TimestampActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_TimestampActionPerformed
-        if (!cb_Timestamp.getSelectedItem().toString().equals("none")){
+        if (!cb_Timestamp.getSelectedItem().toString().equals("none")) {
             cb_Delimiter.setEnabled(true);
         } else {
             cb_Delimiter.setEnabled(false);
@@ -906,29 +915,44 @@ public class SerialLogger extends JFrame {
 //        infoDialog.setLocationRelativeTo(this);
 //        infoDialog.setVisible(true);
     }//GEN-LAST:event_bt_InfoActionPerformed
-    
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
 
-            //<editor-fold defaultstate="collapsed" desc="Look and Feel">
-            // Try GTK-LaF on GNU/Linux first, then System-LaF. System-LaF on all other platforms
-        if (System.getProperty("os.name").toLowerCase().contains("linux")) {
-            try {
-                UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-            } catch (Exception e1) {
+        //<editor-fold defaultstate="collapsed" desc="Look and Feel">
+        // Try GTK-LaF on GNU/Linux first, then System-LaF. System-LaF on all other platforms
+        if (false) {
+//            try {
+//                UIManager.setLookAndFeel(new Options().getLafClasses()[lafidx].getClassName());
+//                System.out.println("Laf: " + new Options().getLafClasses()[Options.lafIdx].getName());
+//            } catch (ClassNotFoundException ex) {
+//                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (InstantiationException ex) {
+//                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (IllegalAccessException ex) {
+//                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (UnsupportedLookAndFeelException ex) {
+//                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+        } else {
+            if (System.getProperty("os.name").toLowerCase().contains("linux")) {
+                try {
+                    UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+                } catch (Exception e1) {
+                    try {
+                        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                    } catch (Exception e2) {
+                        System.err.println("Look & Feel Error\n" + e2.getMessage());
+                    }
+                }
+            } else {
                 try {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 } catch (Exception e2) {
                     System.err.println("Look & Feel Error\n" + e2.getMessage());
                 }
-            }
-        } else {
-            try {
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } catch (Exception e2) {
-                System.err.println("Look & Feel Error\n" + e2.getMessage());
             }
         }
         //</editor-fold>
