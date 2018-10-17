@@ -13,125 +13,84 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 /**
- *
+ * JDialog where the Look and Feels can be set
+ * 
  * @author HI
  */
 public class Options extends javax.swing.JDialog {
 
-    private final int lafNum = UIManager.getInstalledLookAndFeels().length; // Amount of available LaFs
-    private final UIManager.LookAndFeelInfo[] lafClasses = new UIManager.LookAndFeelInfo[lafNum]; // LaF classes
-//    private final UIManager.LookAndFeelInfo[] lafNames = new UIManager.LookAndFeelInfo[lafNum]; // Laf names
-    private final String[] lafNamesStr = new String[lafNum]; // LaF names as Strings
-    static int lafIdx;
-    static boolean lafFlag = false;
+    private final static int LAF_NUM = UIManager.getInstalledLookAndFeels().length; // Amount of available LaFs
+    private static final UIManager.LookAndFeelInfo[] lafs = new UIManager.LookAndFeelInfo[LAF_NUM]; // LaF classes
+    private static final String[] lafStrs = new String[LAF_NUM]; // LaF names as Strings
+    private static int lafIdx;
     
-    public Options(){
-        // Get and put Look and Feels
-        setAvailableLafClasses(); // set class variable lafClasses
-        setAvailableLafNames();   // set class variable lafNames
-        putLafNames(); // put LaF to combobox
-        
-        lafIdx = Arrays.asList(lafNamesStr).indexOf(getCurrentLaf()); // Get index of current LaF of LaF-list
-    }
-
-    /**
+     /**
      * Creates new form Options
      *
-     * @param parent
-     * @param modal
+     * @param parent Parent element/frame
+     * @param modal Dialog modal or not
      */
     public Options(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
 
         // Get and put Look and Feels
-        setAvailableLafClasses(); // set class variable lafClasses
-        setAvailableLafNames();   // set class variable lafNames
-        putLafNames(); // put LaF to combobox
+        setAvailableLafs(); // set class variable lafs
+        fillInLafNames(); // put LaF to combobox
 
-        // 
-        lafIdx = Arrays.asList(lafNamesStr).indexOf(getCurrentLaf()); // Get index of current LaF of LaF-list
+        lafIdx = Arrays.asList(lafStrs).indexOf(getCurrentLaf()); // Get index of current LaF of LaF-list
         cb_LookAndFeel.setSelectedIndex(lafIdx); // Set curemnt LaF in combobox
 
-//        cb_LookAndFeel.setSelectedItem(getCurrentLaf()); // set combobox entry to current LaF
         myInit();
     }
-    
-    //-------------------------------------------------------------------------
-
     /**
-     * Getter for LaF classes
-     *
-     * @return LaF classes
+     * Get the selected Look and Feel as a Strinh
+     * @return 
      */
-    public UIManager.LookAndFeelInfo[] getLafClasses() {
-        return lafClasses;
+    static String getSelectedLaf(){
+        // Check if lafStrs[] is populated by testing the 1st elemnt against null
+        if (lafStrs[0] == null){
+            setAvailableLafs();
+        }
+        int idx = Arrays.asList(lafStrs).indexOf(getCurrentLaf());
+        return lafs[idx].getClassName();
     }
-
-//    /**
-//     * Getter for LaF index number of current LaF
-//     *
-//     * @return Index number of current LaF
-//     */
-//    public int getLafIdx() {
-//        return lafIdx;
-//    }
-    
-    // ------------------------------------------------------------------------
-    
+      
     /**
      * My presets for the GUI
      */
     private void myInit() {
         this.getRootPane().setDefaultButton(bt_OK); // Set OK-Button to default   
     }
-
-//    private void putAvailableLaF(){
-//        cb_LookAndFeel.removeAllItems();
-//        for (UIManager.LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()){
-//            cb_LookAndFeel.addItem(laf.getClassName());
-//        }
-//    }
+   
+    /**
+     * Fill up the class var lafs with the classes of LaFs
+     */
+    private static void setAvailableLafs() {
+        int i = 0;
+        for (UIManager.LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()){
+            lafs[i] = laf;
+            lafStrs [i] = laf.getName();
+            i++;
+        }
+    }
     
-    /**
-     * Fill up the class var lafClasses with the classes of LaFs
-     */
-    private void setAvailableLafClasses() {
-        int i = 0;
-        for (UIManager.LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
-            lafClasses[i] = laf;
-            i++;
-        }
-    }
-
-    /**
-     * Fill up the class var lafNames with names of LaFs
-     */
-    private void setAvailableLafNames() {
-        int i = 0;
-        for (UIManager.LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
-//            lafNames[i] = laf;
-            lafNamesStr[i] = laf.getName();
-            i++;
-        }
-    }
-
     /**
      * Set List of Look and Feels to the combobox in the Options dialog
      */
-    private void putLafNames() {
+    private void fillInLafNames() {
         cb_LookAndFeel.removeAllItems();
-        for (int i = 0; i < lafNum; i++) {
-            cb_LookAndFeel.addItem(lafClasses[i].getName());
+        for (int i = 0; i < LAF_NUM; i++) {
+            cb_LookAndFeel.addItem(lafs[i].getName());
         }
     }
 
     /**
      * Get cuurent Look and Feel
      *
-     * @return Look and Feel
+     * @return Look and Feel Name
      */
-    private String getCurrentLaf() {
+    private static String getCurrentLaf() {
         return UIManager.getLookAndFeel().getName();
     }
 
@@ -240,9 +199,8 @@ public class Options extends javax.swing.JDialog {
 
     private void bt_OKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_OKActionPerformed
         try {
-            lafFlag = true;
             int x = cb_LookAndFeel.getSelectedIndex();
-            UIManager.setLookAndFeel(lafClasses[x].getClassName());
+            UIManager.setLookAndFeel(lafs[x].getClassName());
             SwingUtilities.updateComponentTreeUI(SerialLogger.getFrames()[0]);
             SerialLogger.getFrames()[0].pack();
         } catch (ClassNotFoundException ex) {
