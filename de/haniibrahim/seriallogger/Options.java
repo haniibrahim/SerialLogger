@@ -14,7 +14,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  * JDialog where the Look and Feels can be set
- * 
+ *
  * @author HI
  */
 public class Options extends javax.swing.JDialog {
@@ -23,8 +23,8 @@ public class Options extends javax.swing.JDialog {
     private static final UIManager.LookAndFeelInfo[] lafs = new UIManager.LookAndFeelInfo[LAF_NUM]; // LaF classes
     private static final String[] lafStrs = new String[LAF_NUM]; // LaF names as Strings
     private static int lafIdx;
-        
-     /**
+
+    /**
      * Creates new form Options
      *
      * @param parent Parent element/frame
@@ -43,7 +43,7 @@ public class Options extends javax.swing.JDialog {
 
         myInit();
     }
-    
+
     // ------------------------------------------------------------------------
     // Class methods
     // ------------------------------------------------------------------------
@@ -54,11 +54,20 @@ public class Options extends javax.swing.JDialog {
      * @return Look and Feel name
      */
     static String getCurrentLafName() {
-        return UIManager.getLookAndFeel().getName();
+        String lafName = UIManager.getLookAndFeel().getName();
+        
+        // Workaround for Java and GTK look and feel:
+        // - UIManager.getLookAndFeel().getName() = "GTK look and feel"
+        // - UIManager.LookAndFeelInfo.getName() = "GTK+"
+        if (lafName.equalsIgnoreCase("GTK look and feel")) {
+            lafName = "GTK+";
+        }
+        return lafName;
     }
-    
+
     /**
      * Get current Lok and Feel classname
+     *
      * @return Look and Feel classname
      */
     static String getCurrentLafClassName(){
@@ -66,7 +75,7 @@ public class Options extends javax.swing.JDialog {
         int idx = Arrays.asList(lafStrs).indexOf(getCurrentLafName());
         return lafs[idx].getClassName();
     }
-    
+
 //    /**
 //     * Get the selected Look and Feel as a string
 //     * @return 
@@ -88,20 +97,20 @@ public class Options extends javax.swing.JDialog {
     private void myInit() {
         this.getRootPane().setDefaultButton(bt_OK); // Set OK-Button to default   
     }
-     
+
     /**
-     * Fill up the class variables "lafs" and "lafStrs" with the names/classes 
+     * Fill up the class variables "lafs" and "lafStrs" with the names/classes
      * of available LaFs
      */
     private static void setAvailableLafs() {
         int i = 0;
-        for (UIManager.LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()){
+        for (UIManager.LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
             lafs[i] = laf;
-            lafStrs [i] = laf.getName();
+            lafStrs[i] = laf.getName();
             i++;
         }
     }
-    
+
     /**
      * Set List of Look and Feels to the combobox in the Options dialog
      */
