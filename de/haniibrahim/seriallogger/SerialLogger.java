@@ -426,10 +426,9 @@ public class SerialLogger extends JFrame {
         }
         prefs.putBoolean("logto", ck_Logfile.isSelected());
 
-        // Save LaF index
-        if (Options.lafFlag) { // if Options dialog was opened.
-            prefs.put("lafidx", Integer.toString(Options.lafIdx));
-        }
+        // Save current LaF
+        prefs.put("laf", Options.getCurrentLafClassName());
+        
         prefs.flush();
     }
 
@@ -471,11 +470,18 @@ public class SerialLogger extends JFrame {
         String delimiter = prefs.get("delimiter", "blank");
         String logfile = prefs.get("logfile", stdLogfileName);
         boolean logto = prefs.getBoolean("logto", false);
-
-        // LaF index
-            int lafidx = prefs.getInt(Integer.toString(Options.lafIdx),
-                    Options.lafIdx);
-
+        String laf = prefs.get("laf", getMyLookAndFeel());
+        
+        try {
+            // Set Look and Feel
+            UIManager.setLookAndFeel(laf);
+            SwingUtilities.updateComponentTreeUI(this);
+            SerialLogger.getFrames()[0].pack();       
+        } catch (Exception ex) {
+            System.err.println("LOOK AND FEEL ERROR: " + ex.getMessage());
+            Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         // Put default/stored serialparameters/logfile in GUI
         cb_Baud.setSelectedItem(baud);
         cb_DataBits.setSelectedItem(databits);
@@ -915,48 +921,42 @@ public class SerialLogger extends JFrame {
 //        infoDialog.setLocationRelativeTo(this);
 //        infoDialog.setVisible(true);
     }//GEN-LAST:event_bt_InfoActionPerformed
-
+    
+    /**
+     * Initial Look and Feel.  
+     * Try GTK-LaF on GNU/Linux first, then System-LaF. System-LaF on all other platforms
+     * 
+     * @return Look and Feel class name
+     */
+    private static String getMyLookAndFeel(){
+        String laf;
+        if (System.getProperty("os.name").toLowerCase().contains("linux")) {
+            laf = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
+        } else {
+            laf = UIManager.getSystemLookAndFeelClassName();
+        }
+        return laf;
+    }
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-
+        
         //<editor-fold defaultstate="collapsed" desc="Look and Feel">
-        // Try GTK-LaF on GNU/Linux first, then System-LaF. System-LaF on all other platforms
-        if (false) {
-//            try {
-//                UIManager.setLookAndFeel(new Options().getLafClasses()[lafidx].getClassName());
-//                System.out.println("Laf: " + new Options().getLafClasses()[Options.lafIdx].getName());
-//            } catch (ClassNotFoundException ex) {
-//                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
-//            } catch (InstantiationException ex) {
-//                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
-//            } catch (IllegalAccessException ex) {
-//                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
-//            } catch (UnsupportedLookAndFeelException ex) {
-//                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-        } else {
-            if (System.getProperty("os.name").toLowerCase().contains("linux")) {
-                try {
-                    UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-                } catch (Exception e1) {
-                    try {
-                        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                    } catch (Exception e2) {
-                        System.err.println("Look & Feel Error\n" + e2.getMessage());
-                    }
-                }
-            } else {
-                try {
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                } catch (Exception e2) {
-                    System.err.println("Look & Feel Error\n" + e2.getMessage());
-                }
+        try {
+            UIManager.setLookAndFeel(getMyLookAndFeel());
+        } catch (Exception e1){
+            System.err.println("LOOK AND FEEL ERROR: " + e1.getMessage());
+            try {
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            } catch (Exception e2) {
+                System.err.println("SERIOUS LOOK AND FEEL ERROR: " + e2.getMessage());
+                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, e2);
             }
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         SwingUtilities.invokeLater(new Runnable() {
             @Override

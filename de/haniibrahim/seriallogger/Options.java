@@ -23,7 +23,7 @@ public class Options extends javax.swing.JDialog {
     private static final UIManager.LookAndFeelInfo[] lafs = new UIManager.LookAndFeelInfo[LAF_NUM]; // LaF classes
     private static final String[] lafStrs = new String[LAF_NUM]; // LaF names as Strings
     private static int lafIdx;
-    
+        
      /**
      * Creates new form Options
      *
@@ -38,33 +38,60 @@ public class Options extends javax.swing.JDialog {
         setAvailableLafs(); // set class variable lafs
         fillInLafNames(); // put LaF to combobox
 
-        lafIdx = Arrays.asList(lafStrs).indexOf(getCurrentLaf()); // Get index of current LaF of LaF-list
+        lafIdx = Arrays.asList(lafStrs).indexOf(getCurrentLafName()); // Get index of current LaF of LaF-list
         cb_LookAndFeel.setSelectedIndex(lafIdx); // Set curemnt LaF in combobox
 
         myInit();
     }
+    
+    // ------------------------------------------------------------------------
+    // Class methods
+    // ------------------------------------------------------------------------
+    
     /**
-     * Get the selected Look and Feel as a Strinh
-     * @return 
+     * Get cuurent Look and Feel name
+     *
+     * @return Look and Feel name
      */
-    static String getSelectedLaf(){
-        // Check if lafStrs[] is populated by testing the 1st elemnt against null
-        if (lafStrs[0] == null){
-            setAvailableLafs();
-        }
-        int idx = Arrays.asList(lafStrs).indexOf(getCurrentLaf());
+    static String getCurrentLafName() {
+        return UIManager.getLookAndFeel().getName();
+    }
+    
+    /**
+     * Get current Lok and Feel classname
+     * @return Look and Feel classname
+     */
+    static String getCurrentLafClassName(){
+        setAvailableLafs();
+        int idx = Arrays.asList(lafStrs).indexOf(getCurrentLafName());
         return lafs[idx].getClassName();
     }
-      
+    
+//    /**
+//     * Get the selected Look and Feel as a string
+//     * @return 
+//     */
+//    static String getSelectedLaf(){
+//        // Check if lafStrs[] is populated by testing the 1st elemnt against null
+//        if (lafStrs[0] == null){
+//            setAvailableLafs();
+//        }
+//        int idx = Arrays.asList(lafStrs).indexOf(getCurrentLafName());
+//        return lafs[idx].getClassName();
+//    }
+    
+    // ------------------------------------------------------------------------
+    
     /**
      * My presets for the GUI
      */
     private void myInit() {
         this.getRootPane().setDefaultButton(bt_OK); // Set OK-Button to default   
     }
-   
+     
     /**
-     * Fill up the class var lafs with the classes of LaFs
+     * Fill up the class variables "lafs" and "lafStrs" with the names/classes 
+     * of available LaFs
      */
     private static void setAvailableLafs() {
         int i = 0;
@@ -83,15 +110,6 @@ public class Options extends javax.swing.JDialog {
         for (int i = 0; i < LAF_NUM; i++) {
             cb_LookAndFeel.addItem(lafs[i].getName());
         }
-    }
-
-    /**
-     * Get cuurent Look and Feel
-     *
-     * @return Look and Feel Name
-     */
-    private static String getCurrentLaf() {
-        return UIManager.getLookAndFeel().getName();
     }
 
     /**

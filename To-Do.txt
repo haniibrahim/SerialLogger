@@ -7,5 +7,6 @@
 [x] Warning when close window/quit app and buffer is not empty and not logged.
 [x] Flowcontrol bug fixed
 [x] Timestamp feature
+[x] Look and Feel switcher
 [ ] Save option for buffer
 [ ] CLI interface
