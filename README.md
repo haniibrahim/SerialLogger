@@ -18,9 +18,9 @@
 * ***NEW*** Timestamp function (ISO 8601, MJD, ...)
 
 ## Screenshot
-![](http://blog.hani-ibrahim.de/wp-content/uploads/Seriallogger-1.1.0-alpha.png "Screenshot")
+![](http://blog.hani-ibrahim.de/wp-content/uploads/SerialLogger-1.1.0.png "Screenshot")
 
-SerialLogger v1.1.0-alpha on Windows 10
+SerialLogger v1.1.0 on Windows 10
 
 ## Requirements
 
@@ -50,12 +50,12 @@ For JARs and platform related installers go to the [RELEASE](https://github.com/
 | 1.0.0       | Check & warn for unsaved/unlogged puffer at app closing, empty commport bug fixed, flowcontrol bug fixed, filedialog bug fixed on macOS & Windows, code clean-up |
 | 1.1.0-alpha | Timestamp feature (see Notes.md for details) |
 | 1.1.0-beta  | ISO 8601 timezone bug fixed. All other timezone strings now ISO 8601 compatible. Delimiter combobox bug fixed |
+| 1.1.0       | Timestamp function, Look and Feel function |
 
 ## Roadmap
 
 | Version | Notes                 |
 |---------|-----------------------|
-| 1.1.0   | Time-stamp feature    |
 | 2.0.0   | Command line features |
 
 ## Known bugs
