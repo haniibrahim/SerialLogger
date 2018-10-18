@@ -427,7 +427,7 @@ public class SerialLogger extends JFrame {
         prefs.putBoolean("logto", ck_Logfile.isSelected());
 
         // Save current LaF
-        prefs.put("laf", Options.getCurrentLafClassName());
+        prefs.put("laf", LafHelper.getCurrentLafClassName());
         
         prefs.flush();
     }

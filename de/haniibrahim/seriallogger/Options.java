@@ -19,9 +19,12 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class Options extends javax.swing.JDialog {
 
-    private final static int LAF_NUM = UIManager.getInstalledLookAndFeels().length; // Amount of available LaFs
-    private static final UIManager.LookAndFeelInfo[] lafs = new UIManager.LookAndFeelInfo[LAF_NUM]; // LaF classes
-    private static final String[] lafStrs = new String[LAF_NUM]; // LaF names as Strings
+    private static final UIManager.LookAndFeelInfo[] lafs = LafHelper.getLafs(); // LaF classes
+    private static final String[] lafStrs = LafHelper.getLafStrs(); // LaF names as Strings
+
+//    private final static int LAF_NUM = UIManager.getInstalledLookAndFeels().length; // Amount of available LaFs
+//    private static final UIManager.LookAndFeelInfo[] lafs = new UIManager.LookAndFeelInfo[LAF_NUM]; // LaF classes
+//    private static final String[] lafStrs = new String[LafHelper.LAF_LENGTH]; // LaF names as Strings
     private static int lafIdx;
 
     /**
@@ -35,61 +38,61 @@ public class Options extends javax.swing.JDialog {
         initComponents();
 
         // Get and put Look and Feels
-        setAvailableLafs(); // set class variable lafs
+//        setAvailableLafs(); // set class variable lafs
         fillInLafNames(); // put LaF to combobox
 
-        lafIdx = Arrays.asList(lafStrs).indexOf(getCurrentLafName()); // Get index of current LaF of LaF-list
+        lafIdx = Arrays.asList(lafStrs).indexOf(LafHelper.getCurrentLafName()); // Get index of current LaF of LaF-list
         cb_LookAndFeel.setSelectedIndex(lafIdx); // Set curemnt LaF in combobox
 
         myInit();
     }
 
-    // ------------------------------------------------------------------------
-    // Class methods
-    // ------------------------------------------------------------------------
-    
-    /**
-     * Get cuurent Look and Feel name
-     *
-     * @return Look and Feel name
-     */
-    static String getCurrentLafName() {
-        String lafName = UIManager.getLookAndFeel().getName();
-        
-        // Workaround for Java and GTK look and feel:
-        // - UIManager.getLookAndFeel().getName() = "GTK look and feel"
-        // - UIManager.LookAndFeelInfo.getName() = "GTK+"
-        if (lafName.equalsIgnoreCase("GTK look and feel")) {
-            lafName = "GTK+";
-        }
-        return lafName;
-    }
-
-    /**
-     * Get current Lok and Feel classname
-     *
-     * @return Look and Feel classname
-     */
-    static String getCurrentLafClassName(){
-        setAvailableLafs();
-        int idx = Arrays.asList(lafStrs).indexOf(getCurrentLafName());
-        return lafs[idx].getClassName();
-    }
-
+//    // ------------------------------------------------------------------------
+//    // Class methods
+//    // ------------------------------------------------------------------------
+//    
 //    /**
-//     * Get the selected Look and Feel as a string
-//     * @return 
+//     * Get cuurent Look and Feel name
+//     *
+//     * @return Look and Feel name
 //     */
-//    static String getSelectedLaf(){
-//        // Check if lafStrs[] is populated by testing the 1st elemnt against null
-//        if (lafStrs[0] == null){
-//            setAvailableLafs();
+//    static String getCurrentLafName() {
+//        String lafName = UIManager.getLookAndFeel().getName();
+//        
+//        // Workaround for Java and GTK look and feel:
+//        // - UIManager.getLookAndFeel().getName() = "GTK look and feel"
+//        // - UIManager.LookAndFeelInfo.getName() = "GTK+"
+//        if (lafName.equalsIgnoreCase("GTK look and feel")) {
+//            lafName = "GTK+";
 //        }
+//        return lafName;
+//    }
+//
+//    /**
+//     * Get current Lok and Feel classname
+//     *
+//     * @return Look and Feel classname
+//     */
+//    static String getCurrentLafClassName(){
+//        setAvailableLafs();
 //        int idx = Arrays.asList(lafStrs).indexOf(getCurrentLafName());
 //        return lafs[idx].getClassName();
 //    }
-    
-    // ------------------------------------------------------------------------
+//
+////    /**
+////     * Get the selected Look and Feel as a string
+////     * @return 
+////     */
+////    static String getSelectedLaf(){
+////        // Check if lafStrs[] is populated by testing the 1st elemnt against null
+////        if (lafStrs[0] == null){
+////            setAvailableLafs();
+////        }
+////        int idx = Arrays.asList(lafStrs).indexOf(getCurrentLafName());
+////        return lafs[idx].getClassName();
+////    }
+//    
+//    // ------------------------------------------------------------------------
     
     /**
      * My presets for the GUI
@@ -98,25 +101,25 @@ public class Options extends javax.swing.JDialog {
         this.getRootPane().setDefaultButton(bt_OK); // Set OK-Button to default   
     }
 
-    /**
-     * Fill up the class variables "lafs" and "lafStrs" with the names/classes
-     * of available LaFs
-     */
-    private static void setAvailableLafs() {
-        int i = 0;
-        for (UIManager.LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
-            lafs[i] = laf;
-            lafStrs[i] = laf.getName();
-            i++;
-        }
-    }
+//    /**
+//     * Fill up the class variables "lafs" and "lafStrs" with the names/classes
+//     * of available LaFs
+//     */
+//    private static void setAvailableLafs() {
+//        int i = 0;
+//        for (UIManager.LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
+//            lafs[i] = laf;
+//            lafStrs[i] = laf.getName();
+//            i++;
+//        }
+//    }
 
     /**
      * Set List of Look and Feels to the combobox in the Options dialog
      */
     private void fillInLafNames() {
         cb_LookAndFeel.removeAllItems();
-        for (int i = 0; i < LAF_NUM; i++) {
+        for (int i = 0; i < LafHelper.LAF_LENGTH; i++) {
             cb_LookAndFeel.addItem(lafs[i].getName());
         }
     }
