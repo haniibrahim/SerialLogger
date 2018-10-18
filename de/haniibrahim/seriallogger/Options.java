@@ -179,9 +179,9 @@ public class Options extends javax.swing.JDialog {
             }
         });
 
+        bt_OK.setText("OK");
         bt_OK.setToolTipText("");
-        bt_OK.setActionCommand("Ok");
-        bt_OK.setLabel("OK");
+        bt_OK.setActionCommand("OK");
         bt_OK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_OKActionPerformed(evt);
@@ -214,8 +214,6 @@ public class Options extends javax.swing.JDialog {
                     .addComponent(bt_OK))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        bt_OK.getAccessibleContext().setAccessibleName("Ok");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

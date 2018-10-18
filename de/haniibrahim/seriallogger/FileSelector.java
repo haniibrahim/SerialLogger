@@ -10,6 +10,7 @@ import java.awt.Frame;
 import java.io.File;
 import java.io.FilenameFilter;
 import javax.swing.JFileChooser;
+import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -71,7 +72,8 @@ final class FileSelector {
                 || System.getProperty("java.version").startsWith("1.1")
                 || System.getProperty("java.version").startsWith("1.0")
                 ))
-                || (getOS().equals("win"))) {
+                || (getOS().equals("win"))
+                || (!isNativeLookAndFeel())) {
             JFileChooser fd = new JFileChooser(pathName);
             fd.setDialogTitle(dialogTitle);
             fd.setDialogType(JFileChooser.SAVE_DIALOG);
@@ -125,4 +127,23 @@ final class FileSelector {
         }
         return "noarch";
     }
+
+    /**
+     * If the underlying platform has a "native" look and feel, and this is an 
+     * implementation of it, return true.
+     * 
+     * @return true if this look and feel represents the underlying platform look and feel
+     */
+    private static boolean isNativeLookAndFeel() {
+        // Get current LaF
+        String lafName = UIManager.getLookAndFeel().getName();        
+        // Workaround for Java and GTK look and feel:
+        // - UIManager.getLookAndFeel().getName() = "GTK look and feel"
+        // - UIManager.LookAndFeelInfo.getName() = "GTK+"
+        if (lafName.equalsIgnoreCase("GTK look and feel")) {
+            lafName = "GTK+";
+        }
+        return !(lafName.equals("Metal") || lafName.equals("Nimbus") || lafName.equals("CDE/Motif"));
+    }
+
 }

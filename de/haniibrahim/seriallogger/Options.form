@@ -134,13 +134,10 @@
     </Component>
     <Component class="javax.swing.JButton" name="bt_OK">
       <Properties>
+        <Property name="text" type="java.lang.String" value="OK"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
-        <Property name="actionCommand" type="java.lang.String" value="Ok"/>
-        <Property name="label" type="java.lang.String" value="OK"/>
+        <Property name="actionCommand" type="java.lang.String" value="OK"/>
       </Properties>
-      <AccessibilityProperties>
-        <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Ok"/>
-      </AccessibilityProperties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bt_OKActionPerformed"/>
       </Events>
