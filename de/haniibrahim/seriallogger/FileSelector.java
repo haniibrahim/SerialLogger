@@ -143,7 +143,15 @@ final class FileSelector {
         if (lafName.equalsIgnoreCase("GTK look and feel")) {
             lafName = "GTK+";
         }
-        return !(lafName.equals("Metal") || lafName.equals("Nimbus") || lafName.equals("CDE/Motif"));
+        if (getOS().equals("win") && lafName.contains("windows")){
+            return true;
+        } else if (getOS().equals("mac") && lafName.contains("mac")){
+            return true;
+        } else if (getOS().equals("lin") && lafName.contains("GTK")){
+            return true;
+        } else {
+            return false;
+        }
+//        return !(lafName.equals("Metal") || lafName.equals("Nimbus") || lafName.equals("CDE/Motif"));
     }
-
 }
