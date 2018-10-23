@@ -123,8 +123,12 @@ public class SerialLogger extends JFrame {
                             setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
                             break;
                         case 1:
-                            saveBuffer();
-                            setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                            boolean ret = saveBuffer();
+                            if (ret) {
+                                setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                            } else {
+                                setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+                            }
                             break;
                         default:
                             setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -401,7 +405,7 @@ public class SerialLogger extends JFrame {
     /**
      * Save Buffer to file
      */
-    private void saveBuffer() {
+    private boolean saveBuffer() {
         boolean aFlag = false; // append data to file - flag
 
         String fn = FileSelector.getSaveFilename(this, "", tf_Logfile.getText(), "Set file name for buffer");
@@ -424,7 +428,7 @@ public class SerialLogger extends JFrame {
                 if (ans == 0) { // append data to file
                     aFlag = true;
                 } else { // cancel
-                    return;
+                    return false;
                 }
             }
             try {
@@ -439,8 +443,10 @@ public class SerialLogger extends JFrame {
 
                 System.err.println(ex.getMessage());
             }
+        } else {
+            return false;
         }
-
+        return true;
     }
 
     /**
