@@ -8,5 +8,5 @@
 [x] Flowcontrol bug fixed
 [x] Timestamp feature
 [x] Look and Feel switcher
-[ ] Save option for buffer
+[x] Save option for buffer
 [ ] CLI interface

@@ -96,7 +96,7 @@
                               <Component id="bt_Options" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="cb_Delimiter" max="32767" attributes="0"/>
-                          <Component id="cb_Timestamp" pref="144" max="32767" attributes="0"/>
+                          <Component id="cb_Timestamp" pref="0" max="32767" attributes="0"/>
                           <Component id="cb_Handshake" pref="0" max="32767" attributes="0"/>
                           <Component id="cb_Parity" pref="0" max="32767" attributes="0"/>
                           <Component id="cb_StopBits" max="32767" attributes="0"/>

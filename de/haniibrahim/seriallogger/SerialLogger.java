@@ -41,11 +41,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * to a GUI interface, the console and optionally to a file
  *
  * @author Hani Andreas Ibrahim
- * @version 1.1.0
+ * @version 1.2.0
  */
 public class SerialLogger extends JFrame {
 
-    static String version = "1.1.0"; // CHANGE VERSION NUMBER AS NECESSARY - Shown in info dialog
+    static String version = "1.2.0"; // CHANGE VERSION NUMBER AS NECESSARY - Shown in info dialog
 
     private static SerialPort chosenPort;
     private static String stdLogfileName;
@@ -403,12 +403,14 @@ public class SerialLogger extends JFrame {
     }
 
     /**
-     * Save Buffer to file
+     * Save Buffer to file vis FileChooser
+     * 
+     * @return false if filechooser was canceled, true if OK was clicked and data saved
      */
     private boolean saveBuffer() {
         boolean aFlag = false; // append data to file - flag
 
-        String fn = FileSelector.getSaveFilename(this, "", tf_Logfile.getText(), "Set file name for buffer");
+        String fn = FileSelector.getSaveFilename(this, "", tf_Logfile.getText(), "Save buffer");
 
         if (!fn.equals("")) {
             File f = new File(fn);
