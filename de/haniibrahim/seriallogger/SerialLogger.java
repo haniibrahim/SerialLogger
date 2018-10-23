@@ -111,17 +111,24 @@ public class SerialLogger extends JFrame {
             public void windowClosing(WindowEvent e) {
                 // Check for unsaved buffer
                 if (!ta_LogPanel.getText().isEmpty() && printLogFlag == false) {
-                    Object[] options = {"Delete Buffer and Quit", "Cancel"};
+                    Object[] options = {"Delete Buffer and Quit", "Save Buffer and Quit", "Cancel"};
                     int ans = JOptionPane.showOptionDialog(SerialLogger.getFrames()[0],
                             "Buffer is not empty and not saved\n",
                             "Buffer not empty",
                             JOptionPane.YES_NO_OPTION,
                             JOptionPane.WARNING_MESSAGE,
                             null, options, options[1]);
-                    if (ans == 0) {
-                        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-                    } else {
-                        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+                    switch (ans) {
+                        case 0:
+                            setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                            break;
+                        case 1:
+                            saveBuffer();
+                            setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+                            break;
+                        default:
+                            setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+                            break;
                     }
                 } else {
                     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -392,6 +399,51 @@ public class SerialLogger extends JFrame {
     }
 
     /**
+     * Save Buffer to file
+     */
+    private void saveBuffer() {
+        boolean aFlag = false; // append data to file - flag
+
+        String fn = FileSelector.getSaveFilename(this, "", tf_Logfile.getText(), "Set file name for buffer");
+
+        if (!fn.equals("")) {
+            File f = new File(fn);
+            if (f.exists()) {
+                // Log file exists, append or cancel?
+                Object[] options = {
+                    "Append",
+                    "Cancel"
+                };
+                int ans = JOptionPane.showOptionDialog(this,
+                        "Logfile already exists\n"
+                        + "Do you want to append data to this file\n",
+                        "Append or Cancel?",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null, options, options[1]);
+                if (ans == 0) { // append data to file
+                    aFlag = true;
+                } else { // cancel
+                    return;
+                }
+            }
+            try {
+                FileWriter fw = new FileWriter(f.getAbsolutePath(), aFlag);
+                ta_LogPanel.write(fw);
+                fw.close();
+                ta_LogPanel.setText("");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this,
+                        ex.getMessage() + "\n",
+                        "Info", JOptionPane.ERROR_MESSAGE);
+
+                System.err.println(ex.getMessage());
+            }
+        }
+
+    }
+
+    /**
      * Store settings in preferences - Window position and size - Serial
      * settings - Log file name and path
      *
@@ -428,7 +480,7 @@ public class SerialLogger extends JFrame {
 
         // Save current LaF
         prefs.put("laf", LafHelper.getCurrentLafClassName());
-        
+
         prefs.flush();
     }
 
@@ -471,17 +523,17 @@ public class SerialLogger extends JFrame {
         String logfile = prefs.get("logfile", stdLogfileName);
         boolean logto = prefs.getBoolean("logto", false);
         String laf = prefs.get("laf", getMyLookAndFeel());
-        
+
         try {
             // Set Look and Feel
             UIManager.setLookAndFeel(laf);
             SwingUtilities.updateComponentTreeUI(this);
-            SerialLogger.getFrames()[0].pack();       
+            SerialLogger.getFrames()[0].pack();
         } catch (Exception ex) {
             System.err.println("LOOK AND FEEL ERROR: " + ex.getMessage());
             Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         // Put default/stored serialparameters/logfile in GUI
         cb_Baud.setSelectedItem(baud);
         cb_DataBits.setSelectedItem(databits);
@@ -833,17 +885,22 @@ public class SerialLogger extends JFrame {
     private void bt_OpenPortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_OpenPortActionPerformed
         // Clear textarea if desired
         if (!ta_LogPanel.getText().isEmpty() && printLogFlag == false) { // Buffer not empty
-            Object[] options = {"Delete Buffer", "Cancel"};
+            Object[] options = {"Delete Buffer", "Save Buffer", "Cancel"};
             int ans = JOptionPane.showOptionDialog(this,
                     "Buffer is not empty and not saved",
                     "Buffer not empty",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.WARNING_MESSAGE,
                     null, options, options[1]);
-            if (ans == 0) {
-                ta_LogPanel.setText("");
-            } else {
-                return;
+            switch (ans) {
+                case 0:
+                    ta_LogPanel.setText("");
+                    break;
+                case 1:
+                    saveBuffer();
+                    return;
+                default:
+                    return;
             }
         }
         ta_LogPanel.setText("");
@@ -890,7 +947,15 @@ public class SerialLogger extends JFrame {
      * @param evt
      */
     private void bt_FileselectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_FileselectorActionPerformed
-        tf_Logfile.setText(FileSelector.getSaveFilename(this, "serial.log", tf_Logfile.getText(), "Specify log file ..."));
+        String fn = FileSelector.getSaveFilename(this, "serial.log", tf_Logfile.getText(), "Specify log file ...");
+        if (fn.equals("")) {
+            String oldFilePath = System.getProperty("user.home")
+                    + System.getProperty("file.separator")
+                    + "serial.log";
+            tf_Logfile.setText(oldFilePath);
+        } else {
+            tf_Logfile.setText(fn);
+        }
     }//GEN-LAST:event_bt_FileselectorActionPerformed
 
     private void cb_TimestampActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_TimestampActionPerformed
@@ -921,14 +986,14 @@ public class SerialLogger extends JFrame {
 //        infoDialog.setLocationRelativeTo(this);
 //        infoDialog.setVisible(true);
     }//GEN-LAST:event_bt_InfoActionPerformed
-    
+
     /**
-     * Initial Look and Feel.  
-     * Try GTK-LaF on GNU/Linux first, then System-LaF. System-LaF on all other platforms
-     * 
+     * Initial Look and Feel. Try GTK-LaF on GNU/Linux first, then System-LaF.
+     * System-LaF on all other platforms
+     *
      * @return Look and Feel class name
      */
-    private static String getMyLookAndFeel(){
+    private static String getMyLookAndFeel() {
         String laf;
         if (System.getProperty("os.name").toLowerCase().contains("linux")) {
             laf = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
@@ -937,16 +1002,16 @@ public class SerialLogger extends JFrame {
         }
         return laf;
     }
-    
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
+
         //<editor-fold defaultstate="collapsed" desc="Look and Feel">
         try {
             UIManager.setLookAndFeel(getMyLookAndFeel());
-        } catch (Exception e1){
+        } catch (Exception e1) {
             System.err.println("LOOK AND FEEL ERROR: " + e1.getMessage());
             try {
                 UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -956,7 +1021,7 @@ public class SerialLogger extends JFrame {
             }
         }
         //</editor-fold>
-        
+
         /* Create and display the form */
         SwingUtilities.invokeLater(new Runnable() {
             @Override

@@ -85,7 +85,8 @@ final class FileSelector {
             if (retVal == JFileChooser.APPROVE_OPTION) {
                 newfilePath = fd.getSelectedFile().toString();
             } else {
-                newfilePath = oldFilePath;
+//                newfilePath = oldFilePath;
+                newfilePath = "";
             }
         } else {
             FileDialog fd = new FileDialog(frame, dialogTitle, FileDialog.SAVE);
@@ -102,7 +103,8 @@ final class FileSelector {
             if (fd.getFile() != null) {
                 newfilePath = fd.getDirectory() + fd.getFile();
             } else {
-                newfilePath = oldFilePath;
+//                newfilePath = oldFilePath;
+                newfilePath = "";
             }
         }
         return newfilePath;
