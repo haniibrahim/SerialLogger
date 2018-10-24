@@ -404,8 +404,9 @@ public class SerialLogger extends JFrame {
 
     /**
      * Save Buffer to file vis FileChooser
-     * 
-     * @return false if filechooser was canceled, true if OK was clicked and data saved
+     *
+     * @return false if filechooser was canceled, true if OK was clicked and
+     * data saved
      */
     private boolean saveBuffer() {
         boolean aFlag = false; // append data to file - flag
@@ -421,7 +422,7 @@ public class SerialLogger extends JFrame {
                     "Cancel"
                 };
                 int ans = JOptionPane.showOptionDialog(this,
-                        "Logfile already exists\n"
+                        "File already exists\n"
                         + "Do you want to append data to this file\n",
                         "Append or Cancel?",
                         JOptionPane.YES_NO_OPTION,
@@ -437,7 +438,6 @@ public class SerialLogger extends JFrame {
                 FileWriter fw = new FileWriter(f.getAbsolutePath(), aFlag);
                 ta_LogPanel.write(fw);
                 fw.close();
-                ta_LogPanel.setText("");
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this,
                         ex.getMessage() + "\n",
@@ -901,13 +901,19 @@ public class SerialLogger extends JFrame {
                     JOptionPane.WARNING_MESSAGE,
                     null, options, options[1]);
             switch (ans) {
-                case 0:
+                case 0: // "Delete Buffer" was choosen
                     ta_LogPanel.setText("");
                     break;
-                case 1:
-                    saveBuffer();
+                case 1: // "Save Buffer" was choosen
+                    boolean sbFlag = saveBuffer();
+                    if (sbFlag) { // if buffer was saved or append to file was choosen
+                        ta_LogPanel.setText("");
+                        toggleGuiElements(false);
+                        serialReader = new SerialReadTask();
+                        serialReader.execute();
+                    }
                     return;
-                default:
+                default: // "Cancel" was choosen
                     return;
             }
         }
