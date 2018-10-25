@@ -102,7 +102,7 @@ public class SerialLogger extends JFrame {
         // Checking before close frame
         this.addWindowListener(new WindowAdapter() {
             /**
-             * Checks if buffer is empty and saved before closinf window If not
+             * Checks if buffer is empty and saved before close window If not
              * it asks whether it should proceed to quit
              *
              * @param e WindowEvent
