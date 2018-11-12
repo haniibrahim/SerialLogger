@@ -57,8 +57,6 @@ final class Helper {
         String prefix; // Prefix of the numer (+/-)
 
         Calendar cal = Calendar.getInstance(); // Current Date/Time
-        cal.set(2018, 7, 1);
-        System.out.println(cal.getTime());
         boolean dst = cal.getTimeZone().inDaylightTime(cal.getTime()); // summertime=yes, wintertime=false
         int rawOffset = cal.getTimeZone().getRawOffset(); // Time offset of the local timezone (w/o DST) in ms
         

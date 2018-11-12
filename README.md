@@ -51,6 +51,7 @@ For JARs and platform related installers go to the [RELEASE](https://github.com/
 | 1.1.0-alpha | Timestamp feature (see Notes.md for details) |
 | 1.1.0-beta  | ISO 8601 timezone bug fixed. All other timezone strings now ISO 8601 compatible. Delimiter combobox bug fixed |
 | 1.1.0       | Timestamp function, Look and Feel function |
+| 1.2.0       | Save buffer feature, Timezone-DST bug fixed, latest jSerialComm library v 2.3.0 |
 
 ## Roadmap
 
