@@ -17,7 +17,7 @@ The delimiter sign is added between timestamp components (if necessary) and at t
 
 ### Timestamp formats
 - *ISO 8601:* 
-  Format: `2018-09-06T13:45:42+02:00` => 1:45:42pm at September 6th, 2018 CEST (Central European Summer Time)
+  Format: `2018-09-06T13:45:42+02:00` => 1:45:42pm at September 6th, 2018 CEST (Central European Summer Time), To parse ISO 8601-format in Microsoft Excel or LibreOffice Calc refer [ISO 8601 Parsing in Excel and Calc](http://blog.hani-ibrahim.de/iso-8601-parsing-in-excel-and-calc.html "")
 - *Date|Time|Timezone:*
   Format: `06.09.2016,13:45:42,+02:00` => 1:45:42pm at September 6th, 2018 CEST, comma is the delimiter
 - *Date|Time:*
