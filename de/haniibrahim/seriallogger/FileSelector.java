@@ -147,7 +147,7 @@ final class FileSelector {
         }
         if (getOS().equals("win") && lafName.contains("windows")){
             return true;
-        } else if (getOS().equals("mac") && lafName.contains("mac")){
+        } else if (getOS().equals("mac") && lafName.contains("Mac")){
             return true;
         } else if (getOS().equals("lin") && lafName.contains("GTK")){
             return true;
