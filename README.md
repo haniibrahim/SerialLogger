@@ -24,7 +24,7 @@ SerialLogger v1.1.0 on Windows 10
 
 ## Requirements
 
-* PC with MS-Windows XP or higher
+* PC with MS-Windows 7 or higher on x86/x86_64
 * PC with GNU/Linux on x86/x86_64 or ARM (32/64-bit)
 * Macintosh with macOS 10.5 (Tiger) or higher
 * Java 6 JRE or higher on platforms mentioned above (Oracle Java or OpenJDK)
