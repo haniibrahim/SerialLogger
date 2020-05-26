@@ -46,8 +46,15 @@ final class Helper {
     }
     
     /**
+<<<<<<< HEAD
      * Returns the current and local timezone string in ISO 8601 format 
      * (e.g. +02:00)
+=======
+     * Return a timestamp in ISO 8601, format: yyyy-MM-dd'T'HH:mm:ssZ, separator
+     * 
+     * Example: 2018-09-06T13:45:42+0200
+     * 1:45:42pm at September 6th, 2018 CEST (Central European Summer Time) 
+>>>>>>> refs/stash
      * 
      * @return ISO 8601 timezone string (e.g. +02:00)
      */
@@ -90,6 +97,7 @@ final class Helper {
      * @param delimiter Separator sign (e.g. [blank],[,],[;]) 
      * @return ISO 8601 timestamp
      */
+<<<<<<< HEAD
     static String getIsoTimestamp(String delimiter) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         return df.format(new Date()) + getIsoTzString() + delimiter; // ISO 8601 Timestamp format
@@ -231,6 +239,75 @@ final class Helper {
         return MjdMidnight + FracOfDay;
     } //calcMjd 
 
+=======
+    static String getIsoTimestamp(String separator) {
+        TimeZone tz = TimeZone.getDefault();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        df.setTimeZone(tz);
+        return df.format(new Date()) + separator; // ISO 8601 Timestamp format
+    }
+    
+    /**
+     * Return a timestamp formated as date, sepearator, time, separator timezone, separator
+     * 
+     * This format is excellent to process data in spreadsheets apps
+     * 
+     * Example: 06.09.2016,13:45:42,+0200
+     * 1:45:42pm at September 6th, 2018 CEST, comma is the separator
+     * 
+     * @param separator Separator sign (e.g. [blank],[,],[;])
+     * @return date/separator/time timestamp
+     */
+    static String getDateTimeTz(String separator){
+        TimeZone tz = TimeZone.getDefault();
+        DateFormat tzf = new SimpleDateFormat("Z");
+        tzf.setTimeZone(tz);
+
+        DateFormat df = new SimpleDateFormat("dd-MM-YYYY"); // Date
+        DateFormat tf = new SimpleDateFormat("HH:mm:ss"); // Time
+        return df.format(new Date()) + separator + tf.format(new Date()) 
+                + separator + tzf.format(new Date()) + separator;
+    }
+    
+    /**
+     * Return a timestamp formated as date, sepearator, time, separator
+     * 
+     * This format is excellent to process data in spreadsheets apps
+     * 
+     * Example: 06.09.2016,13:45:42
+     * 1:45:42pm at September 6th, 2018, comma is the separator
+     * 
+     * @param separator Separator sign (e.g. [blank],[,],[;])
+     * @return date/separator/time timestamp
+     */
+    static String getDateTimeTimestamp(String separator){
+        DateFormat df = new SimpleDateFormat("dd-MM-YYYY"); // Date
+        DateFormat tf = new SimpleDateFormat("HH:mm:ss"); // Time
+        return df.format(new Date()) + separator + tf.format(new Date()) + separator;
+    }
+    
+    /**
+     * Return a timestamp formated as time
+     * 
+     * This format is excellent to process data in spreadsheets apps
+     * 
+     * Example: 13:45:42
+     * 1:45:42pm at September 6th, 2018
+     * 
+     * @param separator Separator sign (e.g. [blank],[,],[;])
+     * @return date/separator/time timestamp
+     */
+    static String getTimeTimestamp(String separator){
+        DateFormat tf = new SimpleDateFormat("HH:mm:ss"); // Time
+        return tf.format(new Date()) + separator;
+    }
+    
+    static String getModJulianTimestamp(String separator){
+        
+        return "";
+    }
+   
+>>>>>>> refs/stash
     /**
      * Show alertbox when writing in log file fails
      */
