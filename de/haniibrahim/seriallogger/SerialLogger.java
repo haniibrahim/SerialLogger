@@ -257,6 +257,9 @@ public class SerialLogger extends JFrame {
                             pw.flush(); // flush buffer and tries to save every line to the file immediately
                         }
                     }
+                    if (isCancelled()){
+                        pw.close();
+                    }
                     return false;
                 } catch (IOException ex) {
                     System.err.println(ex.getMessage());
@@ -297,7 +300,7 @@ public class SerialLogger extends JFrame {
             } catch (ExecutionException ex) {
                 System.err.println(ex.getMessage());
             } catch (CancellationException ex) { // important
-                System.err.println(ex.getMessage());
+//                System.err.println(ex.getMessage()); // Produce output "null" in console
                 if (chosenPort.isOpen()) {
                     // Close serial port
                     chosenPort.closePort();
