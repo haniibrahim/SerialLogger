@@ -45,7 +45,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class SerialLogger extends JFrame {
 
-    static String version = "1.2.1a"; // CHANGE VERSION NUMBER AS NECESSARY - Shown in info dialog
+    static String version = "1.2.0b"; // CHANGE VERSION NUMBER AS NECESSARY - Shown in info dialog
 
     private static SerialPort chosenPort;
     private static String stdLogfileName;

@@ -5,7 +5,7 @@
  
 ## Features
 
-* Cross-platform: Windows (Intel), macOS (Intel), GNU/Linux (Intel/ARM), 32- and 64-bit architectures
+* Cross-platform: Windows (Intel), macOS (Intel, ARM M1), GNU/Linux (Intel/ARM), 32- and 64-bit architectures
 * Logs serial data to screen (GUI), console and optionally in a file
 * Fail-proof data collection. Save every collected line of data immediately to the optional log file avoiding data loss even at power breakdowns or computer/application crash.
 * Warning of unintentional overwriting or deleting of unlogged buffer
@@ -15,7 +15,8 @@
 * Serial port name is editable in the GUI (for pseudo ports as `/dev/pts/[x]`)
 * Arbitrary baud rate (if hardware supports it)
 * Hardware (CTS/RTS) and Software (Xon/Xoff) handshake available
-* ***NEW*** Timestamp function (ISO 8601, MJD, ...)
+* Timestamp function (ISO 8601, MJD, ...)
+* ***NEW*** Apple M1 ARM support
 
 ## Screenshot
 ![](http://blog.hani-ibrahim.de/wp-content/uploads/SerialLogger-1.1.0.png "Screenshot")
@@ -26,7 +27,7 @@ SerialLogger v1.1.0 on Windows 10
 
 * PC with MS-Windows 7 or higher on x86/x86_64
 * PC with GNU/Linux on x86/x86_64 or ARM (32/64-bit)
-* Macintosh with macOS 10.5 (Tiger) or higher
+* Macintosh with macOS 10.5 (Tiger) or higher, M1 ARM support
 * Java 6 JRE or higher on platforms mentioned above (Oracle Java or OpenJDK)
 
 ## Dependencies
@@ -52,6 +53,7 @@ For JARs and platform related installers go to the [RELEASE](https://github.com/
 | 1.1.0-beta  | ISO 8601 timezone bug fixed. All other timezone strings now ISO 8601 compatible. Delimiter combobox bug fixed |
 | 1.1.0       | Timestamp function, Look and Feel function |
 | 1.2.0       | Save buffer feature, Timezone-DST bug fixed, latest jSerialComm library v 2.3.0 |
+| 1.2.0b      | latest jSerialComm library v 2.6.2, Apple M1 ARM support  |
 
 ## Roadmap
 
