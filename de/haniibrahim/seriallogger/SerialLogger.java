@@ -2,15 +2,14 @@ package de.haniibrahim.seriallogger;
 
 //<editor-fold defaultstate="collapsed" desc="import statements">
 import com.fazecast.jSerialComm.*;
+import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Dimension;
-import java.awt.FileDialog;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -23,17 +22,15 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
-import javax.swing.filechooser.FileNameExtensionFilter;
-//</editor-fold>
 
 /**
  *
@@ -102,8 +99,8 @@ public class SerialLogger extends JFrame {
         // Checking before close frame
         this.addWindowListener(new WindowAdapter() {
             /**
-             * Checks if buffer is empty and saved before close window If not
-             * it asks whether it should proceed to quit
+             * Checks if buffer is empty and saved before close window If not it
+             * asks whether it should proceed to quit
              *
              * @param e WindowEvent
              */
@@ -257,7 +254,7 @@ public class SerialLogger extends JFrame {
                             pw.flush(); // flush buffer and tries to save every line to the file immediately
                         }
                     }
-                    if (isCancelled()){
+                    if (isCancelled()) {
                         pw.close();
                     }
                     return false;
@@ -1025,18 +1022,24 @@ public class SerialLogger extends JFrame {
      */
     public static void main(String args[]) {
 
+        // Flat LaF
+	UIManager.installLookAndFeel("Flat Light", "com.formdev.flatlaf.FlatLightLaf");
+        UIManager.installLookAndFeel("Flat Dark", "com.formdev.flatlaf.FlatDarkLaf");
+        UIManager.installLookAndFeel("Flat IntelliJ", "com.formdev.flatlaf.FlatIntelliJLaf");
+        UIManager.installLookAndFeel("Flat Darcula", "com.formdev.flatlaf.FlatDarculaLaf");
+        
         //<editor-fold defaultstate="collapsed" desc="Look and Feel">
-        try {
-            UIManager.setLookAndFeel(getMyLookAndFeel());
-        } catch (Exception e1) {
-            System.err.println("LOOK AND FEEL ERROR: " + e1.getMessage());
-            try {
-                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            } catch (Exception e2) {
-                System.err.println("SERIOUS LOOK AND FEEL ERROR: " + e2.getMessage());
-                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, e2);
-            }
-        }
+//        try {
+//            UIManager.setLookAndFeel(getMyLookAndFeel());
+//        } catch (Exception e1) {
+//            System.err.println("LOOK AND FEEL ERROR: " + e1.getMessage());
+//            try {
+//                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+//            } catch (Exception e2) {
+//                System.err.println("SERIOUS LOOK AND FEEL ERROR: " + e2.getMessage());
+//                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, e2);
+//            }
+//        }
         //</editor-fold>
 
         /* Create and display the form */
