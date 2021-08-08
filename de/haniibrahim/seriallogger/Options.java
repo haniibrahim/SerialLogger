@@ -26,9 +26,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class Options extends javax.swing.JDialog {
 
     private static final UIManager.LookAndFeelInfo[] lafs = LafHelper.getLafs(); // LaF classes
-    private static final String[] lafStrs = LafHelper.getLafStrs(); // LaF names as Strings
+    private static final String[] lafNames = LafHelper.getLafNames(); // LaF names as Strings
     private static int lafIdx;
-
+    
     /**
      * Creates new form Options
      *
@@ -42,7 +42,7 @@ public class Options extends javax.swing.JDialog {
         // Get and put Look and Feels
         fillInLafNames(); // put LaF to combobox
 
-        lafIdx = Arrays.asList(lafStrs).indexOf(LafHelper.getCurrentLafName()); // Get index of current LaF of LaF-list
+        lafIdx = Arrays.asList(lafNames).indexOf(LafHelper.getCurrentLafName()); // Get index of current LaF of LaF-list
         cb_LookAndFeel.setSelectedIndex(lafIdx); // Set curemnt LaF in combobox
 
         myInit();
