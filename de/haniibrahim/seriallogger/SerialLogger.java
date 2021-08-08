@@ -1018,17 +1018,11 @@ public class SerialLogger extends JFrame {
      */
     public static void main(String args[]) {
 
-        //<editor-fold defaultstate="collapsed" desc="FlatLaF (disabled)">
-        
-        /* Flat LaF install
-        - Needs Java 8 or higher
-        - Flat LaF jar in the classpath
-        */
-//	UIManager.installLookAndFeel("FlatLaf Light", "com.formdev.flatlaf.FlatLightLaf");
-//        UIManager.installLookAndFeel("FlatLaf Dark", "com.formdev.flatlaf.FlatDarkLaf");
-//        UIManager.installLookAndFeel("FlatLaf IntelliJ", "com.formdev.flatlaf.FlatIntelliJLaf");
-//        UIManager.installLookAndFeel("FlatLaf Darcula", "com.formdev.flatlaf.FlatDarculaLaf");
-        //</editor-fold>
+        // Flat LaF install
+	UIManager.installLookAndFeel("FlatLaf Light", "com.formdev.flatlaf.FlatLightLaf");
+        UIManager.installLookAndFeel("FlatLaf Dark", "com.formdev.flatlaf.FlatDarkLaf");
+        UIManager.installLookAndFeel("FlatLaf IntelliJ", "com.formdev.flatlaf.FlatIntelliJLaf");
+        UIManager.installLookAndFeel("FlatLaf Darcula", "com.formdev.flatlaf.FlatDarculaLaf");
         
         //<editor-fold defaultstate="collapsed" desc="Look and Feel">
 //        try {
