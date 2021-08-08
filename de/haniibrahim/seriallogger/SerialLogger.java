@@ -1017,12 +1017,14 @@ public class SerialLogger extends JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-
-        // Flat LaF install
-	UIManager.installLookAndFeel("FlatLaf Light", "com.formdev.flatlaf.FlatLightLaf");
-        UIManager.installLookAndFeel("FlatLaf Dark", "com.formdev.flatlaf.FlatDarkLaf");
-        UIManager.installLookAndFeel("FlatLaf IntelliJ", "com.formdev.flatlaf.FlatIntelliJLaf");
-        UIManager.installLookAndFeel("FlatLaf Darcula", "com.formdev.flatlaf.FlatDarculaLaf");
+        
+        //<editor-fold defaultstate="collapsed" desc="FlatLaF (deactivated)"> 
+//        // Flat LaF install
+//	  UIManager.installLookAndFeel("FlatLaf Light", "com.formdev.flatlaf.FlatLightLaf");
+//        UIManager.installLookAndFeel("FlatLaf Dark", "com.formdev.flatlaf.FlatDarkLaf");
+//        UIManager.installLookAndFeel("FlatLaf IntelliJ", "com.formdev.flatlaf.FlatIntelliJLaf");
+//        UIManager.installLookAndFeel("FlatLaf Darcula", "com.formdev.flatlaf.FlatDarculaLaf");
+       //</editor-fold>
         
         //<editor-fold defaultstate="collapsed" desc="Look and Feel">
 //        try {
