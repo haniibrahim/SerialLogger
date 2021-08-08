@@ -107,14 +107,7 @@ public final class LafHelper {
      * @return true if this look and feel represents the underlying platform look and feel
      */
     public static boolean isNativeLookAndFeel() {
-        // Get current LaF
-        String lafName = UIManager.getLookAndFeel().getName();        
-        // Workaround for Java and GTK look and feel:
-        // - UIManager.getLookAndFeel().getName() = "GTK look and feel"
-        // - UIManager.LookAndFeelInfo.getName() = "GTK+"
-        if (lafName.equalsIgnoreCase("GTK look and feel")) {
-            lafName = "GTK+";
-        }
-        return !(lafName.equals("Metal") || lafName.equals("Nimbus") || lafName.equals("CDE/Motif"));
+        boolean nativeLaf = UIManager.getLookAndFeel().isNativeLookAndFeel();        
+        return nativeLaf;
     }
 }

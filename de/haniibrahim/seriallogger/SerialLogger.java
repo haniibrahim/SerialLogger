@@ -2,7 +2,6 @@ package de.haniibrahim.seriallogger;
 
 //<editor-fold defaultstate="collapsed" desc="import statements">
 import com.fazecast.jSerialComm.*;
-import com.formdev.flatlaf.FlatLightLaf;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
@@ -22,14 +21,11 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.WindowConstants;
 
 /**
@@ -1022,7 +1018,7 @@ public class SerialLogger extends JFrame {
      */
     public static void main(String args[]) {
 
-        // Flat LaF
+        // Flat LaF install
 	UIManager.installLookAndFeel("FlatLaf Light", "com.formdev.flatlaf.FlatLightLaf");
         UIManager.installLookAndFeel("FlatLaf Dark", "com.formdev.flatlaf.FlatDarkLaf");
         UIManager.installLookAndFeel("FlatLaf IntelliJ", "com.formdev.flatlaf.FlatIntelliJLaf");
