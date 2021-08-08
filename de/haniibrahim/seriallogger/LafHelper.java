@@ -1,6 +1,7 @@
 package de.haniibrahim.seriallogger;
 
 import java.util.Arrays;
+import java.util.List;
 import javax.swing.UIManager;
 
 /**
@@ -20,7 +21,8 @@ public final class LafHelper {
     public final static int LAF_LENGTH = UIManager.getInstalledLookAndFeels().length; // Amount of available LaFs
     
     private static final UIManager.LookAndFeelInfo[] lafs = new UIManager.LookAndFeelInfo[LAF_LENGTH]; // LaF classes
-    private static final String[] lafStrs = new String[LAF_LENGTH]; // LaF names as Strings
+    private static final String[] lafNames = new String[LAF_LENGTH]; // LaF names as Strings
+    private static final String[] lafClassNames = new String[LAF_LENGTH]; // LaF names as Strings
     
     // ------------------------------------------------------------------------
     // Class methods
@@ -45,13 +47,13 @@ public final class LafHelper {
      * 
      * @return array of strings
      */
-    public static String[] getLafStrs(){
+    public static String[] getLafNames(){
         int i = 0;
         for (UIManager.LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
-            lafStrs[i] = laf.getName();
+            lafNames[i] = laf.getName();
             i++;
         }
-        return lafStrs;
+        return lafNames;
     }
     
     /**
@@ -62,10 +64,10 @@ public final class LafHelper {
     public static String[] getLafClassNames(){
         int i = 0;
         for (UIManager.LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
-            lafStrs[i] = laf.getClassName();
+            lafClassNames[i] = laf.getClassName();
             i++;
         }
-        return lafStrs;
+        return lafClassNames;
     }
     
     
@@ -75,15 +77,14 @@ public final class LafHelper {
      * @return Current Look and Feel name
      */
     public static String getCurrentLafName() {
-        String lafName = UIManager.getLookAndFeel().getName();
-        
+        String currentLafName = UIManager.getLookAndFeel().getName();    
         // Workaround for Java and GTK look and feel:
         // - UIManager.getLookAndFeel().getName() = "GTK look and feel"
         // - UIManager.LookAndFeelInfo.getName() = "GTK+"
-        if (lafName.equalsIgnoreCase("GTK look and feel")) {
-            lafName = "GTK+";
+        if (currentLafName.equalsIgnoreCase("GTK look and feel")) {
+            currentLafName = "GTK+";
         }
-        return lafName;
+        return currentLafName;
     }
 
     /**
@@ -93,7 +94,9 @@ public final class LafHelper {
      */
     public static String getCurrentLafClassName(){
 //        setAvailableLafs();
-        int idx = Arrays.asList(getLafStrs()).indexOf(getCurrentLafName());
+        List<String> gls = Arrays.asList(getLafNames());
+        String gcln = getCurrentLafName();
+        int idx = Arrays.asList(getLafNames()).indexOf(getCurrentLafName());
         return getLafs()[idx].getClassName();
     }
     
