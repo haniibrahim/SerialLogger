@@ -1,7 +1,20 @@
-/de/haniibrahim/seriallogger/vsp.png
-/de/haniibrahim/seriallogger/serial_th.png
-/de/haniibrahim/seriallogger/serial.png
-/de/haniibrahim/seriallogger/serial.ico
-de/haniibrahim/seriallogger/serial.icns
+# Created by https://www.toptal.com/developers/gitignore/api/netbeans
+# Edit at https://www.toptal.com/developers/gitignore?templates=netbeans
+### NetBeans ###
+**/nbproject/private/
+**/nbproject/Makefile-*.mk
+**/nbproject/Package-*.bash
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+# End of https://www.toptal.com/developers/gitignore/api/netbeans
+
+vsp.png
+serial_th.png
+serial.png
+serial.ico
+serial.icns
 .DS_Store
-/NS-AppendFeature*.nsd
+NS-AppendFeature*.nsd
