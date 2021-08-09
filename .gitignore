@@ -12,8 +12,6 @@ nbdist/
 # End of https://www.toptal.com/developers/gitignore/api/netbeans
 
 vsp.png
-serial_th.png
-serial.png
 serial.ico
 serial.icns
 .DS_Store
