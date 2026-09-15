@@ -141,10 +141,10 @@ public class SerialLogger extends JFrame {
         bt_ClosePort.setEnabled(false);
 
         // Hide Info and Options Button for macOS
-        if (Helper.getOS().equals("mac")) {
-            bt_Info.setVisible(false);
-            bt_Options.setVisible(false);
-        }
+//        if (Helper.getOS().equals("mac")) {
+//            bt_Info.setVisible(false);
+//            bt_Options.setVisible(false);
+//        }
     }
 
     /**
