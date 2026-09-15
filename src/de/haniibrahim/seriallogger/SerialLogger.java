@@ -601,15 +601,15 @@ public class SerialLogger extends JFrame {
     private void initComponents() {
 
         lb_Commport = new javax.swing.JLabel();
-        cb_Commport = new javax.swing.JComboBox();
+        cb_Commport = new javax.swing.JComboBox<>();
         lb_Baud = new javax.swing.JLabel();
-        cb_Baud = new javax.swing.JComboBox();
+        cb_Baud = new javax.swing.JComboBox<>();
         lb_DataBits = new javax.swing.JLabel();
-        cb_DataBits = new javax.swing.JComboBox();
+        cb_DataBits = new javax.swing.JComboBox<>();
         lb_StopBits = new javax.swing.JLabel();
         cb_StopBits = new javax.swing.JComboBox();
         lb_Parity = new javax.swing.JLabel();
-        cb_Parity = new javax.swing.JComboBox();
+        cb_Parity = new javax.swing.JComboBox<>();
         sp_VirtualPrint = new javax.swing.JScrollPane();
         ta_LogPanel = new javax.swing.JTextArea();
         bt_Update = new javax.swing.JButton();
@@ -617,12 +617,12 @@ public class SerialLogger extends JFrame {
         lb_VirtalPrint = new javax.swing.JLabel();
         bt_OpenPort = new javax.swing.JButton();
         lb_Handshake = new javax.swing.JLabel();
-        cb_Handshake = new javax.swing.JComboBox();
+        cb_Handshake = new javax.swing.JComboBox<>();
         ck_Logfile = new javax.swing.JCheckBox();
         tf_Logfile = new javax.swing.JTextField();
         bt_Fileselector = new javax.swing.JButton();
-        cb_Timestamp = new javax.swing.JComboBox();
-        cb_Delimiter = new javax.swing.JComboBox();
+        cb_Timestamp = new javax.swing.JComboBox<>();
+        cb_Delimiter = new javax.swing.JComboBox<>();
         lb_Timestamp = new javax.swing.JLabel();
         lb_Delimiter = new javax.swing.JLabel();
         fi_01 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 32767));
@@ -639,16 +639,16 @@ public class SerialLogger extends JFrame {
         lb_Commport.setText("CommPort:");
 
         cb_Commport.setEditable(true);
-        cb_Commport.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Update Ports ..." }));
+        cb_Commport.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Update Ports ..." }));
 
         lb_Baud.setText("Baud:");
 
         cb_Baud.setEditable(true);
-        cb_Baud.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "300", "600", "1200", "2400", "4800", "9600", "19200", "38400", "57600", "115200" }));
+        cb_Baud.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "300", "600", "1200", "2400", "4800", "9600", "19200", "38400", "57600", "115200" }));
 
         lb_DataBits.setText("Data Bits:");
 
-        cb_DataBits.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "5", "6", "7", "8" }));
+        cb_DataBits.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "5", "6", "7", "8" }));
 
         lb_StopBits.setText("Stop Bits:");
 
@@ -656,7 +656,7 @@ public class SerialLogger extends JFrame {
 
         lb_Parity.setText("Parity:");
 
-        cb_Parity.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "none", "even", "odd", "mark", "space" }));
+        cb_Parity.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "none", "even", "odd", "mark", "space" }));
 
         ta_LogPanel.setEditable(false);
         ta_LogPanel.setColumns(20);
@@ -692,7 +692,7 @@ public class SerialLogger extends JFrame {
 
         lb_Handshake.setText("Handshake:");
 
-        cb_Handshake.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "none", "RTS/CTS", "XON/XOFF" }));
+        cb_Handshake.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "none", "RTS/CTS", "XON/XOFF" }));
         cb_Handshake.setToolTipText("Flow Control (RTS/CTS=Hardware | XON/XOFF=Software)");
 
         ck_Logfile.setText("Log to:");
@@ -706,7 +706,7 @@ public class SerialLogger extends JFrame {
             }
         });
 
-        cb_Timestamp.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "none", "ISO 8601", "Date|Time|Timezone", "Date|Time", "Time", "Mod. Julian Date", "Year|Day of year|Time", "yyyy|MM|dd|HH|mm|ss" }));
+        cb_Timestamp.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "none", "ISO 8601", "Date|Time|Timezone", "Date|Time", "Time", "Mod. Julian Date", "Year|Day of year|Time", "yyyy|MM|dd|HH|mm|ss" }));
         cb_Timestamp.setToolTipText("Timestamp (before each committed line)");
         cb_Timestamp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -714,7 +714,7 @@ public class SerialLogger extends JFrame {
             }
         });
 
-        cb_Delimiter.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "blank", "komma", "semicolon", "none" }));
+        cb_Delimiter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "blank", "komma", "semicolon", "none" }));
         cb_Delimiter.setToolTipText("Delimiter between timestamp and data");
 
         lb_Timestamp.setText("Timestamp:");
@@ -791,7 +791,7 @@ public class SerialLogger extends JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(bt_Options))
                             .addComponent(cb_Delimiter, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cb_Timestamp, 0, 144, Short.MAX_VALUE)
+                            .addComponent(cb_Timestamp, 0, 1, Short.MAX_VALUE)
                             .addComponent(cb_Handshake, 0, 1, Short.MAX_VALUE)
                             .addComponent(cb_Parity, 0, 1, Short.MAX_VALUE)
                             .addComponent(cb_StopBits, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1046,7 +1046,7 @@ public class SerialLogger extends JFrame {
             public void run() {
                 new SerialLogger().setVisible(true);
                 if (Helper.getOS().equals("mac")) {
-                    MacImpl macImpl = new MacImpl();
+                    // Mac class removed
                 }
             }
         });
@@ -1059,14 +1059,14 @@ public class SerialLogger extends JFrame {
     private javax.swing.JButton bt_OpenPort;
     private javax.swing.JButton bt_Options;
     private javax.swing.JButton bt_Update;
-    private javax.swing.JComboBox cb_Baud;
-    private javax.swing.JComboBox cb_Commport;
-    private javax.swing.JComboBox cb_DataBits;
-    private javax.swing.JComboBox cb_Delimiter;
-    private javax.swing.JComboBox cb_Handshake;
-    private javax.swing.JComboBox cb_Parity;
+    private javax.swing.JComboBox<String> cb_Baud;
+    private javax.swing.JComboBox<String> cb_Commport;
+    private javax.swing.JComboBox<String> cb_DataBits;
+    private javax.swing.JComboBox<String> cb_Delimiter;
+    private javax.swing.JComboBox<String> cb_Handshake;
+    private javax.swing.JComboBox<String> cb_Parity;
     private javax.swing.JComboBox cb_StopBits;
-    private javax.swing.JComboBox cb_Timestamp;
+    private javax.swing.JComboBox<String> cb_Timestamp;
     private javax.swing.JCheckBox ck_Logfile;
     private javax.swing.Box.Filler fi_01;
     private javax.swing.JLabel lb_Baud;

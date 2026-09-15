@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 import javax.swing.text.JTextComponent;
 
 /**
@@ -96,7 +97,7 @@ public class ContextMenuMouseListener extends MouseAdapter {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getModifiers() == InputEvent.BUTTON3_MASK) {
+        if (SwingUtilities.isRightMouseButton(e)) {
             if (!(e.getSource() instanceof JTextComponent)) {
                 return;
             }

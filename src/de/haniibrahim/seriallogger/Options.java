@@ -98,7 +98,7 @@ public class Options extends javax.swing.JDialog {
         tp_Options = new javax.swing.JTabbedPane();
         pn_Appearance = new javax.swing.JPanel();
         lb_LookAndFeel = new javax.swing.JLabel();
-        cb_LookAndFeel = new javax.swing.JComboBox();
+        cb_LookAndFeel = new javax.swing.JComboBox<>();
         bt_Cancel = new javax.swing.JButton();
         bt_OK = new javax.swing.JButton();
 
@@ -110,7 +110,7 @@ public class Options extends javax.swing.JDialog {
 
         lb_LookAndFeel.setText("Look and Feel:");
 
-        cb_LookAndFeel.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cb_LookAndFeel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout pn_AppearanceLayout = new javax.swing.GroupLayout(pn_Appearance);
         pn_Appearance.setLayout(pn_AppearanceLayout);
@@ -146,7 +146,6 @@ public class Options extends javax.swing.JDialog {
 
         bt_OK.setText("OK");
         bt_OK.setToolTipText("");
-        bt_OK.setActionCommand("OK");
         bt_OK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_OKActionPerformed(evt);
@@ -209,7 +208,7 @@ public class Options extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bt_Cancel;
     private javax.swing.JButton bt_OK;
-    private javax.swing.JComboBox cb_LookAndFeel;
+    private javax.swing.JComboBox<String> cb_LookAndFeel;
     private javax.swing.JLabel lb_LookAndFeel;
     private javax.swing.JPanel pn_Appearance;
     private javax.swing.JTabbedPane tp_Options;
