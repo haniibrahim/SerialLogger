@@ -11,8 +11,6 @@ nbdist/
 .nb-gradle/
 # End of https://www.toptal.com/developers/gitignore/api/netbeans
 
-vsp.png
-serial.ico
-serial.icns
+*~
 .DS_Store
 NS-AppendFeature*.nsd
