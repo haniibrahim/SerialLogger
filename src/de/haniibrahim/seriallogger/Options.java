@@ -121,7 +121,7 @@ public class Options extends javax.swing.JDialog {
                 .addGroup(pn_AppearanceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pn_AppearanceLayout.createSequentialGroup()
                         .addComponent(lb_LookAndFeel)
-                        .addGap(0, 204, Short.MAX_VALUE))
+                        .addGap(0, 203, Short.MAX_VALUE))
                     .addComponent(cb_LookAndFeel, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -132,7 +132,7 @@ public class Options extends javax.swing.JDialog {
                 .addComponent(lb_LookAndFeel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cb_LookAndFeel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(81, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tp_Options.addTab("Appearance", pn_Appearance);

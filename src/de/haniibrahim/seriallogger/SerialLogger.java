@@ -38,7 +38,7 @@ import javax.swing.WindowConstants;
  */
 public class SerialLogger extends JFrame {
 
-    static String version = "1.2.0b"; // CHANGE VERSION NUMBER AS NECESSARY - Shown in info dialog
+    static String version = "1.2.1"; // CHANGE VERSION NUMBER AS NECESSARY - Shown in info dialog
 
     private static SerialPort chosenPort;
     private static String stdLogfileName;
@@ -983,18 +983,18 @@ public class SerialLogger extends JFrame {
     }//GEN-LAST:event_bt_OptionsActionPerformed
 
     private void bt_InfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_InfoActionPerformed
-        JOptionPane.showMessageDialog(this,
-                "<html><span style=\"font-size:large;\"><b>SerialLogger</b></span></html>\n"
-                + "Logs data received from a serial interface\n"
-                + "to GUI, console or file.\n\n"
-                + "Version: " + version + "\n\n"
-                + "(c) 2013-" + Helper.getCurrentYear() + " Hani Ibrahim\n"
-                + "<html><a href=\"mailto:hani.ibrahim@gmx.de>\">hani.ibrahim@gmx.de</a>\n\n"
-                + "GNU Public License 3.0\n\n",
-                "Info", JOptionPane.INFORMATION_MESSAGE, icon);
-//        InfoDialog infoDialog = new InfoDialog(this, true);
-//        infoDialog.setLocationRelativeTo(this);
-//        infoDialog.setVisible(true);
+//        JOptionPane.showMessageDialog(this,
+//                "<html><span style=\"font-size:large;\"><b>SerialLogger</b></span></html>\n"
+//                + "Logs data received from a serial interface\n"
+//                + "to GUI, console or file.\n\n"
+//                + "Version: " + version + "\n\n"
+//                + "(c) 2013-" + Helper.getCurrentYear() + " Hani Ibrahim\n"
+//                + "<html><a href=\"mailto:hani.ibrahim@gmx.de>\">hani.ibrahim@gmx.de</a>\n\n"
+//                + "GNU Public License 3.0\n\n",
+//                "Info", JOptionPane.INFORMATION_MESSAGE, icon);
+        InfoDialog infoDialog = new InfoDialog(this, true);
+        infoDialog.setLocationRelativeTo(this);
+        infoDialog.setVisible(true);
     }//GEN-LAST:event_bt_InfoActionPerformed
 
     /**
