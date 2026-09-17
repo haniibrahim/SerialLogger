@@ -5,7 +5,14 @@
  
 ## Features
 
-* Cross-platform: Windows (Intel), macOS (Intel, ARM M1), GNU/Linux (Intel/ARM), 32- and 64-bit architectures
+* Cross-platform: 
+    * Windows XP and later (32-bit, 64-bit, ARM, and ARM64)
+    * Mac OS X Tiger (10.4) and later (32/64-bit Intel and Apple Silicon)
+    * All Linux distributions (32/64-bit x86, ARM, and PowerPC)
+    * Solaris 10 and later (32/64-bit x86 and SPARC)
+    * FreeBSD (32/64-bit x86 and ARM64)
+    * OpenBSD (32/64-bit x86)
+    * ARM/Intel/AMD Mobile Linux derivatives (e.g. RaspberryPi, Beaglebone, etc.)
 * Logs serial data to screen (GUI), console and optionally in a file
 * Fail-proof data collection. Save every collected line of data immediately to the optional log file avoiding data loss even at power breakdowns or computer/application crash.
 * Warning of unintentional overwriting or deleting of unlogged buffer
@@ -16,7 +23,7 @@
 * Arbitrary baud rate (if hardware supports it)
 * Hardware (CTS/RTS) and Software (Xon/Xoff) handshake available
 * Timestamp function (ISO 8601, MJD, ...)
-* ***NEW*** Apple M1 ARM support
+* Apple Silicon ARM support
 
 ## Screenshot
 ![](http://blog.hani-ibrahim.de/wp-content/uploads/SerialLogger-1.1.0.png "Screenshot")
@@ -27,15 +34,14 @@ SerialLogger v1.1.0 on Windows 10
 
 * PC with MS-Windows 7 or higher on x86/x86_64
 * PC with GNU/Linux on x86/x86_64 or ARM (32/64-bit)
-* Macintosh with macOS 10.5 (Tiger) or higher, M1 ARM support
-* Java 6 JRE or higher on platforms mentioned above (Oracle Java or OpenJDK)
+* Macintosh with macOS 10.5 (Tiger) or higher, x86_64 or ARM64
+* Java 8 JRE or higher (>11 recommended on modern PCs) on platforms mentioned above (Oracle Java or OpenJDK)
 
 ## Dependencies
 
 * [jSerialComm](http://fazecast.github.io/jSerialComm/ "") library, version 2.1.0 or higher
-* [AppleJavaExtensions](http://www.java2s.com/Code/Jar/a/applejavaextensions.htm "") library for platforms other than macOS
 
-Build in Netbeans with JDK 1.6. 
+Build in Netbeans with `ant`.
 
 ## Binaries
 
@@ -58,12 +64,8 @@ For some important additional information, visit the [Wiki](https://github.com/h
 | 1.1.0       | Timestamp function, Look and Feel function |
 | 1.2.0       | Save buffer feature, Timezone-DST bug fixed, latest jSerialComm library v 2.3.0 |
 | 1.2.0b      | latest jSerialComm library v 2.6.2, Apple M1 ARM support  |
-
-## Roadmap
-
-| Version | Notes                 |
-|---------|-----------------------|
-| 2.0.0   | Command line features |
+| 1.2.1       | Upgrade for newer platform and Java versions incl. better HDPI-support |
+| 1.2.2       | Multi-screen position bug fixed, Update-URL in InfoDialog |
 
 ## Known bugs
 

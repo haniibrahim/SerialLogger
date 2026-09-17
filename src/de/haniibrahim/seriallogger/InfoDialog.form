@@ -89,7 +89,7 @@
               </Group>
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="lb_Email" max="32767" attributes="0"/>
+                  <Component id="lb_Url" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -118,7 +118,7 @@
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="sep3" min="-2" pref="10" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="lb_Email" min="-2" pref="25" max="-2" attributes="0"/>
+                  <Component id="lb_Url" min="-2" pref="25" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jSeparator1" min="-2" pref="16" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -183,11 +183,17 @@
         </Component>
         <Component class="javax.swing.JSeparator" name="sep3">
         </Component>
-        <Component class="javax.swing.JLabel" name="lb_Email">
+        <Component class="javax.swing.JLabel" name="lb_Url">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" value="hani.ibrahim@gmx.de"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;font color=blue&gt;&lt;u&gt;SerialLogger Updates&lt;/u&gt;&lt;/font&gt;&lt;/html&gt;"/>
+            <Property name="toolTipText" type="java.lang.String" value="https://github.com/haniibrahim/SerialLogger/releases"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lb_UrlMouseClicked"/>
+            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lb_UrlMouseEntered"/>
+            <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lb_UrlMouseExited"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="lb_Image">
           <Properties>

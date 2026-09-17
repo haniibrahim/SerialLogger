@@ -9,4 +9,9 @@
 [x] Timestamp feature
 [x] Look and Feel switcher
 [x] Save option for buffer
+[x] Fix multi-screen position bug
+[ ] Infodialog with UpdateURL
+[ ] FlatLaF with native file selector
+[ ] Updatenotice
+[ ] Switch to Maven
 [ ] CLI interface

@@ -2,8 +2,10 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 ; Non-commercial use only
 
+; => When updated change version number in line 8 and 33
+
 #define MyAppName "SerialLogger"
-#define MyAppVersion "1.2.1"
+#define MyAppVersion "1.2.2"
 #define MyAppPublisher "Hani A. Ibrahim"
 #define MyAppURL "https://blog.hani-ibrahim.de/en/serialogger.html"
 #define MyAppExeName "SerialLogger.exe"
@@ -28,7 +30,7 @@ LicenseFile=C:\Users\hi\NetBeansProjects\SerialLogger\gpl-3.0.txt
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=C:\Users\hi\dev\Setup
-OutputBaseFilename=SerialLogger-1.2.1-Setup
+OutputBaseFilename=SerialLogger-1.2.2-with-JRE21-Setup
 SolidCompression=yes
 WizardStyle=modern
 ArchitecturesAllowed=x64compatible

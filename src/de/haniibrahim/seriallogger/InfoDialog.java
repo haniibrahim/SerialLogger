@@ -1,15 +1,23 @@
 package de.haniibrahim.seriallogger;
 
+import java.awt.Cursor;
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 /**
  * Info Dialogbox
+ *
  * @author hi
  */
 public class InfoDialog extends javax.swing.JDialog {
-    
+
     private String version = SerialLogger.version; // CHANGE VERSION NUMBER AS NECESSARY - Shown in Infodialog()
-    
+
     /**
      * Creates new form InfoDialog
+     *
      * @param parent
      * @param modal
      */
@@ -20,7 +28,6 @@ public class InfoDialog extends javax.swing.JDialog {
         lb_Copyright.setText("© 2013 - " + Helper.getCurrentYear() + " Hani Ibrahim");
         this.getRootPane().setDefaultButton(bt_Ok); // Set OK-Button to default    
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -42,7 +49,7 @@ public class InfoDialog extends javax.swing.JDialog {
         lb_Text2 = new javax.swing.JLabel();
         sep1 = new javax.swing.JSeparator();
         sep3 = new javax.swing.JSeparator();
-        lb_Email = new javax.swing.JLabel();
+        lb_Url = new javax.swing.JLabel();
         lb_Image = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
 
@@ -80,8 +87,20 @@ public class InfoDialog extends javax.swing.JDialog {
         lb_Text2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lb_Text2.setText("to GUI, console or file");
 
-        lb_Email.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lb_Email.setText("hani.ibrahim@gmx.de");
+        lb_Url.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lb_Url.setText("<html><font color=blue><u>SerialLogger Updates</u></font></html>");
+        lb_Url.setToolTipText("https://github.com/haniibrahim/SerialLogger/releases");
+        lb_Url.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lb_UrlMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                lb_UrlMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                lb_UrlMouseExited(evt);
+            }
+        });
 
         lb_Image.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lb_Image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/haniibrahim/seriallogger/serial_th.png"))); // NOI18N
@@ -120,7 +139,7 @@ public class InfoDialog extends javax.swing.JDialog {
                 .addContainerGap())
             .addGroup(pn_MainLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lb_Email, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lb_Url)
                 .addContainerGap())
         );
         pn_MainLayout.setVerticalGroup(
@@ -147,7 +166,7 @@ public class InfoDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(sep3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lb_Email, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lb_Url, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -177,23 +196,55 @@ public class InfoDialog extends javax.swing.JDialog {
 
     /**
      * OK button event
-     * @param evt 
+     *
+     * @param evt
      */
     private void bt_OkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_OkActionPerformed
         this.dispose();
     }//GEN-LAST:event_bt_OkActionPerformed
+    /**
+     * SerialLogger-Github-Link
+     *
+     * @param evt
+     */
+    private void lb_UrlMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lb_UrlMouseClicked
+        if (Desktop.isDesktopSupported()) {
+            try {
+                Desktop.getDesktop().browse(new URI("https://github.com/haniibrahim/SerialLogger/releases"));
+            } catch (IOException | URISyntaxException ex) {
+                System.getLogger(InfoDialog.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
+        } else {
+            System.err.println("ERROR: 'Desktop.isDesktopSupported()' is 'FALSE'");
+        }
+    }//GEN-LAST:event_lb_UrlMouseClicked
+    /**
+     * Change mouse cusor to a finger if hovering over URL-Link
+     * 
+     * @param evt 
+     */
+    private void lb_UrlMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lb_UrlMouseEntered
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }//GEN-LAST:event_lb_UrlMouseEntered
+    /**
+     * Change mouse cursor to default after moved away from URL-Link
+     * @param evt 
+     */
+    private void lb_UrlMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lb_UrlMouseExited
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    }//GEN-LAST:event_lb_UrlMouseExited
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bt_Ok;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lb_Copyright;
-    private javax.swing.JLabel lb_Email;
     private javax.swing.JLabel lb_Image;
     private javax.swing.JLabel lb_License;
     private javax.swing.JLabel lb_Text1;
     private javax.swing.JLabel lb_Text2;
     private javax.swing.JLabel lb_Title;
+    private javax.swing.JLabel lb_Url;
     private javax.swing.JLabel lb_Version;
     private javax.swing.JPanel pn_Main;
     private javax.swing.JSeparator sep1;

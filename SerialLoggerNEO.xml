@@ -4,7 +4,7 @@
   <headerType>gui</headerType>
   <jar>C:\Users\hi\NetBeansProjects\SerialLogger\dist\SerialLogger.jar</jar>
   <outfile>C:\Users\hi\dev\out\SerialLogger.exe</outfile>
-  <errTitle>Java Runtime Umgebung (JRE) fehlt</errTitle>
+  <errTitle>Java Runtime (JRE) is missing</errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
   <priority>normal</priority>
