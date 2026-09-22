@@ -30,7 +30,7 @@ LicenseFile=C:\Users\hi\NetBeansProjects\SerialLogger\gpl-3.0.txt
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=C:\Users\hi\dev\Setup
-OutputBaseFilename=SerialLogger-1.2.3-with-JRE21-Setup
+OutputBaseFilename=SerialLogger-1.2.3-Setup
 SolidCompression=yes
 WizardStyle=modern
 ArchitecturesAllowed=x64compatible
@@ -45,7 +45,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "C:\Users\hi\dev\out\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\hi\dev\out\jre\*"; DestDir: "{app}\jre"; Flags: ignoreversion recursesubdirs createallsubdirs
+;Source: "C:\Users\hi\dev\out\jre\*"; DestDir: "{app}\jre"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "C:\Users\hi\dev\out\lib\*"; DestDir: "{app}\lib"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 

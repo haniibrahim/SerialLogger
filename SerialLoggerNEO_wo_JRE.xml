@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\Users\hi\NetBeansProjects\SerialLogger\dist\SerialLogger.jar</jar>
+  <outfile>C:\Users\hi\dev\out\SerialLogger.exe</outfile>
+  <errTitle>Java Runtime (JRE) is missing</errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>https://adoptium.net/de/temurin/releases?version=21&amp;os=windows&amp;arch=x64&amp;mode=filter</downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>true</stayAlive>
+  <restartOnCrash>true</restartOnCrash>
+  <manifest></manifest>
+  <icon>C:\Users\hi\NetBeansProjects\SerialLogger\src\de\haniibrahim\seriallogger\serial.ico</icon>
+  <classPath>
+    <mainClass>de.haniibrahim.seriallogger.SerialLogger</mainClass>
+    <cp>.\libs</cp>
+  </classPath>
+  <jre>
+    <path>%JAVA_HOME%;%PATH%</path>
+    <requiresJdk>false</requiresJdk>
+    <requires64Bit>false</requires64Bit>
+    <minVersion></minVersion>
+    <maxVersion></maxVersion>
+    <opt>--enable-native-access=ALL-UNNAMED</opt>
+  </jre>
+</launch4jConfig>
