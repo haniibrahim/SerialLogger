@@ -297,20 +297,19 @@ public class SerialLogger extends JFrame {
             } catch (ExecutionException ex) {
                 System.err.println(ex.getMessage());
             } catch (CancellationException ex) { // important
-//                System.err.println(ex.getMessage()); // Produce output "null" in console
-                if (chosenPort.isOpen()) {
-                    // Close serial port
+
+                if (chosenPort != null && chosenPort.isOpen()) {
                     chosenPort.closePort();
-                } else {
-                    System.err.println("Final close port fails, port was not open");
                 }
+
                 if (ck_Logfile.isSelected()) {
-                    if (pw != null) { // if PrintWriter bw exists
+                    if (pw != null) {
                         pw.close();
                     }
                 }
             }
         }
+
     }
 
     /**
@@ -492,147 +491,147 @@ public class SerialLogger extends JFrame {
         prefs.flush();
     }
 
-/**
- * Set settings from stored preferences
- * <li>Window position and size
- * <li>Serial settings
- * <li>Log file name and path
- */
-private void setPrefs() {
-    // Get node
-    prefs = Preferences.userNodeForPackage(getClass());
+    /**
+     * Set settings from stored preferences
+     * <li>Window position and size
+     * <li>Serial settings
+     * <li>Log file name and path
+     */
+    private void setPrefs() {
+        // Get node
+        prefs = Preferences.userNodeForPackage(getClass());
 
-    // Default window size
-    final int defaultWidth = 637;
-    final int defaultHeight = 380;
+        // Default window size
+        final int defaultWidth = 637;
+        final int defaultHeight = 380;
 
-    // Get stored window position and size
-    int winX = prefs.getInt("xpos", Integer.MIN_VALUE);
-    int winY = prefs.getInt("ypos", Integer.MIN_VALUE);
-    int winWidth = prefs.getInt("width", defaultWidth);
-    int winHeight = prefs.getInt("height", defaultHeight);
+        // Get stored window position and size
+        int winX = prefs.getInt("xpos", Integer.MIN_VALUE);
+        int winY = prefs.getInt("ypos", Integer.MIN_VALUE);
+        int winWidth = prefs.getInt("width", defaultWidth);
+        int winHeight = prefs.getInt("height", defaultHeight);
 
-    // Get current graphics environment
-    GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    GraphicsDevice[] screens = ge.getScreenDevices();
+        // Get current graphics environment
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice[] screens = ge.getScreenDevices();
 
-    // Get primary monitor and its usable area
-    GraphicsConfiguration primaryGC =
-            ge.getDefaultScreenDevice().getDefaultConfiguration();
+        // Get primary monitor and its usable area
+        GraphicsConfiguration primaryGC
+                = ge.getDefaultScreenDevice().getDefaultConfiguration();
 
-    Rectangle primaryBounds = primaryGC.getBounds();
-    Insets primaryInsets =
-            Toolkit.getDefaultToolkit().getScreenInsets(primaryGC);
+        Rectangle primaryBounds = primaryGC.getBounds();
+        Insets primaryInsets
+                = Toolkit.getDefaultToolkit().getScreenInsets(primaryGC);
 
-    Rectangle primaryUsableBounds = new Rectangle(
-            primaryBounds.x + primaryInsets.left,
-            primaryBounds.y + primaryInsets.top,
-            primaryBounds.width - primaryInsets.left - primaryInsets.right,
-            primaryBounds.height - primaryInsets.top - primaryInsets.bottom
-    );
+        Rectangle primaryUsableBounds = new Rectangle(
+                primaryBounds.x + primaryInsets.left,
+                primaryBounds.y + primaryInsets.top,
+                primaryBounds.width - primaryInsets.left - primaryInsets.right,
+                primaryBounds.height - primaryInsets.top - primaryInsets.bottom
+        );
 
-    // Check stored window size
-    boolean validSize =
-            winWidth > 0
-            && winHeight > 0
-            && winWidth <= primaryUsableBounds.width
-            && winHeight <= primaryUsableBounds.height;
+        // Check stored window size
+        boolean validSize
+                = winWidth > 0
+                && winHeight > 0
+                && winWidth <= primaryUsableBounds.width
+                && winHeight <= primaryUsableBounds.height;
 
-    // If stored size is invalid, use default size, but never larger
-    // than the usable area of the primary monitor.
-    if (!validSize) {
-        winWidth = Math.min(defaultWidth, primaryUsableBounds.width);
-        winHeight = Math.min(defaultHeight, primaryUsableBounds.height);
-    }
+        // If stored size is invalid, use default size, but never larger
+        // than the usable area of the primary monitor.
+        if (!validSize) {
+            winWidth = Math.min(defaultWidth, primaryUsableBounds.width);
+            winHeight = Math.min(defaultHeight, primaryUsableBounds.height);
+        }
 
-    // Rectangle representing stored window position and size
-    Rectangle storedWindow =
-            new Rectangle(winX, winY, winWidth, winHeight);
+        // Rectangle representing stored window position and size
+        Rectangle storedWindow
+                = new Rectangle(winX, winY, winWidth, winHeight);
 
-    // Check whether the complete window fits on any current monitor
-    boolean validPosition = false;
+        // Check whether the complete window fits on any current monitor
+        boolean validPosition = false;
 
-    if (winX != Integer.MIN_VALUE && winY != Integer.MIN_VALUE) {
-        for (GraphicsDevice screen : screens) {
-            GraphicsConfiguration gc = screen.getDefaultConfiguration();
-            Rectangle bounds = gc.getBounds();
-            Insets insets =
-                    Toolkit.getDefaultToolkit().getScreenInsets(gc);
+        if (winX != Integer.MIN_VALUE && winY != Integer.MIN_VALUE) {
+            for (GraphicsDevice screen : screens) {
+                GraphicsConfiguration gc = screen.getDefaultConfiguration();
+                Rectangle bounds = gc.getBounds();
+                Insets insets
+                        = Toolkit.getDefaultToolkit().getScreenInsets(gc);
 
-            Rectangle usableBounds = new Rectangle(
-                    bounds.x + insets.left,
-                    bounds.y + insets.top,
-                    bounds.width - insets.left - insets.right,
-                    bounds.height - insets.top - insets.bottom
-            );
+                Rectangle usableBounds = new Rectangle(
+                        bounds.x + insets.left,
+                        bounds.y + insets.top,
+                        bounds.width - insets.left - insets.right,
+                        bounds.height - insets.top - insets.bottom
+                );
 
-            if (usableBounds.contains(storedWindow)) {
-                validPosition = true;
-                break;
+                if (usableBounds.contains(storedWindow)) {
+                    validPosition = true;
+                    break;
+                }
             }
         }
+
+        // If the stored position is invalid, center the window
+        // on the primary monitor.
+        if (!validPosition) {
+            winX = primaryUsableBounds.x
+                    + (primaryUsableBounds.width - winWidth) / 2;
+
+            winY = primaryUsableBounds.y
+                    + (primaryUsableBounds.height - winHeight) / 2;
+        }
+
+        // Set serial parameters and logfile name
+        String baud = prefs.get("baud", "9600");
+        String databits = prefs.get("databits", "8");
+        String stopbits = prefs.get("stopbits", "1");
+        String parity = prefs.get("parity", "none");
+        String handshake = prefs.get("handshake", "none");
+        String timestamp = prefs.get("timestamp", "none");
+        String delimiter = prefs.get("delimiter", "blank");
+        String logfile = prefs.get("logfile", stdLogfileName);
+        boolean logto = prefs.getBoolean("logto", false);
+        String laf = prefs.get("laf", getMyLookAndFeel());
+
+        // IMPORTANT: Must be called before setSize & setLocation otherwise pack()
+        // set them to default
+        try {
+            // Set Look and Feel
+            UIManager.setLookAndFeel(laf);
+            SwingUtilities.updateComponentTreeUI(this);
+            SerialLogger.getFrames()[0].pack();
+        } catch (Exception ex) {
+            System.err.println("LOOK AND FEEL ERROR: " + ex.getMessage());
+            Logger.getLogger(SerialLogger.class.getName())
+                    .log(Level.SEVERE, null, ex);
+        }
+
+        // Set validated window size and position
+        setSize(winWidth, winHeight);
+        setLocation(winX, winY);
+
+        // Initial logfilename => ~/serial.log
+        stdLogfileName = System.getProperty("user.home")
+                + System.getProperty("file.separator")
+                + "serial.log";
+
+        // Put default/stored serialparameters/logfile in GUI
+        cb_Baud.setSelectedItem(baud);
+        cb_DataBits.setSelectedItem(databits);
+        cb_StopBits.setSelectedItem(stopbits);
+        cb_Parity.setSelectedItem(parity);
+        cb_Handshake.setSelectedItem(handshake);
+        cb_Timestamp.setSelectedItem(timestamp);
+        cb_Delimiter.setSelectedItem(delimiter);
+        tf_Logfile.setText(logfile);
+        ck_Logfile.setSelected(logto);
+
+        // No timestamp disables delimiter combobox
+        if (timestamp.equals("none")) {
+            cb_Delimiter.setEnabled(false);
+        }
     }
-
-    // If the stored position is invalid, center the window
-    // on the primary monitor.
-    if (!validPosition) {
-        winX = primaryUsableBounds.x
-                + (primaryUsableBounds.width - winWidth) / 2;
-
-        winY = primaryUsableBounds.y
-                + (primaryUsableBounds.height - winHeight) / 2;
-    }
-    
-    // Set serial parameters and logfile name
-    String baud = prefs.get("baud", "9600");
-    String databits = prefs.get("databits", "8");
-    String stopbits = prefs.get("stopbits", "1");
-    String parity = prefs.get("parity", "none");
-    String handshake = prefs.get("handshake", "none");
-    String timestamp = prefs.get("timestamp", "none");
-    String delimiter = prefs.get("delimiter", "blank");
-    String logfile = prefs.get("logfile", stdLogfileName);
-    boolean logto = prefs.getBoolean("logto", false);
-    String laf = prefs.get("laf", getMyLookAndFeel());
-    
-    // IMPORTANT: Must be called before setSize & setLocation otherwise pack()
-    // set them to default
-    try {
-        // Set Look and Feel
-        UIManager.setLookAndFeel(laf);
-        SwingUtilities.updateComponentTreeUI(this);
-        SerialLogger.getFrames()[0].pack(); 
-    } catch (Exception ex) {
-        System.err.println("LOOK AND FEEL ERROR: " + ex.getMessage());
-        Logger.getLogger(SerialLogger.class.getName())
-                .log(Level.SEVERE, null, ex);
-    }
-    
-    // Set validated window size and position
-    setSize(winWidth, winHeight);
-    setLocation(winX, winY);
-
-    // Initial logfilename => ~/serial.log
-    stdLogfileName = System.getProperty("user.home")
-            + System.getProperty("file.separator")
-            + "serial.log";
-
-    // Put default/stored serialparameters/logfile in GUI
-    cb_Baud.setSelectedItem(baud);
-    cb_DataBits.setSelectedItem(databits);
-    cb_StopBits.setSelectedItem(stopbits);
-    cb_Parity.setSelectedItem(parity);
-    cb_Handshake.setSelectedItem(handshake);
-    cb_Timestamp.setSelectedItem(timestamp);
-    cb_Delimiter.setSelectedItem(delimiter);
-    tf_Logfile.setText(logfile);
-    ck_Logfile.setSelected(logto);
-
-    // No timestamp disables delimiter combobox
-    if (timestamp.equals("none")) {
-        cb_Delimiter.setEnabled(false);
-    }
-}
 
     /**
      * Enables or disables GUI elements
@@ -939,32 +938,37 @@ private void setPrefs() {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     /**
-     * Update Button event
-     *
-     * @param evt
-     */
+         * Update Button event
+         *
+         * @param evt
+         */
     private void bt_UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_UpdateActionPerformed
         updatePortList();
     }//GEN-LAST:event_bt_UpdateActionPerformed
 
-    /**
-     * Close port button event
-     *
-     * @param evt
-     */
+        /**
+         * Close port button event
+         *
+         * @param evt
+         */
     private void bt_ClosePortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_ClosePortActionPerformed
+        if (serialReader != null) {
+            serialReader.cancel(true);
+        }
+
+        if (chosenPort != null && chosenPort.isOpen()) {
+            chosenPort.closePort();
+        }
+
         // Enable GUI elements
         toggleGuiElements(true);
-
-        // flag main swingworker class as cancel
-        serialReader.cancel(true);
     }//GEN-LAST:event_bt_ClosePortActionPerformed
 
-    /**
-     * Open port button event
-     *
-     * @param evt
-     */
+        /**
+         * Open port button event
+         *
+         * @param evt
+         */
     private void bt_OpenPortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_OpenPortActionPerformed
         // Clear textarea if desired
         if (!ta_LogPanel.getText().isEmpty() && printLogFlag == false) { // Buffer not empty
@@ -1030,11 +1034,11 @@ private void setPrefs() {
         }
     }//GEN-LAST:event_bt_OpenPortActionPerformed
 
-    /**
-     * Logfile's fileselector button event. Choose logfile name incl. path
-     *
-     * @param evt
-     */
+        /**
+         * Logfile's fileselector button event. Choose logfile name incl. path
+         *
+         * @param evt
+         */
     private void bt_FileselectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_FileselectorActionPerformed
         String fn = FileSelector.getSaveFilename(this, "serial.log", tf_Logfile.getText(), "Specify log file ...");
         if (fn.equals("")) {
@@ -1076,36 +1080,35 @@ private void setPrefs() {
         infoDialog.setVisible(true);
     }//GEN-LAST:event_bt_InfoActionPerformed
 
-    /**
-     * Initial Look and Feel. Try GTK-LaF on GNU/Linux first, then System-LaF.
-     * System-LaF on all other platforms
-     *
-     * @return Look and Feel class name
-     */
-    private static String getMyLookAndFeel() {
-        String laf;
-        if (System.getProperty("os.name").toLowerCase().contains("linux")) {
-            laf = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
-        } else {
-            laf = UIManager.getSystemLookAndFeelClassName();
+        /**
+         * Initial Look and Feel. Try GTK-LaF on GNU/Linux first, then
+         * System-LaF. System-LaF on all other platforms
+         *
+         * @return Look and Feel class name
+         */
+        private static String getMyLookAndFeel() {
+            String laf;
+            if (System.getProperty("os.name").toLowerCase().contains("linux")) {
+                laf = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
+            } else {
+                laf = UIManager.getSystemLookAndFeelClassName();
+            }
+            return laf;
         }
-        return laf;
-    }
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        
-        //<editor-fold defaultstate="collapsed" desc="FlatLaF (deactivated)"> 
+        /**
+         * @param args the command line arguments
+         */
+        public static void main(String args[]) {
+
+            //<editor-fold defaultstate="collapsed" desc="FlatLaF (deactivated)"> 
 //        // Flat LaF install
 //	  UIManager.installLookAndFeel("FlatLaf Light", "com.formdev.flatlaf.FlatLightLaf");
 //        UIManager.installLookAndFeel("FlatLaf Dark", "com.formdev.flatlaf.FlatDarkLaf");
 //        UIManager.installLookAndFeel("FlatLaf IntelliJ", "com.formdev.flatlaf.FlatIntelliJLaf");
 //        UIManager.installLookAndFeel("FlatLaf Darcula", "com.formdev.flatlaf.FlatDarculaLaf");
-       //</editor-fold>
-        
-        //<editor-fold defaultstate="collapsed" desc="Look and Feel">
+            //</editor-fold>
+            //<editor-fold defaultstate="collapsed" desc="Look and Feel">
 //        try {
 //            UIManager.setLookAndFeel(getMyLookAndFeel());
 //        } catch (Exception e1) {
@@ -1117,20 +1120,20 @@ private void setPrefs() {
 //                Logger.getLogger(SerialLogger.class.getName()).log(Level.SEVERE, null, e2);
 //            }
 //        }
-        //</editor-fold>
+            //</editor-fold>
 
-        /* Create and display the form */
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new SerialLogger().setVisible(true);
-                if (Helper.getOS().equals("mac")) {
-                    // Mac class removed
+            /* Create and display the form */
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    new SerialLogger().setVisible(true);
+                    if (Helper.getOS().equals("mac")) {
+                        // Mac class removed
+                    }
                 }
-            }
-        });
-    }
-    //<editor-fold defaultstate="collapsed" desc=" GUI variables declaration ">
+            });
+        }
+        //<editor-fold defaultstate="collapsed" desc=" GUI variables declaration ">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bt_ClosePort;
     private javax.swing.JButton bt_Fileselector;
