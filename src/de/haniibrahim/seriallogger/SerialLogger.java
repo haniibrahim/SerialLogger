@@ -42,7 +42,7 @@ import javax.swing.WindowConstants;
  */
 public class SerialLogger extends JFrame {
 
-    static String version = "1.2.2"; // CHANGE VERSION NUMBER AS NECESSARY - Shown in info dialog
+    static String version = "1.2.3"; // CHANGE VERSION NUMBER AS NECESSARY - Shown in info dialog
 
     private static SerialPort chosenPort;
     private static String stdLogfileName;
