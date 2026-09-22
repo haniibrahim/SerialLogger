@@ -70,6 +70,7 @@ For some important additional information, visit the [Wiki](https://github.com/h
 | 1.2.0b      | latest jSerialComm library v 2.6.2, Apple M1 ARM support                                                                                                                                       |
 | 1.2.1       | Upgrade for newer platform and Java versions incl. better HDPI-support                                                                                                                         |
 | 1.2.2       | Multi-screen position bug fixed, Update-URL in InfoDialog                                                                                                                                      |
+| 1.2.3       | Close port bug fixed                                                                                                                                                                           |
 
 ## Known bugs
 
