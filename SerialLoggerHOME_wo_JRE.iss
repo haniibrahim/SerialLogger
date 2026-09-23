@@ -5,7 +5,7 @@
 ; => When updated change version number in line 8 and 33
 
 #define MyAppName "SerialLogger"
-#define MyAppVersion "1.2.2"
+#define MyAppVersion "1.2.3"
 #define MyAppPublisher "Hani A. Ibrahim"
 #define MyAppURL "https://blog.hani-ibrahim.de/en/serialogger.html"
 #define MyAppExeName "SerialLogger.exe"
@@ -30,7 +30,7 @@ LicenseFile="C:\Users\hi\Meine Ablage\Entwicklung\NetBeansProjects\SerialLogger\
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=C:\Users\hi\Entwicklung\OUT
-OutputBaseFilename=SerialLogger-1.2.2-Setup
+OutputBaseFilename=SerialLogger-1.2.3-Setup
 SolidCompression=yes
 WizardStyle=modern
 ArchitecturesAllowed=x64compatible
